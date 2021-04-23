@@ -1,0 +1,254 @@
+# Fornax.Seo
+
+[![Nuget version][]][Package host]
+[![NuGet workflow status][]][NuGet Workflow]
+[![Test workflow status][]][Test Workflow]
+
+SEO metadata generator for Fornax
+
+## Goals
+
+- enhance the search engine visibility of Fornax-generated websites with:
+
+  + [structured data][] in [JSON-LD](https://json-ld.org) format
+  + [OpenGraph](https://ogp.me) `<meta>` tags
+  + personalized social media links
+
+- try to enforce some SEO best practises, e.g. requiring [absolute URLs][] to all content items
+
+
+## Usage example
+
+- Install [Fornax](https://ionide.io/Tools/fornax.html)
+
+      dotnet tool install fornax -g
+
+- Change into a project directory and scaffold a new website
+
+      fornax new
+
+**IMPORTANT**
+
+- Add the root domain of your website to a global instance of `Fornax.Core.Model.SiteContents`:
+
+~~~fsharp
+// loaders/globalloader.fsx
+#r "../_lib/Fornax.Core.dll"
+
+type SiteInfo = {
+    title: string
+    /// The root domain of your website - must be an absolute URL
+    baseUrl: string
+    description: string
+}
+~~~
+
+- add personal authorship details, e.g.:
+
+~~~fsharp
+// loaders/globalloader.fsx
+#r "nuget: Fornax.Seo"
+
+open Fornax.Seo
+
+let loader (projectRoot: string) (siteContent: SiteContents) =
+    let siteInfo =
+        { title = "Sample Fornax blog"
+          baseUrl = "http://example.com"
+          description = "Just a simple blog" }
+
+    let onTheWeb =
+        [ "linkedin.com/in/username"
+          "github.com/username"
+          "bitbucket.org/username"
+          "facebook.com/username" ]
+
+    let siteAuthor = { Name = "Moi-même"; Email = "info@example.com"; SocialMedia = onTheWeb }
+
+    siteContent.Add(siteInfo)
+    siteContent.Add(siteAuthor)
+
+    siteContent
+~~~
+
+### Collect metadata from a content item (e.g., a blog posting)
+
+~~~fsharp
+// generators/post.fsx
+#r "../_lib/Fornax.Core.dll"
+#r "nuget: Fornax.Seo"
+#load "layout.fsx"
+
+open Html
+open Fornax.Seo
+
+let generate' (ctx: SiteContents) (page: string) =
+    let siteInfo = ctx.TryGetValue<Globalloader.SiteInfo>()
+    let siteName = siteInfo |> Option.map (fun si -> si.title)
+    let tagline = siteInfo |> Option.map (fun si -> si.description) |> Option.defaultValue ""
+    let siteAuthor = ctx.TryGetValue<ContentCreator>() |> Option.defaultValue ContentCreator.Default
+
+    let siteRoot =
+        siteInfo
+        |> Option.map (fun si -> si.baseUrl)
+        |> Option.defaultValue ContentObject.Default.BaseUrl
+
+    let post =
+        ctx.TryGetValues<Postloader.Post>()
+        |> Option.defaultValue Seq.empty
+        |> Seq.find (fun p -> p.file = page)
+
+    let postMeta =
+        { Title = post.title
+          BaseUrl = siteRoot
+          Url = post.file
+          Description = tagline
+          Author = { siteAuthor with Name = defaultArg post.author siteAuthor.Name }
+          SiteName = siteName
+          Headline = Some post.summary
+          ObjectType = Some "Blog"
+          ContentType = Some "BlogPosting"
+          OpenGraphType = Some "article"
+          Locale = Some "en-us"
+          Published = post.published
+          Modified = post.modified
+          Tags = Some post.tags
+          Meta =
+              Some [ ("Image", defaultArg post.image $"{siteRoot}/images/avatar.jpg")
+                     ("Publisher", defaultArg siteName siteAuthor.Name) ] }
+
+    ctx.Add(postMeta)
+    // . . .
+~~~
+
+### Render SEO metadata in your page layout
+
+~~~fsharp
+// generators/layout.fsx
+#r "../_lib/Fornax.Core.dll"
+#r "nuget: Fornax.Seo"
+
+open Html
+open Fornax.Seo
+
+// . . .
+
+let layout (ctx: SiteContents) (active: string) (content: HtmlElement seq) =
+    let siteInfo = ctx.TryGetValue<Globalloader.SiteInfo>()
+    let siteAuthor = ctx.TryGetValue<ContentCreator>() |> Option.defaultValue ContentCreator.Default
+    let pageTitle = siteInfo |> Option.map (fun si -> si.title) |> Option.defaultValue ""
+    let tagline = siteInfo |> Option.map (fun si -> si.description) |> Option.defaultValue ""
+
+    let siteRoot =
+        siteInfo
+        |> Option.map (fun si -> si.baseUrl)
+        |> Option.defaultValue ContentObject.Default.BaseUrl
+
+    let seoData =
+        ctx.TryGetValues<ContentObject>()
+        |> Option.defaultValue Seq.empty
+
+    let pageMeta =
+        seoData
+        |> Seq.tryFind (fun p -> p.Title.Contains(active))
+        |> function
+        | Some info -> info
+        | _ ->
+            { ContentObject.Default with
+                  Title = title
+                  Description = tagline
+                  BaseUrl = siteRoot
+                  SiteName = Some title
+                  Headline = Some tagline
+                  Author = siteAuthor }
+
+    html [] [
+        head [] [
+            meta [ CharSet "utf-8" ]
+            meta [ Name "viewport"; Content "width=device-width, initial-scale=1" ]
+            title [] [ !!"My Blog" ]
+            // . . .
+            yield! seo pageMeta
+        ]
+        body [] [
+            // . . .
+            footer [] [ yield! socialMedia siteAuthor ]
+        ]
+    ]
+
+    // . . .
+~~~
+
+
+## Development
+
+_All platforms need a .NET SDK at version 5.0.102 or later_
+
+### Windows
+
+To run unit tests and build a sample website:
+
+~~~bat
+  scripts\ci
+  :: or, to also serve the site at localhost:8080
+  scripts\ci live
+~~~
+
+To browse a local copy of [the documentation][]:
+
+~~~bat
+  scripts\gendocs live
+~~~
+
+### Linux, macOS
+
+Run tests with:
+
+~~~sh
+  scripts/ci
+  # or
+  scripts/ci live
+~~~
+
+Browse docs with:
+
+~~~sh
+  scripts/gendocs live
+~~~
+
+
+## Similar NuGet libraries (by framework)
+
+### .NET
+
+- [json-ld.net](https://github.com/linked-data-dotnet/json-ld.net)
+- [OpenGraph-Net](https://ghorsey.github.io/OpenGraph-Net)
+
+### ASP.NET
+
+- [Winton.AspNetCore.Seo](https://github.com/wintoncode/Winton.AspNetCore.Seo)
+- [Definux.Seo](https://github.com/Definux/Seo)
+
+### [Umbraco](https://umbraco.com)
+
+- [Wavenet.Umbraco8.Seo](https://www.nuget.org/packages/Wavenet.Umbraco8.Seo)
+
+
+## License
+
+Distributed under the terms of the [Mozilla Public License Version 2.0][].
+
+
+[structured data]: https://developers.google.com/search/docs/guides/intro-structured-data
+[absolute URLs]: https://stackoverflow.com/a/64830732
+[the documentation]: https://heredocs.io/Fornax.Seo
+
+[Nuget version]: https://img.shields.io/nuget/vpre/Fornax.Seo?color=blueviolet&logo=nuget
+[Package host]: https://www.nuget.org/packages/Fornax.Seo
+[NuGet Workflow]: https://github.com/rdipardo/Fornax.Seo/actions/workflows/nuget.yml
+[NuGet workflow status]: https://github.com/rdipardo/Fornax.Seo/actions/workflows/nuget.yml/badge.svg
+[Test Workflow]: https://github.com/rdipardo/Fornax.Seo/actions/workflows/ci.yml
+[Test workflow status]: https://github.com/rdipardo/Fornax.Seo/actions/workflows/ci.yml/badge.svg
+
+[Fornax CLI tool]: https://github.com/ionide/Fornax
+[Mozilla Public License Version 2.0]: https://github.com/rdipardo/Fornax.Seo/blob/main/LICENSE

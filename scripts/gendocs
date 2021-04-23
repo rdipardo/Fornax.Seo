@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+FORNAX_CMD=build
+SITE_ROOT='root /'
+if [ "$1" = "live" ]; then
+    FORNAX_CMD=watch
+    SITE_ROOT=
+fi
+dotnet tool restore
+dotnet build src/Fornax.Seo/Fornax.Seo.fsproj -c Release
+cp ./README.md docs/index.md
+
+dotnet fsdocs $FORNAX_CMD --projects $(pwd)/src/Fornax.Seo/Fornax.Seo.fsproj \
+    --eval --clean --strict \
+    --properties RepositoryBranch=main Configuration=Release \
+    --parameters ${SITE_ROOT} \
+        fsdocs-logo-link https://www.nuget.org/packages/Fornax.Seo \
+        fsdocs-package-project-url https://heredocs.io/Fornax.Seo \
+        fsdocs-license-link https://github.com/rdipardo/Fornax.Seo/blob/main/LICENSE \
+        fsdocs-release-notes-link https://github.com/rdipardo/Fornax.Seo/blob/main/CHANGELOG
+
+rm -f docs/index.md

@@ -1,0 +1,220 @@
+.navbar, .navbar div, .navbar div a, article, body, footer, header, html, section {
+	font-family: -apple-system, 'BlinkMacSystemFont', 'Nunito', 'Helvetica Neue', sans-serif
+}
+
+body, html {
+	font-size: 18px;
+	background: #f0f2f4
+}
+
+footer {
+	margin-top: 6rem;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-weight: 800;
+	color: #222;
+	font-family: 'Quicksand', 'Lucida Grande', 'Helvetica Neue', sans-serif;
+	letter-spacing: -1px
+}
+
+a:not(.navbar-link) {
+	color: #008b8b
+}
+
+.is-dark a.navbar-item {
+	color: #eee
+}
+
+footer.is-dark a {
+	color: #22cf9a
+}
+
+a.navbar-item.is-active, a.navbar-item:active, a.navbar-item:focus, a.navbar-item:hover, a:hover, footer.is-dark a:focus, footer.is-dark a:hover {
+	background: #212121;
+	color: #eee
+}
+
+footer.is-dark, footer.is-dark a.navicon:focus, footer.is-dark a.navicon:hover {
+	background: #363636;
+	color: #eee
+}
+
+.navbar {
+	box-shadow: 1px 1px 4px 1px #999
+}
+
+.navbar, footer div.stacked {
+	min-height: 4rem
+}
+
+.navbar-menu {
+	font-size: 20px;
+	font-weight: 600;
+	justify-content: space-evenly;
+}
+
+.navbar.is-dark .navbar-burger.is-active {
+	background-color: #212121
+}
+
+.navbar.is-dark .navbar-menu.is-active {
+	background-color: #363636
+}
+
+footer .columns {
+	padding: 1rem;
+	text-align: center;
+	column-count: 3;
+	column-rule-width: 0;
+	column-gap: .25rem;
+	flex-flow: column;
+	column-fill: balance;
+	-moz-column-fill: balance;
+	-webkit-column-fill: balance
+}
+
+footer .stacked {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	flex-shrink: 0
+}
+
+footer .stacked div, footer .stacked p {
+	margin: 0 auto;
+	padding: .5rem 2rem
+}
+
+footer img {
+	max-width: 80%
+}
+
+.license {
+	flex-shrink: 1;
+	font-size: 70%;
+	max-width: 50%;
+	margin: 0 auto
+}
+
+.hero.is-info.is-bold {
+	background-image: none
+}
+
+.hero.is-info {
+	background-color: #eee;
+	color: #000
+}
+
+.navbar-brand .brand-text {
+	font-size: 1.11rem;
+	font-weight: 700
+}
+
+.hero-body {
+	background-image: url(https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Plum_trees_Kitano_Tenmangu.jpg/1200px-Plum_trees_Kitano_Tenmangu.jpg);
+	background-position: center;
+	background-size: cover;
+	background-repeat: no-repeat;
+	height: 500px
+}
+
+.articles {
+	margin: 5rem 0;
+	margin-top: -200px
+}
+
+.articles .content p {
+	line-height: 1.9;
+	margin: 15px 0
+}
+
+.author-image {
+	position: absolute;
+	top: -30px;
+	left: 50%;
+	width: 60px;
+	height: 60px;
+	margin-left: -30px;
+	border: 3px solid #ccc;
+	border-radius: 50%
+}
+
+.media-center {
+	display: block;
+	margin-bottom: 1rem
+}
+
+.content pre {
+	font-size: 14px;
+	white-space: pre
+}
+
+.content blockquote {
+	padding: .1em 1.5em
+}
+
+.article, .promo-block {
+	margin-top: 3rem
+}
+
+div.column.is-8:first-child {
+	padding-top: 0;
+	margin-top: 0
+}
+
+.article-title {
+	font-size: 2rem;
+	line-height: 2
+}
+
+.article-subtitle {
+	color: #6a6a6a;
+	margin-bottom: 3rem;
+	font-style: italic
+}
+
+.article-body {
+	line-height: 1.4;
+	margin: 0 4rem
+}
+
+.article-body.is-post {
+	margin: 0 1.5rem
+}
+
+.article-body img {
+	display: block;
+	margin: 0 auto
+}
+
+.promo-block .container {
+	margin: 1rem 5rem
+}
+
+@media screen and (max-width:1023px) {
+	.navbar-menu.is-active {
+		padding-bottom: 0
+	}
+}
+
+@media screen and (max-width:750px) {
+	body, html {
+		font-size: 1rem
+	}
+	.article-body {
+		margin: 0
+	}
+	footer {
+		font-size: 16px
+	}
+	footer .columns {
+		display: flex
+	}
+	.license {
+		max-width: 100%
+	}
+	footer img, img {
+		max-width: 60%
+	}
+}

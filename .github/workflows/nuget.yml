@@ -1,0 +1,58 @@
+name: NuGet
+on:
+  push:
+    tags:
+      - '**'
+jobs:
+  test:
+    runs-on: ubuntu-20.04
+    env:
+      DOTNET_NOLOGO: true
+      DOTNET_CLI_TELEMETRY_OPTOUT: true
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: 'recursive'
+      - name: Pre-test install
+        uses: actions/setup-dotnet@v1.7.2
+        with:
+          dotnet-version: '5.0.102'
+      - name: Cache packages
+        uses: actions/cache@v2.1.5
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('src/Fornax.Seo/Fornax.Seo.fsproj') }}
+          restore-keys: |-
+            ${{ runner.os }}-nuget-
+            ${{ runner.os }}-
+      - name: Run tests
+        run: scripts/ci
+
+  publish:
+    needs: test
+    runs-on: windows-latest
+    env:
+      DOTNET_NOLOGO: true
+      DOTNET_CLI_TELEMETRY_OPTOUT: true
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: 'recursive'
+      - name: Pre-build Install
+        uses: actions/setup-dotnet@v1.7.2
+        with:
+          dotnet-version: '5.0.102'
+      - name: Release package
+        run: |-
+         scripts\gendocs
+         scripts\pack
+     # dotnet nuget push release\*.nupkg -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json --skip-duplicate
+      - name: Publish docs
+        uses: peaceiris/actions-gh-pages@v3.8.0
+        with:
+          deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+          enable_jekyll: false
+          publish_dir: './output'
+          user_name: 'Fornax.Seo [action]'
+          user_email: 'Fornax.Seo@users.noreply.github.com'
+          commit_message: '${{ github.event.head_commit.message }}'
