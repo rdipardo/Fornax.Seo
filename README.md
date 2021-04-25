@@ -4,7 +4,7 @@
 [![NuGet workflow status][]][NuGet Workflow]
 [![Test workflow status][]][Test Workflow]
 
-SEO metadata generator for Fornax
+A SEO meta tag generator for [Fornax](https://ionide.io/Tools/fornax.html)
 
 ## Goals
 
@@ -19,7 +19,7 @@ SEO metadata generator for Fornax
 
 ## Usage example
 
-- Install [Fornax](https://ionide.io/Tools/fornax.html)
+- [Install Fornax](https://github.com/ionide/Fornax#installation)
 
       dotnet tool install fornax -g
 
@@ -182,7 +182,13 @@ let layout (ctx: SiteContents) (active: string) (content: HtmlElement seq) =
 
 ## Development
 
-_All platforms need a .NET SDK at version 5.0.102 or later_
+_All platforms need a .NET SDK at version 5.0.200 or later_
+
+_Linux users should consider 5.0.202 the [safest minimum version][]_
+
+Checkout the source tree and submodules:
+
+    git clone --recursive https://github.com/rdipardo/Fornax.Seo
 
 ### Windows
 
@@ -241,6 +247,7 @@ Distributed under the terms of the [Mozilla Public License Version 2.0][].
 
 [structured data]: https://developers.google.com/search/docs/guides/intro-structured-data
 [absolute URLs]: https://stackoverflow.com/a/64830732
+[safest minimum version]: https://github.com/NuGet/Announcements/issues/56#issue-847215025
 [the documentation]: https://heredocs.io/Fornax.Seo
 
 [Nuget version]: https://img.shields.io/nuget/vpre/Fornax.Seo?color=blueviolet&logo=nuget

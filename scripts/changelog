@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+HEAD=$(git describe --always)
+PREV_REF=$(git describe --always $HEAD)^
+PREV=$(git describe --always --abbrev=0 ${PREV_REF})
+git log --oneline ${PREV}..${HEAD} | awk '{printf("%s\\n",$0)}'

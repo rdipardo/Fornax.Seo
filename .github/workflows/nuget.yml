@@ -1,35 +1,10 @@
 name: NuGet
 on:
   push:
-    tags:
-      - '**'
+    branches:
+      - main
 jobs:
-  test:
-    runs-on: ubuntu-20.04
-    env:
-      DOTNET_NOLOGO: true
-      DOTNET_CLI_TELEMETRY_OPTOUT: true
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          submodules: 'recursive'
-      - name: Pre-test install
-        uses: actions/setup-dotnet@v1.7.2
-        with:
-          dotnet-version: '5.0.102'
-      - name: Cache packages
-        uses: actions/cache@v2.1.5
-        with:
-          path: ~/.nuget/packages
-          key: ${{ runner.os }}-nuget-${{ hashFiles('src/Fornax.Seo/Fornax.Seo.fsproj') }}
-          restore-keys: |-
-            ${{ runner.os }}-nuget-
-            ${{ runner.os }}-
-      - name: Run tests
-        run: scripts/ci
-
-  publish:
-    needs: test
+  package:
     runs-on: windows-latest
     env:
       DOTNET_NOLOGO: true
@@ -41,18 +16,73 @@ jobs:
       - name: Pre-build Install
         uses: actions/setup-dotnet@v1.7.2
         with:
-          dotnet-version: '5.0.102'
-      - name: Release package
+          dotnet-version: '5.0.202'
+      - name: Build package
+        run: scripts\pack
+      - name: Save package
+        uses: actions/upload-artifact@v2.2.3
+        with:
+          name: Fornax.Seo.nupkg
+          path: release/*.nupkg
+          retention-days: 30
+          if-no-files-found: error
+
+  publish:
+    needs: package
+    runs-on: ubuntu-20.04
+    if: startsWith(github.ref, 'refs/tags/')
+    env:
+      DOTNET_NOLOGO: true
+      DOTNET_CLI_TELEMETRY_OPTOUT: true
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: 'recursive'
+          fetch-depth: 0
+      - name: Pre-build Install
+        uses: actions/setup-dotnet@v1.7.2
+        with:
+          dotnet-version: '5.0.202'
+      - name: Cache packages
+        uses: actions/cache@v2.1.5
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('src/Fornax.Seo/Directory.Build.props') }}
+          restore-keys: |-
+            ${{ runner.os }}-nuget-
+            ${{ runner.os }}-
+      - name: Collect release info
         run: |-
-         scripts\gendocs
-         scripts\pack
-     # dotnet nuget push release\*.nupkg -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json --skip-duplicate
+          echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+          echo -e $(scripts/changelog) > release_notes.txt
+      - name: Retrieve package
+        uses: actions/download-artifact@v2.0.9
+        id: fetch
+        with:
+          name: Fornax.Seo.nupkg
+          path: '~/release'
+      - name: Prepare release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: ${{ steps.fetch.outputs.download-path }}/*.nupkg
+          bodyFile: release_notes.txt
+          name: ${{ env.RELEASE_VERSION }}
+          draft: true
+          allowUpdates: true
+          artifactErrorsFailBuild: true
+          replacesArtifacts: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Publish release
+        run: |-
+          dotnet nuget push release/Fornax.Seo.*.nupkg -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json --skip-duplicate
+          scripts/gendocs
       - name: Publish docs
         uses: peaceiris/actions-gh-pages@v3.8.0
         with:
           deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
           enable_jekyll: false
           publish_dir: './output'
+          publish_branch: docs
           user_name: 'Fornax.Seo [action]'
           user_email: 'Fornax.Seo@users.noreply.github.com'
           commit_message: '${{ github.event.head_commit.message }}'

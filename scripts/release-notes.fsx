@@ -19,5 +19,5 @@ try
     FileInfo(noteText).Directory.Create()
     File.WriteAllText(noteText, notes)
 
-    printfn "---\n%s\n---" <| (File.ReadAllText(noteText)).Replace("!NL!", "\n")
+    printfn "---\n%s\n---" <| (File.ReadAllText(noteText)).Replace("!NL!", Environment.NewLine)
 with exc -> printfn "%s" <| (sprintf "%s: %s" <| exc.GetType().Name <| exc.Message)

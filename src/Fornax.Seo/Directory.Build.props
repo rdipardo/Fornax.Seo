@@ -1,0 +1,5 @@
+<Project>
+  <PropertyGroup>
+    <FSharpDataVersion>4.1.0</FSharpDataVersion>
+  </PropertyGroup>
+</Project>

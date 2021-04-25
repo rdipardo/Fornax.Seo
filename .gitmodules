@@ -1,3 +1,6 @@
 [submodule "src/Fornax"]
 	path = src/Fornax
 	url = https://github.com/ionide/Fornax.git
+[submodule "src/FSharp.Data"]
+	path = src/FSharp.Data
+	url = https://github.com/fsprojects/FSharp.Data.git

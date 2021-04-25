@@ -1,11 +1,8 @@
 name: Unit Tests
 on:
-  push:
-    branches:
-      - !ma*
   pull_request:
     branches:
-      - '**'
+      - main
 jobs:
   unit_tests:
     runs-on: ubuntu-20.04
@@ -19,12 +16,12 @@ jobs:
       - name: Pre-test install
         uses: actions/setup-dotnet@v1.7.2
         with:
-          dotnet-version: '5.0.102'
+          dotnet-version: '5.0.202'
       - name: Cache packages
         uses: actions/cache@v2.1.5
         with:
           path: ~/.nuget/packages
-          key: ${{ runner.os }}-nuget-${{ hashFiles('test/Fornax.Seo.Tests/Fornax.Seo.Tests.fsproj') }}
+          key: ${{ runner.os }}-nuget-${{ hashFiles('src/Fornax.Seo/Directory.Build.props') }}
           restore-keys: |-
             ${{ runner.os }}-nuget-
             ${{ runner.os }}-

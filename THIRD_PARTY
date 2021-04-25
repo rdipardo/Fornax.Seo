@@ -5,3 +5,8 @@ Fornax
 ------
 The Fornax CLI tool and libraries are distributed under the terms of the MIT License.
 More information is available at https://github.com/ionide/Fornax/blob/master/LICENSE.md
+
+FSharp.Data
+------------
+FSharp.Data is distributed under the terms of the Apache License, Version 2.0.
+More information is available at https://github.com/fsprojects/FSharp.Data/blob/master/LICENSE.md

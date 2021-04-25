@@ -6,7 +6,7 @@ if [ "$1" = "live" ]; then
     SITE_ROOT=
 fi
 dotnet tool restore
-dotnet build src/Fornax.Seo/Fornax.Seo.fsproj -c Release
+dotnet build /v:m /p:nowarn="3218 3390" src/Fornax.Seo/Fornax.Seo.fsproj -c Release
 cp ./README.md docs/index.md
 
 dotnet fsdocs $FORNAX_CMD --projects $(pwd)/src/Fornax.Seo/Fornax.Seo.fsproj \

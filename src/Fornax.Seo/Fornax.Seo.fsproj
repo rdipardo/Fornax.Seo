@@ -1,10 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk" InitialTargets="ToolRestore">
   <PropertyGroup>
     <VersionPrefix>0.1.0</VersionPrefix>
     <VersionSuffix>alpha</VersionSuffix>
     <Authors>Robert Di Pardo</Authors>
     <Copyright>Copyright (c) 2021 Robert Di Pardo and Contributors</Copyright>
-    <Description>SEO metadata generator for Fornax</Description>
+    <Description>A SEO meta tag generator for Fornax (https://ionide.io/Tools/fornax.html)</Description>
     <RepositoryUrl>https://github.com/rdipardo/Fornax.Seo</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageLicenseExpression>MPL-2.0</PackageLicenseExpression>
@@ -22,8 +22,8 @@
     <Compile Include="Core.fs"/>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="FSharp.Data" Version="4.1.0"/>
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3"/>
+    <PackageReference Include="FSharp.Data" Version="$(FSharpDataVersion)"/>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1"/>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="../Fornax/src/Fornax.Core/Fornax.Core.fsproj">
@@ -31,15 +31,28 @@
       <IncludeAssets>Fornax.Core.dll</IncludeAssets>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="../FSharp.Data/src/FSharp.Data.DesignTime/FSharp.Data.DesignTime.fsproj">
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+      <IncludeAssets>FSharp.Data.DesignTime.dll</IncludeAssets>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup>
     <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);CopyProjectReferencesToPackage</TargetsForTfmSpecificBuildOutput>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <Target DependsOnTargets="ResolveReferences" Name="CopyProjectReferencesToPackage">
     <ItemGroup>
       <BuildOutputInPackage Include="@(ReferenceCopyLocalPaths-&gt;WithMetadataValue('ReferenceSourceTarget', 'ProjectReference'))"/>
     </ItemGroup>
+  </Target>
+  <Target Name="ConfigureProjectDependencies">
+    <Exec EchoOff="true" Command="git config --local core.longpaths true"/>
+    <Exec EchoOff="true" Command="git submodule update --init --remote"/>
+    <Exec EchoOff="true" Command="git --git-dir=../FSharp.Data/.git --work-tree=../FSharp.Data checkout $(FSharpDataVersion)"/>
+    <Copy SourceFiles="../../global.json" DestinationFolder="../Fornax"/>
+  </Target>
+  <Target Name="ToolRestore" DependsOnTargets="ConfigureProjectDependencies">
+    <Exec Command="dotnet tool restore --tool-manifest ../Fornax/.config/dotnet-tools.json" EchoOff="true"/>
+    <Exec Command="dotnet tool restore --tool-manifest ../FSharp.Data/.config/dotnet-tools.json" EchoOff="true"/>
   </Target>
 </Project>
