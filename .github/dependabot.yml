@@ -5,7 +5,7 @@ updates:
     schedule:
       interval: "daily"
     commit-message:
-      prefix: "Fornax.Core"
+      prefix: third-party
     labels:
       - "upstream"
       - "dependencies"
