@@ -13,7 +13,8 @@ module UnitTests =
               "https://open.spotify.com/user/er811nzvdw2cy2qgkrlei9sqe/playlist/2lzTTRqhYS6AkHPIvdX9u3?si=KcZxfwiIR7OBPCzj20utaQ"
               "ell.stackexchange.com/users/00001/webmaster"
               "https://t.me/s/webmaster"
-              "https://www.linkedin.com/in/webmaster" ]
+              "https://www.linkedin.com/in/webmaster"
+              "dev.to/webmaster" ]
 
         let pageAuthor = { Name = "Webmaster"; Email = "some1@example.com"; SocialMedia = links }
 
@@ -152,6 +153,15 @@ module UnitTests =
             |> function
             | Some link -> StringAssert.Contains(expected, HtmlElement.ToString link)
             | None -> Assert.Fail($"Expected to find {linkContent}")
+
+        [<Test>]
+        member x.``Generates absolute URLs from relative links to unknown sites``() =
+            let expected = $"""href="https://{links.[6]}" """
+
+            x.TryFindLink(expected)
+            |> function
+            | Some link -> StringAssert.Contains(expected, HtmlElement.ToString link)
+            | None -> Assert.Fail($"Expected to find {expected}")
 
         [<Test>]
         member x.``JsonLinkData ignores relative urls``() =

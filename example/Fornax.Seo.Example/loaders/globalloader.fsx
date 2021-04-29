@@ -21,7 +21,7 @@ let loader (projectRoot: string) (siteContent: SiteContents) =
         [ "linkedin.com/in/rdipardo"
           "github.com/rdipardo"
           "bitbucket.org/rdipardo"
-          "facebook.com/R.Di.Pardo" ]
+          "dev.to/rdipardo" ]
 
     let siteAuthor = { Name = "rdipardo"; Email = "dipardo.r@gmail.com"; SocialMedia = onTheWeb }
 

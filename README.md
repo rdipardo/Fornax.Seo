@@ -101,7 +101,7 @@ let generate' (ctx: SiteContents) (page: string) =
     let postMeta =
         { Title = post.title
           BaseUrl = siteRoot
-          Url = post.file
+          Url = post.file.Replace(System.IO.Path.GetExtension post.file, ".html")
           Description = tagline
           Author = { siteAuthor with Name = defaultArg post.author siteAuthor.Name }
           SiteName = siteName

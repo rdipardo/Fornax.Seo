@@ -68,7 +68,7 @@ let layout (ctx: SiteContents) (active: string) (content: HtmlElement seq) =
                     div [ Class "stacked" ] [
                         p [] [
                             !!($"&copy;&nbsp;%d{DateTime.Now.Year}&nbsp;")
-                            a [ Href($"{Uri.UriSchemeMailto}:{siteAuthor.Email}") ] [ !!siteAuthor.Name ]
+                            !!siteAuthor.Name
                         ]
                     ]
                     (if not <| List.isEmpty links then

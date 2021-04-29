@@ -122,27 +122,29 @@ module Core =
                     let noMatch = (lnk, "", "fa-external-link")
 
                     (if Uri.IsWellFormedUriString(lnk, UriKind.RelativeOrAbsolute) then
-                         lnk.Split([| '/'; '.' |], StringSplitOptions.RemoveEmptyEntries)
-                         |> Array.tryFind (fun part -> Map.containsKey part mediaIcons)
-                         |> function
-                         | Some site ->
-                             Uri.TryCreate(lnk, UriKind.RelativeOrAbsolute)
+                         let link =
+                             lnk.Split([| '/'; '.' |], StringSplitOptions.RemoveEmptyEntries)
+                             |> Array.tryFind (fun part -> Map.containsKey part mediaIcons)
                              |> function
-                             | (true, uri) ->
-                                 let siteLink =
-                                     if uri.IsAbsoluteUri then
-                                         UriBuilder(
-                                             uri.OriginalString,
-                                             Scheme = Uri.UriSchemeHttps,
-                                             Port = -1
-                                         ).Uri.AbsoluteUri
-                                     else
-                                         (sprintf "%s%s%s" Uri.UriSchemeHttps Uri.SchemeDelimiter uri.OriginalString)
-                                             .Replace("///", "//")
+                             | Some site -> site
+                             | None -> lnk
 
-                                 (siteLink, site, Map.tryFind site mediaIcons |> Option.defaultValue "fa-external-link")
-                             | _ -> noMatch
-                         | None -> noMatch
+                         Uri.TryCreate(lnk, UriKind.RelativeOrAbsolute)
+                         |> function
+                         | (true, uri) ->
+                             let siteLink =
+                                 if uri.IsAbsoluteUri then
+                                     UriBuilder(
+                                         uri.OriginalString,
+                                         Scheme = Uri.UriSchemeHttps,
+                                         Port = -1
+                                     ).Uri.AbsoluteUri
+                                 else
+                                     (sprintf "%s%s%s" Uri.UriSchemeHttps Uri.SchemeDelimiter uri.OriginalString)
+                                         .Replace("///", "//")
+
+                             (siteLink, link, Map.tryFind link mediaIcons |> Option.defaultValue "fa-external-link")
+                         | _ -> noMatch
                      else
                          noMatch))
                 >> (fun siteInfo ->
