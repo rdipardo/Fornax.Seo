@@ -33,7 +33,7 @@ module Models =
           Email: string
 
           /// <summary>
-          ///   A list of relative or absolute URLs associated this <see cref="ContentCreator"/>
+          ///   A list of relative or absolute URLs associated with this <see cref="ContentCreator"/>
           /// </summary>
           SocialMedia: string list }
 
@@ -58,7 +58,8 @@ module Models =
           Description: string
 
           /// <summary>
-          ///   The identifying name of the host website &#x2013; defaults to <see cref="Title"/>
+          ///   The identifying name of the host website &#x2013; defaults to
+          ///   <see cref="P:Fornax.Seo.Models.ContentObject.Title"/>
           /// </summary>
           SiteName: string option
 

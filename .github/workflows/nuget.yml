@@ -1,8 +1,8 @@
 name: NuGet
 on:
   push:
-    branches:
-      - main
+    tags:
+      - '**'
 jobs:
   package:
     runs-on: windows-latest
@@ -31,7 +31,6 @@ jobs:
   publish:
     needs: package
     runs-on: ubuntu-20.04
-    if: startsWith(github.ref, 'refs/tags/')
     env:
       DOTNET_NOLOGO: true
       DOTNET_CLI_TELEMETRY_OPTOUT: true
@@ -76,14 +75,14 @@ jobs:
       - name: Publish release
         run: |-
           dotnet nuget push release/Fornax.Seo.*.nupkg -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json --skip-duplicate
-          scripts/gendocs
+          CI=true scripts/gendocs
       - name: Publish docs
         uses: peaceiris/actions-gh-pages@v3.8.0
         with:
           deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
           enable_jekyll: false
           publish_dir: './output'
-          publish_branch: docs
+          publish_branch: api
           user_name: 'Fornax.Seo [action]'
           user_email: 'Fornax.Seo@users.noreply.github.com'
           commit_message: '${{ github.event.head_commit.message }}'

@@ -4,6 +4,7 @@
     <Authors>Robert Di Pardo</Authors>
     <Copyright>Copyright (c) 2021 Robert Di Pardo and Contributors</Copyright>
     <Description>A SEO meta tag generator for Fornax (https://ionide.io/Tools/fornax.html)</Description>
+    <PackageProjectUrl>https://heredocs.io/Fornax.Seo</PackageProjectUrl>
     <RepositoryUrl>https://github.com/rdipardo/Fornax.Seo</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageLicenseExpression>MPL-2.0</PackageLicenseExpression>
@@ -45,8 +46,6 @@
     </ItemGroup>
   </Target>
   <Target Name="ConfigureProjectDependencies">
-    <Exec EchoOff="true" Command="git config --local core.longpaths true"/>
-    <Exec EchoOff="true" Command="git submodule update --init --remote"/>
     <Exec EchoOff="true" Command="git --git-dir=../FSharp.Data/.git --work-tree=../FSharp.Data checkout $(FSharpDataVersion)"/>
     <Copy SourceFiles="../../global.json" DestinationFolder="../Fornax"/>
   </Target>
