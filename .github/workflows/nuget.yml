@@ -24,7 +24,7 @@ jobs:
         uses: actions/upload-artifact@v2.2.3
         with:
           name: Fornax.Seo.nupkg
-          path: release/*.nupkg
+          path: ${{ github.workspace }}/release/*.nupkg
           retention-days: 30
           if-no-files-found: error
 
@@ -60,7 +60,7 @@ jobs:
         id: fetch
         with:
           name: Fornax.Seo.nupkg
-          path: '~/release'
+          path: ${{ github.workspace }}/release
       - name: Prepare release
         uses: ncipollo/release-action@v1
         with:
