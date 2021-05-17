@@ -15,7 +15,7 @@ jobs:
           submodules: 'recursive'
           fetch-depth: 0
       - name: Pre-build Install
-        uses: actions/setup-dotnet@v1.7.2
+        uses: actions/setup-dotnet@v1.8.0
         with:
           dotnet-version: '5.0.202'
       - name: Build package
@@ -40,7 +40,7 @@ jobs:
           submodules: 'recursive'
           fetch-depth: 0
       - name: Pre-build Install
-        uses: actions/setup-dotnet@v1.7.2
+        uses: actions/setup-dotnet@v1.8.0
         with:
           dotnet-version: '5.0.202'
       - name: Cache packages
