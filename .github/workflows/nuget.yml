@@ -44,7 +44,7 @@ jobs:
         with:
           dotnet-version: '5.0.202'
       - name: Cache packages
-        uses: actions/cache@v2.1.5
+        uses: actions/cache@v2.1.6
         with:
           path: ~/.nuget/packages
           key: ${{ runner.os }}-nuget-${{ hashFiles('src/Fornax.Seo/Directory.Build.props') }}
