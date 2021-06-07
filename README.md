@@ -29,7 +29,7 @@ A SEO meta tag generator for [Fornax](https://ionide.io/Tools/fornax.html)
 
 **IMPORTANT**
 
-- Add the root domain of your website to a global instance of `Fornax.Core.Model.SiteContents`:
+- Provide the root domain of your website:
 
 ~~~fsharp
 // loaders/globalloader.fsx
@@ -43,7 +43,7 @@ type SiteInfo = {
 }
 ~~~
 
-- add personal authorship details, e.g.:
+- Add personal authorship details, e.g.:
 
 ~~~fsharp
 // loaders/globalloader.fsx
@@ -155,10 +155,10 @@ let layout (ctx: SiteContents) (active: string) (content: HtmlElement seq) =
         | Some info -> info
         | _ ->
             { ContentObject.Default with
-                  Title = title
+                  Title = pageTitle
                   Description = tagline
                   BaseUrl = siteRoot
-                  SiteName = Some title
+                  SiteName = Some pageTitle
                   Headline = Some tagline
                   Author = siteAuthor }
 
@@ -166,7 +166,7 @@ let layout (ctx: SiteContents) (active: string) (content: HtmlElement seq) =
         head [] [
             meta [ CharSet "utf-8" ]
             meta [ Name "viewport"; Content "width=device-width, initial-scale=1" ]
-            title [] [ !!"My Blog" ]
+            title [] [ !!pageTitle ]
             // . . .
             yield! seo pageMeta
         ]
