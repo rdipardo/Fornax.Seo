@@ -110,7 +110,7 @@
 </ul>
 <p><strong>IMPORTANT</strong></p>
 <ul>
-<li>Add the root domain of your website to a global instance of <code>Fornax.Core.Model.SiteContents</code>:</li>
+<li>Provide the root domain of your website:</li>
 </ul>
 <pre class="fssnip highlighted"><code lang="fsharp"><span class="c">// loaders/globalloader.fsx</span>
 <span class="pp">#r</span> <span class="s">&quot;../_lib/Fornax.Core.dll&quot;</span>
@@ -123,7 +123,7 @@
 <span class="pn">}</span>
 </code></pre>
 <ul>
-<li>add personal authorship details, e.g.:</li>
+<li>Add personal authorship details, e.g.:</li>
 </ul>
 <pre class="fssnip highlighted"><code lang="fsharp"><span class="c">// loaders/globalloader.fsx</span>
 <span class="pp">#r</span> <span class="s">&quot;nuget: Fornax.Seo&quot;</span>
@@ -228,10 +228,10 @@
         <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs13', 60)" onmouseover="showTip(event, 'fs13', 60)" class="id">Some</span> <span class="id">info</span> <span class="k">-&gt;</span> <span class="id">info</span>
         <span class="pn">|</span> <span class="id">_</span> <span class="k">-&gt;</span>
             <span class="pn">{</span> <span class="id">ContentObject</span><span class="pn">.</span><span class="id">Default</span> <span class="k">with</span>
-                  <span class="id">Title</span> <span class="o">=</span> <span class="id">title</span>
+                  <span class="id">Title</span> <span class="o">=</span> <span class="id">pageTitle</span>
                   <span class="id">Description</span> <span class="o">=</span> <span class="id">tagline</span>
                   <span class="id">BaseUrl</span> <span class="o">=</span> <span class="id">siteRoot</span>
-                  <span class="id">SiteName</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs13', 61)" onmouseover="showTip(event, 'fs13', 61)" class="id">Some</span> <span class="id">title</span>
+                  <span class="id">SiteName</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs13', 61)" onmouseover="showTip(event, 'fs13', 61)" class="id">Some</span> <span class="id">pageTitle</span>
                   <span class="id">Headline</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs13', 62)" onmouseover="showTip(event, 'fs13', 62)" class="id">Some</span> <span class="id">tagline</span>
                   <span class="id">Author</span> <span class="o">=</span> <span class="id">siteAuthor</span> <span class="pn">}</span>
 
@@ -239,7 +239,7 @@
         <span class="id">head</span> <span class="pn">[</span><span class="pn">]</span> <span class="pn">[</span>
             <span class="id">meta</span> <span class="pn">[</span> <span class="id">CharSet</span> <span class="s">&quot;utf-8&quot;</span> <span class="pn">]</span>
             <span class="id">meta</span> <span class="pn">[</span> <span class="id">Name</span> <span class="s">&quot;viewport&quot;</span><span class="pn">;</span> <span class="id">Content</span> <span class="s">&quot;width=device-width, initial-scale=1&quot;</span> <span class="pn">]</span>
-            <span class="id">title</span> <span class="pn">[</span><span class="pn">]</span> <span class="pn">[</span> <span class="o">!!</span><span class="s">&quot;My Blog&quot;</span> <span class="pn">]</span>
+            <span class="id">title</span> <span class="pn">[</span><span class="pn">]</span> <span class="pn">[</span> <span class="o">!!</span><span class="id">pageTitle</span> <span class="pn">]</span>
             <span class="c">// . . .</span>
             <span class="k">yield!</span> <span class="id">seo</span> <span class="id">pageMeta</span>
         <span class="pn">]</span>
