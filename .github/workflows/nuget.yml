@@ -21,7 +21,7 @@ jobs:
       - name: Build package
         run: scripts\pack
       - name: Save package
-        uses: actions/upload-artifact@v2.2.3
+        uses: actions/upload-artifact@v2.2.4
         with:
           name: Fornax.Seo.nupkg
           path: ${{ github.workspace }}/release/*.nupkg
