@@ -10,7 +10,7 @@ IF "%1"=="live" (
     SET SITE_ROOT=
 )
 dotnet tool restore
-dotnet build /v:m /p:nowarn="3218 3390" src/Fornax.Seo/Fornax.Seo.fsproj -c Release
+dotnet build /v:m /p:nowarn=\"3218;3390\" src/Fornax.Seo/Fornax.Seo.fsproj -c Release
 
 copy README.md docs\index.md
 dotnet fsdocs %FSDOCS_CMD% --projects %CD%/src/Fornax.Seo/Fornax.Seo.fsproj ^

@@ -21,7 +21,7 @@ IF NOT %ERRORLEVEL% == 0 (
 )
 
 dotnet restore src/Fornax.Seo/Fornax.Seo.fsproj
-dotnet pack /v:m /p:nowarn="3218 3390" src/Fornax.Seo/Fornax.Seo.fsproj -c Release -o release %BUILD_NUMBER%
+dotnet pack /v:m /p:nowarn=\"3218;3390\" src/Fornax.Seo/Fornax.Seo.fsproj -c Release -o release %BUILD_NUMBER%
 
 :END
 ENDLOCAL
