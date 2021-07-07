@@ -14,9 +14,9 @@ module Models =
     open FSharp.Data
 
     [<Literal>]
-    let private schemaDotOrg = @"https://schema.org/version/latest/schemaorg-current-https.jsonld"
+    let private SchemaDotOrg = @"https://schema.org/version/latest/schemaorg-current-https.jsonld"
 
-    type internal SchemaProvider = JsonProvider<schemaDotOrg>
+    type internal SchemaProvider = JsonProvider<SchemaDotOrg>
 
     /// Represents the author of a web content item
     type ContentCreator =

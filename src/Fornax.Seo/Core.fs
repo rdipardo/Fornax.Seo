@@ -140,7 +140,7 @@ module Core =
                                          Port = -1
                                      ).Uri.AbsoluteUri
                                  else
-                                     (sprintf "%s%s%s" Uri.UriSchemeHttps Uri.SchemeDelimiter uri.OriginalString)
+                                     $"{Uri.UriSchemeHttps}{Uri.SchemeDelimiter}{uri.OriginalString}"
                                          .Replace("///", "//")
 
                              (siteLink, link, Map.tryFind link mediaIcons |> Option.defaultValue "fa-external-link")
@@ -160,10 +160,10 @@ module Core =
                         (if String.IsNullOrEmpty(siteAuthor) then
                              String.Empty
                          else
-                             sprintf "Find %s on %s" siteAuthor siteName)
+                             $"Find {siteAuthor} on {siteName}")
 
                     a [ Href link; HtmlProperties.Title linkTitle; Class "navicon" ] [
-                        i [ Class((sprintf "media-icon fa %s" icon)); Custom("aria-hidden", "true") ] []
+                        i [ Class(($"media-icon fa {icon}")); Custom("aria-hidden", "true") ] []
                     ])
             )
 

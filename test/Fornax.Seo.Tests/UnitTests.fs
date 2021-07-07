@@ -65,6 +65,15 @@ module UnitTests =
             | None -> Assert.Fail($"Expected to find {expected}")
 
         [<Test>]
+        member x.``Metadata includes Fornax version``() =
+            let expected = $"""<meta name="generator" content="fornax v0.13.1"/>"""
+
+            x.TryFindSeoTag(expected)
+            |> function
+            | Some _ -> Assert.Pass()
+            | None -> Assert.Fail($"Expected to find {expected}")
+
+        [<Test>]
         member x.``Social media links are styled when present``() =
             let expected = ".media-icon"
 
@@ -178,16 +187,23 @@ module UnitTests =
             Assert.Null(json.MainEntityOfPage.Id)
 
         [<Test>]
-        member x.``Validates mainEntity's Schema.org Type``() =
+        member x.``Validates ContentObject's Schema.org Type``() =
             let f =
                 TestDelegate(fun () -> seo ({ pageInfo with ObjectType = Some "Starbucks" }) |> ignore)
 
             Assert.Throws<System.ArgumentException>(f) |> ignore
 
         [<Test>]
-        member x.``Validates page content's Schema.org Type``() =
+        member x.``Validates MainEntity's Schema.org Type``() =
             let f =
                 TestDelegate(fun () -> seo ({ pageInfo with ContentType = Some "dog.food" }) |> ignore)
+
+            Assert.Throws<System.ArgumentException>(f) |> ignore
+
+        [<Test>]
+        member x.``Validates ContentObject's OpenGraphType Type``() =
+            let f =
+                TestDelegate(fun () -> seo ({ pageInfo with OpenGraphType = Some "" }) |> ignore)
 
             Assert.Throws<System.ArgumentException>(f) |> ignore
 
