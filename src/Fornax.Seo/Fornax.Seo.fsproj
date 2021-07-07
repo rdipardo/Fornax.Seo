@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk" InitialTargets="ToolRestore">
   <PropertyGroup>
-    <VersionPrefix>0.1.0</VersionPrefix>
+    <VersionPrefix>0.1.1</VersionPrefix>
+    <VersionSuffix>rc-1</VersionSuffix>
     <Authors>Robert Di Pardo</Authors>
     <Copyright>Copyright (c) 2021 Robert Di Pardo and Contributors</Copyright>
     <Description>A SEO meta tag generator for Fornax (https://ionide.io/Tools/fornax.html)</Description>
@@ -18,6 +19,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Models.fs"/>
+    <Compile Include="StructuredData.fs"/>
     <Compile Include="Tags.fs"/>
     <Compile Include="Core.fs"/>
   </ItemGroup>

@@ -8,51 +8,6 @@
 
 namespace Fornax.Seo
 
-/// Internal representations of SEO metadata objects
-/// <exclude />
-module StructuredData =
-    open Html
-    open Newtonsoft.Json
-
-    type SchemaDotOrgContext(cxt: SchemaProvider.Context) =
-        member val Rdf = cxt.Rdf
-        member val Rdfs = cxt.Rdfs
-        member val Schema = cxt.Schema
-        member val Xsd = cxt.Xsd
-
-    type MainEntity =
-        { [<JsonProperty("@type")>]
-          Schema: string
-          [<JsonProperty("@id")>]
-          Id: string }
-
-    type Author =
-        { [<JsonProperty("@type")>]
-          Schema: string
-          Name: string
-          [<JsonProperty("sameAs")>]
-          Links: string list }
-
-    type OpenGraphArticle =
-        { Published_time: string
-          Modified_time: string
-          Author: string
-          Tags: string list option }
-        member this.ToHtml() =
-            let tags =
-                defaultArg this.Tags []
-                |> List.map (fun t -> meta [ Property "article:tag"; Content t ])
-
-            this.GetType().GetProperties()
-            |> Array.filter
-                (fun prop ->
-                    not <| obj.ReferenceEquals(prop.GetValue(this, null), null)
-                    && not <| obj.ReferenceEquals(prop.GetValue(this, null), None)
-                    && prop.Name <> "Tags")
-            |> Array.map (fun prop -> "article:" + prop.Name.ToLowerInvariant(), prop.GetValue(this, null).ToString())
-            |> (Map.ofArray
-                >> Map.fold (fun lst p c -> lst @ [ meta [ Property p; Content c ] ]) tags)
-
 /// Internal representations of HTML elements generated from SEO metadata
 /// <exclude />
 module Tags =
@@ -67,12 +22,12 @@ module Tags =
 
     let private getSchemaOrgType name =
         Schemata.Graph
-        |> Array.tryFind (fun s -> s.Id = sprintf "schema:%s" name)
+        |> Array.tryFind (fun s -> s.Id = $"schema:{name}")
         |> function
         | Some schema -> schema.RdfsLabel.String |> Option.get
         | None -> invalidArg name "Invalid Schema.org type! See https://schema.org/docs/full.html"
 
-    let private getOpenGraphType name =
+    let private getOpenGraphType (name: string) =
         [ "website"
           "article"
           "book"
@@ -85,7 +40,7 @@ module Tags =
           "video.episode"
           "video.tv_show"
           "video.other" ]
-        |> List.tryFind (fun typ -> typ.ToLowerInvariant().StartsWith(name))
+        |> List.tryFind (fun typ -> name.ToLowerInvariant().Equals(typ))
         |> function
         | Some typ -> typ
         | None -> invalidArg name "Invalid OpenGraph type! See https://ogp.me/#types"
@@ -104,8 +59,8 @@ module Tags =
         | (true, u) when List.contains u.Scheme [ Uri.UriSchemeHttps; Uri.UriSchemeHttp ] ->
             UriBuilder(u, Port = -1).Uri.AbsoluteUri
         | _ ->
-            let srcPath = System.IO.Path.Combine(__SOURCE_DIRECTORY__, __SOURCE_FILE__) + "," + __LINE__
-            eprintfn "WARNING: Can't resolve website root from '%s' - use an absolute URL instead (%s)" url srcPath
+            let srcPath = $"{System.IO.Path.Combine(__SOURCE_DIRECTORY__, __SOURCE_FILE__)},{__LINE__}"
+            eprintfn $"WARNING: Can't resolve website root from {url}' - use an absolute URL instead ({srcPath})"
             null
 
     let private parseUrl root url canonical =
@@ -133,7 +88,7 @@ module Tags =
                         |> String.concat "/"
                      else resource
 
-                sprintf "%s%s%s%s" domain.Scheme Uri.SchemeDelimiter domain.Host <| ("/" + path).Replace("//", "/")
+                $"""{domain.Scheme}{Uri.SchemeDelimiter}{domain.Host}{("/" + path).Replace("//", "/")}"""
 
     let private toIsoDateString (date: DateTime option) =
         date
@@ -181,7 +136,7 @@ module Tags =
             let jsonLD = JObject.Parse(JsonConvert.SerializeObject(this, Formatting.None, jsonOptions))
 
             let toCamelCase (str: string) =
-                (sprintf "%c%s" <| Char.ToLowerInvariant(str.[0]) <| str.Substring(1)).Replace('_', '\000')
+                $"{Char.ToLowerInvariant(str.[0])}{str.Substring(1)}".Replace('_', '\000')
 
             metaOpt
             |> Map.iter
@@ -231,10 +186,10 @@ module Tags =
              |> (Map.ofArray
                  >> Map.fold (fun lst p c -> lst @ [ meta [ Property p; Content c ] ]) []))
             @ [ meta [ Name "generator"; Content "fornax v0.13.1" ]
-                meta [ Name "description"; Content page.Description ]
+                meta [ Name "description"; Content this.Description ]
                 meta [ Name "author"; Content page.Author.Name ]
                 meta [ Name "twitter:card"; Content "summary" ]
-                meta [ Property "twitter:title"; Content page.Title ] ]
+                meta [ Property "twitter:title"; Content this.Title ] ]
               @ (if isArticle then
                      let article =
                          { Published_time = toIsoDateString page.Published
