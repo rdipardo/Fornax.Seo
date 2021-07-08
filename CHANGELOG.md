@@ -1,3 +1,8 @@
+## 0.1.1
+- Fix faulty comparison that allowed empty strings to match any OpenGraph type
+- Move the `StructuredData` module to a separate file and make some of its members value types
+- Return interpolated strings wherever `sprintf` was used
+
 ## 0.1.0
 - Bump FSharp.Data to 4.1.1
 - Generate absolute URLs to all social media links
