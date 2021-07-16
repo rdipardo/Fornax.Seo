@@ -39,3 +39,10 @@ div.fsdocs-tip {
 div.fsdocs-tip code {
   color: #e83e8c
 }
+
+@media only screen and (max-width: 600px) {
+  #fsdocs-logo {
+    display: block;
+    margin: 10px auto;
+  }
+}

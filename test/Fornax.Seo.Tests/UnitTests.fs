@@ -33,7 +33,7 @@ module UnitTests =
               Published = Some System.DateTime.Now
               Modified = None
               Tags = Some [ "advice"; "careers"; "blogging" ]
-              Meta = Some [ ("Image", "/avatar.jpg" ); ("Publisher", pageAuthor.Name ) ]}
+              Meta = Some [ ("Image", "/avatar.jpg"); ("Publisher", pageAuthor.Name) ] }
 
         member private x.TryFindSeoTag(content: string) =
             seo pageInfo
@@ -84,9 +84,7 @@ module UnitTests =
 
         [<Test>]
         member x.``No style is generated if no email and no links are present``() =
-            seo
-                { pageInfo with
-                      Author = { pageAuthor with Email = ""; SocialMedia = [] } }
+            seo { pageInfo with Author = { pageAuthor with Email = ""; SocialMedia = [] } }
             |> List.tryFind (fun tag -> (HtmlElement.ToString tag).Contains("<style>"))
             |> function
             | Some _ -> Assert.Fail($"Expected no <style> tag")
@@ -174,7 +172,7 @@ module UnitTests =
 
         [<Test>]
         member x.``JsonLinkData ignores relative urls``() =
-            let bad = { pageInfo with BaseUrl = "/public"; Url = "/news/posting.php"}
+            let bad = { pageInfo with BaseUrl = "/public"; Url = "/news/posting.php" }
             let json = JsonLinkData(bad)
 
             Assert.Null(json.MainEntityOfPage.Id)

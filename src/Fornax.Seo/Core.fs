@@ -39,9 +39,7 @@ module Core =
         let links = author.SocialMedia
         let jsonLd = JsonLinkData(page)
         let openGraph = OpenGraph({ page with ContentType = Some jsonLd.MainEntityOfPage.Schema })
-
         let tags = [ yield! openGraph.ToHtml(); jsonLd.ToHtml() ]
-
         let iconStyle = """
             .media-icon {
                 font-size: 2.5rem;
@@ -82,7 +80,6 @@ module Core =
         let siteAuthor = author.Name
         let email = author.Email.Trim()
         let socialMedia = author.SocialMedia
-
         let mediaIcons =
             [ ("bitbucket", "fa-bitbucket")
               ("deviantart", "fa-deviantart")
@@ -138,7 +135,9 @@ module Core =
                                          uri.OriginalString,
                                          Scheme = Uri.UriSchemeHttps,
                                          Port = -1
-                                     ).Uri.AbsoluteUri
+                                     )
+                                         .Uri
+                                         .AbsoluteUri
                                  else
                                      $"{Uri.UriSchemeHttps}{Uri.SchemeDelimiter}{uri.OriginalString}"
                                          .Replace("///", "//")

@@ -6,6 +6,7 @@
 **.bat              text   eol=crlf
 scripts/changelog   text   eol=lf
 scripts/ci          text   eol=lf
+scripts/format      text   eol=lf
 scripts/gendocs     text   eol=lf
 example/**/build    text   eol=lf
 example/**          linguist-documentation

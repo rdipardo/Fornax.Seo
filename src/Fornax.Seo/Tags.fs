@@ -74,9 +74,8 @@ module Tags =
             |> function
             | (false, _) -> String.Empty
             | (true, uri) ->
-                let resource =
-                    if uri.IsAbsoluteUri then uri.AbsolutePath
-                    else uri.OriginalString
+                let resource = if uri.IsAbsoluteUri then uri.AbsolutePath else uri.OriginalString
+
                 let path =
                     if canonical then
                         resource.Split([| '/'; '#'; '?'; '&' |], StringSplitOptions.RemoveEmptyEntries)
@@ -86,7 +85,8 @@ module Tags =
                                 |> (List.contains <| part.ToLowerInvariant())
                                 |> not)
                         |> String.concat "/"
-                     else resource
+                    else
+                        resource
 
                 $"""{domain.Scheme}{Uri.SchemeDelimiter}{domain.Host}{("/" + path).Replace("//", "/")}"""
 
@@ -134,14 +134,13 @@ module Tags =
                 )
 
             let jsonLD = JObject.Parse(JsonConvert.SerializeObject(this, Formatting.None, jsonOptions))
-
-            let toCamelCase (str: string) =
-                $"{Char.ToLowerInvariant(str.[0])}{str.Substring(1)}".Replace('_', '\000')
+            let toCamelCase (str: string) = $"{Char.ToLowerInvariant(str.[0])}{str.Substring(1)}".Replace('_', '\000')
 
             metaOpt
             |> Map.iter
                 (fun p _ ->
                     let value = tryGetResource metaOpt p
+
                     if not <| obj.ReferenceEquals(value, null) then
                         jsonLD.Add(JProperty(toCamelCase p, value))
                     else
@@ -149,8 +148,7 @@ module Tags =
 
             JsonConvert.SerializeObject(jsonLD, Formatting.None, jsonOptions)
 
-        member this.ToHtml() =
-            script [ HtmlProperties.Type "application/ld+json" ] [ !!this.ToString() ]
+        member this.ToHtml() = script [ HtmlProperties.Type "application/ld+json" ] [ !!this.ToString() ]
 
 
     type OpenGraph(page: ContentObject) =
