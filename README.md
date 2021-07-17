@@ -180,49 +180,6 @@ let layout (ctx: SiteContents) (active: string) (content: HtmlElement seq) =
 ~~~
 
 
-## Development
-
-_All platforms need a .NET SDK at version 5.0.200 or later_
-
-_Linux users should consider 5.0.202 the [safest minimum version][]_
-
-Checkout the source tree and submodules:
-
-    git clone --recursive https://github.com/rdipardo/Fornax.Seo
-
-### Windows
-
-To run unit tests and build a sample website:
-
-~~~bat
-  scripts\ci
-  :: or, to also serve the site at localhost:8080
-  scripts\ci live
-~~~
-
-To browse a local copy of [the documentation][]:
-
-~~~bat
-  scripts\gendocs live
-~~~
-
-### Linux, macOS
-
-Run tests with:
-
-~~~sh
-  scripts/ci
-  # or
-  scripts/ci live
-~~~
-
-Browse docs with:
-
-~~~sh
-  scripts/gendocs live
-~~~
-
-
 ## Similar NuGet libraries (by framework)
 
 ### .NET
@@ -238,6 +195,11 @@ Browse docs with:
 ### [Umbraco](https://umbraco.com)
 
 - [Wavenet.Umbraco8.Seo](https://www.nuget.org/packages/Wavenet.Umbraco8.Seo)
+
+
+## Contributing
+
+A guide to building the project and making pull requests can be found [here](https://github.com/rdipardo/Fornax.Seo/blob/main/CONTRIBUTING.md).
 
 
 ## License
