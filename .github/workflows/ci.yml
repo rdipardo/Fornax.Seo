@@ -2,10 +2,18 @@ name: Unit Tests
 on:
   pull_request:
     branches:
-      - main
+      - next
+  push:
+    branches:
+      - next
+    tags-ignore:
+      - '**'
 jobs:
   unit_tests:
-    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        os: [ubuntu-20.04, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     env:
       DOTNET_NOLOGO: true
       DOTNET_CLI_TELEMETRY_OPTOUT: true
@@ -21,10 +29,19 @@ jobs:
       - name: Cache packages
         uses: actions/cache@v2.1.6
         with:
-          path: ~/.nuget/packages
+          path: |-
+           ${{ github.workspace }}/src/Fornax/.paket
+           ${{ github.workspace }}/src/Fornax/paket-files
+           ${{ github.workspace }}/src/FSharp.Data/.paket
+           ${{ github.workspace }}/src/FSharp.Data/paket-files
           key: ${{ runner.os }}-nuget-${{ hashFiles('src/Fornax.Seo/Directory.Build.props') }}
           restore-keys: |-
             ${{ runner.os }}-nuget-
             ${{ runner.os }}-
       - name: Run tests
+        if: ${{ !startsWith(runner.os, 'windows') }}
         run: scripts/ci
+      - name: Run tests (Windows)
+        if: ${{ startsWith(runner.os, 'windows') }}
+        run: scripts\ci
+        shell: cmd
