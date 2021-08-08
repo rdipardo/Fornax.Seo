@@ -1,5 +1,15 @@
 ## Contributing
 
+Please make all pull requests to the "next" branch. Get it by running
+
+    git clone --branch next --recursive https://github.com/rdipardo/Fornax.Seo
+
+If you already have the source tree locally, run
+
+    git checkout next
+    git reset origin/next
+
+
 ### Development
 
 _All platforms need a .NET SDK at version 5.0.200 or later_
@@ -12,11 +22,6 @@ _Linux users should consider 5.0.202 the [safest minimum version][]_
 >
 > Run `dotnet --list-sdks` and `dotnet --version` before trying to build
 > the project's documentation
-
-
-Start by checking out the source tree and submodules:
-
-    git clone --recursive https://github.com/rdipardo/Fornax.Seo
 
 
 #### Windows
