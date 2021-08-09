@@ -19,11 +19,13 @@ A SEO meta tag generator for [Fornax](https://ionide.io/Tools/fornax.html)
 
 ## Usage example
 
-- [Install Fornax](https://github.com/ionide/Fornax#installation)
+**WARNING**
 
-      dotnet tool install fornax -g
+You will need to build fornax [from source] to make use of the following example.
+Visit [the wiki] for more information.
 
 - Change into a project directory and scaffold a new website
+
 
       fornax new
 
@@ -211,6 +213,8 @@ Distributed under the terms of the [Mozilla Public License Version 2.0][].
 [absolute URLs]: https://stackoverflow.com/a/64830732
 [safest minimum version]: https://github.com/NuGet/Announcements/issues/56#issue-847215025
 [the documentation]: https://heredocs.io/Fornax.Seo
+[from source]: https://github.com/ionide/Fornax#build-process
+[the wiki]: https://github.com/rdipardo/Fornax.Seo/wiki/FAQ#faq
 
 [Nuget version]: https://img.shields.io/nuget/vpre/Fornax.Seo?color=blueviolet&logo=nuget
 [Package host]: https://www.nuget.org/packages/Fornax.Seo
