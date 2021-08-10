@@ -17,6 +17,7 @@ module Tags =
     open Newtonsoft.Json.Linq
     open Newtonsoft.Json.Serialization
     open System
+    open System.Diagnostics
 
     let private Schemata = SchemaProvider.GetSample()
 
@@ -168,6 +169,7 @@ module Tags =
         let canonical = parseUrl page.BaseUrl page.Url true
         let lang = defaultArg page.Locale "en_US"
         let metaOpt = defaultArg page.Meta [ ("", "") ] |> Map.ofList
+        let fornaxVersionInfo = FileVersionInfo.GetVersionInfo((typeof<HtmlElement>).Assembly.Location)
 
         member val Title = page.Title
         member val Type = (defaultArg page.OpenGraphType "article") |> getOpenGraphType
@@ -183,7 +185,7 @@ module Tags =
              |> Array.map (fun prop -> "og:" + prop.Name.ToLowerInvariant(), prop.GetValue(this, null).ToString())
              |> (Map.ofArray
                  >> Map.fold (fun lst p c -> lst @ [ meta [ Property p; Content c ] ]) []))
-            @ [ meta [ Name "generator"; Content "fornax v0.13.1" ]
+            @ [ meta [ Name "generator"; Content $"fornax v{fornaxVersionInfo.FileVersion}" ]
                 meta [ Name "description"; Content this.Description ]
                 meta [ Name "author"; Content page.Author.Name ]
                 meta [ Name "twitter:card"; Content "summary" ]

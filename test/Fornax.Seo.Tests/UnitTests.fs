@@ -4,6 +4,8 @@ module UnitTests =
     open NUnit.Framework
     open Fornax.Seo
     open Fornax.Seo.Tags
+    open Html
+    open System.Diagnostics
 
     [<TestFixture>]
     type UnitTest() =
@@ -66,7 +68,9 @@ module UnitTests =
 
         [<Test>]
         member x.``Metadata includes Fornax version``() =
-            let expected = $"""<meta name="generator" content="fornax v0.13.1"/>"""
+            let fornaxVersionInfo = FileVersionInfo.GetVersionInfo((typeof<HtmlElement>).Assembly.Location)
+            let expected =
+                $"""<meta name="generator" content="fornax v{fornaxVersionInfo.FileVersion}"/>"""
 
             x.TryFindSeoTag(expected)
             |> function
