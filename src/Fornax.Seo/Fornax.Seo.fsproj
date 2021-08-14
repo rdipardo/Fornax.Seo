@@ -48,7 +48,9 @@
     </ItemGroup>
   </Target>
   <Target Name="ConfigureProjectDependencies">
-    <Exec EchoOff="true" WorkingDirectory="../FSharp.Data/" Command="git checkout $(FSharpDataVersion)"/>
+    <Exec EchoOff="true" WorkingDirectory="../FSharp.Data/" Command="git checkout -f $(FSharpDataVersion)"/>
+    <Exec EchoOff="true" WorkingDirectory="../Fornax/" Command="git checkout -f $(FornaxToolVersion)"/>
+    <Copy SourceFiles="../../global.json" DestinationFolder="../FSharp.Data"/>
     <Copy SourceFiles="../../global.json" DestinationFolder="../Fornax"/>
     <Copy SourceFiles="../patches/Fornax.Core.fsproj;Directory.Build.props" DestinationFolder="../Fornax/src/Fornax.Core"/>
   </Target>
