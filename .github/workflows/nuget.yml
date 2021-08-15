@@ -17,7 +17,7 @@ jobs:
       - name: Pre-build Install
         uses: actions/setup-dotnet@v1.8.1
         with:
-          dotnet-version: '5.0.301'
+          dotnet-version: '3.1.412'
       - name: Build package
         run: scripts\pack
       - name: Save package
@@ -42,7 +42,7 @@ jobs:
       - name: Pre-build Install
         uses: actions/setup-dotnet@v1.8.1
         with:
-          dotnet-version: '5.0.204'
+          dotnet-version: '3.1.412'
       - name: Cache packages
         uses: actions/cache@v2.1.6
         with:

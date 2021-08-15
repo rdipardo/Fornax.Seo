@@ -17,12 +17,13 @@ module Tags =
     open Newtonsoft.Json.Linq
     open Newtonsoft.Json.Serialization
     open System
+    open System.Diagnostics
 
     let private Schemata = SchemaProvider.GetSample()
 
     let private getSchemaOrgType name =
         Schemata.Graph
-        |> Array.tryFind (fun s -> s.Id = $"schema:{name}")
+        |> Array.tryFind (fun s -> s.Id = (sprintf "schema:%s" name))
         |> function
         | Some schema -> schema.RdfsLabel.String |> Option.get
         | None -> invalidArg name "Invalid Schema.org type! See https://schema.org/docs/full.html"
@@ -59,8 +60,12 @@ module Tags =
         | (true, u) when List.contains u.Scheme [ Uri.UriSchemeHttps; Uri.UriSchemeHttp ] ->
             UriBuilder(u, Port = -1).Uri.AbsoluteUri
         | _ ->
-            let srcPath = $"{System.IO.Path.Combine(__SOURCE_DIRECTORY__, __SOURCE_FILE__)},{__LINE__}"
-            eprintfn $"WARNING: Can't resolve website root from {url}' - use an absolute URL instead ({srcPath})"
+            let srcPath =
+                sprintf "%s,%s"
+                <| System.IO.Path.Combine(__SOURCE_DIRECTORY__, __SOURCE_FILE__)
+                <| __LINE__
+
+            eprintfn "WARNING: Can't resolve website root from %s' - use an absolute URL instead (%s)" url srcPath
             null
 
     let private parseUrl root url canonical =
@@ -88,7 +93,8 @@ module Tags =
                     else
                         resource
 
-                $"""{domain.Scheme}{Uri.SchemeDelimiter}{domain.Host}{("/" + path).Replace("//", "/")}"""
+                sprintf "%s%s%s%s" domain.Scheme Uri.SchemeDelimiter domain.Host
+                <| ("/" + path).Replace("//", "/")
 
     let private toIsoDateString (date: DateTime option) =
         date
@@ -134,7 +140,10 @@ module Tags =
                 )
 
             let jsonLD = JObject.Parse(JsonConvert.SerializeObject(this, Formatting.None, jsonOptions))
-            let toCamelCase (str: string) = $"{Char.ToLowerInvariant(str.[0])}{str.Substring(1)}".Replace('_', '\000')
+
+            let toCamelCase (str: string) =
+                (sprintf "%c%s" <| Char.ToLowerInvariant(str.[0]) <| str.Substring(1))
+                    .Replace('_', '\000')
 
             metaOpt
             |> Map.iter
@@ -168,6 +177,7 @@ module Tags =
         let canonical = parseUrl page.BaseUrl page.Url true
         let lang = defaultArg page.Locale "en_US"
         let metaOpt = defaultArg page.Meta [ ("", "") ] |> Map.ofList
+        let fornaxVersionInfo = FileVersionInfo.GetVersionInfo((typeof<HtmlElement>).Assembly.Location)
 
         member val Title = page.Title
         member val Type = (defaultArg page.OpenGraphType "article") |> getOpenGraphType
@@ -183,7 +193,7 @@ module Tags =
              |> Array.map (fun prop -> "og:" + prop.Name.ToLowerInvariant(), prop.GetValue(this, null).ToString())
              |> (Map.ofArray
                  >> Map.fold (fun lst p c -> lst @ [ meta [ Property p; Content c ] ]) []))
-            @ [ meta [ Name "generator"; Content "fornax v0.13.1" ]
+            @ [ meta [ Name "generator"; Content("fornax v" + fornaxVersionInfo.FileVersion) ]
                 meta [ Name "description"; Content this.Description ]
                 meta [ Name "author"; Content page.Author.Name ]
                 meta [ Name "twitter:card"; Content "summary" ]

@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk" InitialTargets="ToolRestore">
   <PropertyGroup>
-    <VersionPrefix>0.1.1</VersionPrefix>
+    <VersionPrefix>1.0</VersionPrefix>
+    <VersionSuffix>rc-1</VersionSuffix>
     <Authors>Robert Di Pardo</Authors>
     <Copyright>Copyright (c) 2021 Robert Di Pardo and Contributors</Copyright>
     <Description>A SEO meta tag generator for Fornax (https://ionide.io/Tools/fornax.html)</Description>
@@ -47,8 +48,11 @@
     </ItemGroup>
   </Target>
   <Target Name="ConfigureProjectDependencies">
-    <Exec EchoOff="true" Command="git --git-dir=../FSharp.Data/.git --work-tree=../FSharp.Data checkout $(FSharpDataVersion)"/>
+    <Exec EchoOff="true" WorkingDirectory="../FSharp.Data/" Command="git checkout -f $(FSharpDataVersion)"/>
+    <Exec EchoOff="true" WorkingDirectory="../Fornax/" Command="git checkout -f $(FornaxToolVersion)"/>
+    <Copy SourceFiles="../../global.json" DestinationFolder="../FSharp.Data"/>
     <Copy SourceFiles="../../global.json" DestinationFolder="../Fornax"/>
+    <Copy SourceFiles="../patches/Fornax.Core.fsproj;Directory.Build.props" DestinationFolder="../Fornax/src/Fornax.Core"/>
   </Target>
   <Target Name="ToolRestore" DependsOnTargets="ConfigureProjectDependencies">
     <Exec Command="dotnet tool restore --tool-manifest ../Fornax/.config/dotnet-tools.json" EchoOff="true"/>
