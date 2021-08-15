@@ -22,7 +22,9 @@ A SEO meta tag generator for [Fornax](https://ionide.io/Tools/fornax.html)
 **WARNING**
 
 You will need to build fornax [from source] to make use of the following example.
-Visit [the wiki] for more information.
+
+If you installed the `fornax` tool [from nuget.org], visit [the wiki] to learn how
+to use this package.
 
 - Change into a project directory and scaffold a new website
 
@@ -214,6 +216,7 @@ Distributed under the terms of the [Mozilla Public License Version 2.0][].
 [safest minimum version]: https://github.com/NuGet/Announcements/issues/56#issue-847215025
 [the documentation]: https://heredocs.io/Fornax.Seo
 [from source]: https://github.com/ionide/Fornax#build-process
+[from nuget.org]: https://www.nuget.org/packages/Fornax
 [the wiki]: https://github.com/rdipardo/Fornax.Seo/wiki/FAQ#faq
 
 [Nuget version]: https://img.shields.io/nuget/vpre/Fornax.Seo?color=blueviolet&logo=nuget

@@ -1,3 +1,7 @@
+## 1.0.0
+- Fix issues affecting binary compatibility with the current version of the fornax tool
+- Dynamically set the "generator" `meta` property from the file version of the Fornax.Core assembly
+
 ## 0.1.1
 - Fix faulty comparison that allowed empty strings to match any OpenGraph type
 - Move the `StructuredData` module to a separate file and make some of its members value types
