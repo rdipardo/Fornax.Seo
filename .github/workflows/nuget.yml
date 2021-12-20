@@ -15,13 +15,13 @@ jobs:
           submodules: 'recursive'
           fetch-depth: 0
       - name: Pre-build Install
-        uses: actions/setup-dotnet@v1.8.1
+        uses: actions/setup-dotnet@v1.9.0
         with:
           dotnet-version: '5.0.301'
       - name: Build package
         run: scripts\pack
       - name: Save package
-        uses: actions/upload-artifact@v2.2.4
+        uses: actions/upload-artifact@v2.3.1
         with:
           name: Fornax.Seo.nupkg
           path: ${{ github.workspace }}/release/*.nupkg
@@ -40,11 +40,11 @@ jobs:
           submodules: 'recursive'
           fetch-depth: 0
       - name: Pre-build Install
-        uses: actions/setup-dotnet@v1.8.1
+        uses: actions/setup-dotnet@v1.9.0
         with:
           dotnet-version: '5.0.204'
       - name: Cache packages
-        uses: actions/cache@v2.1.6
+        uses: actions/cache@v2.1.7
         with:
           path: ~/.nuget/packages
           key: ${{ runner.os }}-nuget-${{ hashFiles('src/Fornax.Seo/Directory.Build.props') }}
@@ -56,7 +56,7 @@ jobs:
           echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
           echo -e $(scripts/changelog) > release_notes.txt
       - name: Retrieve package
-        uses: actions/download-artifact@v2.0.10
+        uses: actions/download-artifact@v2.1.0
         id: fetch
         with:
           name: Fornax.Seo.nupkg
