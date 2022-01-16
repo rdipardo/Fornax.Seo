@@ -40,6 +40,11 @@ div.fsdocs-tip code {
   color: #e83e8c
 }
 
+#fsdocs-content pre.fssnip code {
+  font-size: 0.85rem;
+  font-weight: normal;
+}
+
 @media only screen and (max-width: 600px) {
   #fsdocs-logo {
     display: block;

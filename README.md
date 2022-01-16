@@ -19,12 +19,10 @@ A SEO meta tag generator for [Fornax](https://ionide.io/Tools/fornax.html)
 
 ## Usage example
 
-**WARNING**
+**NOTE**
 
-You will need to build fornax [from source] to make use of the following example.
-
-If you installed the `fornax` tool [from nuget.org], visit [the wiki] to learn how
-to use this package.
+The following requires `fornax` [0.14.0 or newer][from nuget.org].
+Visit [the wiki] to learn how to use this package with earlier `fornax` versions.
 
 - Change into a project directory and scaffold a new website
 
