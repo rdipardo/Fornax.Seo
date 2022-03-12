@@ -12,9 +12,7 @@ If you already have the source tree locally, run
 
 ### Development
 
-_All platforms need a .NET SDK at version 5.0.200 or later_
-
-_Linux users should consider 5.0.202 the [safest minimum version][]_
+_All platforms need a .NET SDK at version 6.0.100 or later_
 
 > **NOTE**
 >
@@ -108,7 +106,6 @@ put a [license notice][] at the top, like this:
 ~~~
 
 
-[safest minimum version]: https://github.com/NuGet/Announcements/issues/56#issue-847215025
 [may be incompatible]: https://github.com/ArtemyB/FsDocsSample/issues/1#issuecomment-878835846
 [well-documented steps]: https://docs.github.com/en/github/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork
 [the issue tracker]: https://github.com/rdipardo/Fornax.Seo/issues
