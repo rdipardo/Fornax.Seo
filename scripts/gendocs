@@ -1,17 +1,25 @@
 #!/usr/bin/env bash
-FORNAX_CMD=build
-SITE_ROOT='root /'
-if [ ! -z "$CI" ]; then
-    SITE_ROOT='root https://heredocs.io/Fornax.Seo/'
-elif [ "$1" = "live" ]; then
-    FORNAX_CMD=watch
-    SITE_ROOT=
+
+if [ -z "$GITHUB_REF" ]; then
+  echo '********************************************************************'
+  echo 'This script must be deployed to GitHub Actions from a tagged commit!'
+  echo '********************************************************************'
+  exit 2
 fi
-dotnet tool restore
+
+#
+# .NET 6 compatibility remains a work in progress
+# https://github.com/fsprojects/FSharp.Formatting/pull/719
+#
+git checkout -f e8653a7 -- src/Fornax.Seo/Directory.Build.props
+sed -i 's/[0-9.]\+/5.0.204/' global.json
+sed -i 's/\-f v\$(/-f \$(/'  src/Fornax.Seo/Fornax.Seo.fsproj
+dotnet tool install fsdocs-tool --version 14.0.1
 dotnet build /v:m /p:nowarn='"3218;3390"' src/Fornax.Seo/Fornax.Seo.fsproj -c Release
 cp ./README.md docs/index.md
 
-dotnet fsdocs $FORNAX_CMD --projects $(pwd)/src/Fornax.Seo/Fornax.Seo.fsproj \
+SITE_ROOT='root https://heredocs.io/Fornax.Seo/' \
+dotnet fsdocs build --projects $(pwd)/src/Fornax.Seo/Fornax.Seo.fsproj \
     --eval --clean --strict \
     --properties RepositoryBranch=main Configuration=Release \
     --parameters ${SITE_ROOT} \
