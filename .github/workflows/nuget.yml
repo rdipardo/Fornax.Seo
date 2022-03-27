@@ -6,9 +6,6 @@ on:
 jobs:
   package:
     runs-on: windows-latest
-    defaults:
-      run:
-        shell: powershell
     env:
       DOTNET_NOLOGO: true
       DOTNET_CLI_TELEMETRY_OPTOUT: true
@@ -20,17 +17,13 @@ jobs:
       - name: Pre-build Install
         uses: actions/setup-dotnet@v2
         with:
-          dotnet-version: '6.0.200'
+          dotnet-version: '5.0.301'
       - name: Build package
         run: scripts\pack
-      - name: Collect release info
-        run: |
-          $REL=${env:GITHUB_REF}.Split('/')[2]
-          echo "RELEASE_VERSION=$REL" >> $env:GITHUB_ENV
       - name: Save package
         uses: actions/upload-artifact@v3
         with:
-          name: Fornax.Seo.${{ env.RELEASE_VERSION }}.nupkg
+          name: Fornax.Seo.nupkg
           path: ${{ github.workspace }}/release/*.nupkg
           retention-days: 30
           if-no-files-found: error
@@ -49,16 +42,11 @@ jobs:
       - name: Pre-build Install
         uses: actions/setup-dotnet@v2
         with:
-          dotnet-version: '5.0.406'
+          dotnet-version: '5.0.204'
       - name: Cache packages
         uses: actions/cache@v2.1.7
         with:
-          path: |
-           ~/.nuget/packages
-           ${{ github.workspace }}/src/Fornax/.paket
-           ${{ github.workspace }}/src/Fornax/paket-files
-           ${{ github.workspace }}/src/FSharp.Data/.paket
-           ${{ github.workspace }}/src/FSharp.Data/paket-files
+          path: ~/.nuget/packages
           key: ${{ runner.os }}-nuget-${{ hashFiles('src/Fornax.Seo/Directory.Build.props') }}
           restore-keys: |-
             ${{ runner.os }}-nuget-
@@ -71,7 +59,7 @@ jobs:
         uses: actions/download-artifact@v3
         id: fetch
         with:
-          name: Fornax.Seo.${{ env.RELEASE_VERSION }}.nupkg
+          name: Fornax.Seo.nupkg
           path: ${{ github.workspace }}/release
       - name: Prepare release
         uses: ncipollo/release-action@v1

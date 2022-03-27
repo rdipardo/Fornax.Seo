@@ -14,6 +14,13 @@ If you already have the source tree locally, run
 
 _All platforms need a .NET SDK at version 6.0.100 or later_
 
+> **NOTE**
+>
+> .NET SDK 5.0.300 and later [may be incompatible][] with `fsdocs`
+>
+> Run `dotnet --list-sdks` and `dotnet --version` before trying to build
+> the project's documentation
+
 
 #### Windows
 
@@ -25,6 +32,12 @@ To run unit tests and build a sample website:
   scripts\ci live
 ~~~
 
+To browse a local copy of [the documentation][]:
+
+~~~bat
+  scripts\gendocs live
+~~~
+
 
 #### Linux, macOS
 
@@ -34,6 +47,12 @@ Run tests with:
   scripts/ci
   # or
   scripts/ci live
+~~~
+
+Browse docs with:
+
+~~~sh
+  scripts/gendocs live
 ~~~
 
 
@@ -87,8 +106,10 @@ put a [license notice][] at the top, like this:
 ~~~
 
 
+[may be incompatible]: https://github.com/ArtemyB/FsDocsSample/issues/1#issuecomment-878835846
 [well-documented steps]: https://docs.github.com/en/github/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork
 [the issue tracker]: https://github.com/rdipardo/Fornax.Seo/issues
 [the project owner]: mailto:dipardo.r@gmail.com
+[the documentation]: https://heredocs.io/Fornax.Seo
 [Mozilla Public License, Version 2.0]: https://www.mozilla.org/en-US/MPL/2.0/
 [license notice]: https://www.mozilla.org/en-US/MPL/headers/
