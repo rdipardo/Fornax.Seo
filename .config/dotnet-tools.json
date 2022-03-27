@@ -2,16 +2,16 @@
   "version": 1,
   "isRoot": true,
   "tools": {
-    "fsharp.formatting.commandtool": {
-      "version": "11.1.0",
-      "commands": [
-        "fsdocs"
-      ]
-    },
     "fantomas-tool": {
       "version": "4.4.0",
       "commands": [
         "fantomas"
+      ]
+    },
+    "fsdocs-tool": {
+      "version": "15.0.0",
+      "commands": [
+        "fsdocs"
       ]
     }
   }

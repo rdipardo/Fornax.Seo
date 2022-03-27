@@ -14,14 +14,6 @@ If you already have the source tree locally, run
 
 _All platforms need a .NET SDK at version 6.0.100 or later_
 
-> **NOTE**
->
-> .NET SDK 5.0.300 and later [may be incompatible][] with `fsdocs`
->
-> Run `dotnet --list-sdks` and `dotnet --version` before trying to build
-> the project's documentation
-
-
 #### Windows
 
 To run unit tests and build a sample website:

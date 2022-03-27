@@ -27,7 +27,7 @@ jobs:
         with:
           dotnet-version: '6.0.200'
       - name: Cache packages
-        uses: actions/cache@v2.1.7
+        uses: actions/cache@v3
         with:
           path: |-
            ${{ github.workspace }}/src/Fornax/.paket
