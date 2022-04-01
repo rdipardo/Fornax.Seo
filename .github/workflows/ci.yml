@@ -2,7 +2,12 @@ name: Unit Tests
 on:
   pull_request:
     branches:
-      - main
+      - next
+  push:
+    branches:
+      - next
+    tags-ignore:
+      - '**'
 jobs:
   unit_tests:
     strategy:
@@ -13,16 +18,16 @@ jobs:
       DOTNET_NOLOGO: true
       DOTNET_CLI_TELEMETRY_OPTOUT: true
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           submodules: 'recursive'
           fetch-depth: 0
       - name: Pre-test install
-        uses: actions/setup-dotnet@v1.8.1
+        uses: actions/setup-dotnet@v2
         with:
-          dotnet-version: '3.1.412'
+          dotnet-version: '6.0.200'
       - name: Cache packages
-        uses: actions/cache@v2.1.6
+        uses: actions/cache@v3
         with:
           path: |-
            ${{ github.workspace }}/src/Fornax/.paket

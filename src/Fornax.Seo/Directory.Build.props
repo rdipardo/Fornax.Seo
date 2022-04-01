@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
     <FSharpDataVersion>4.1.1</FSharpDataVersion>
-    <FornaxToolVersion>0.13.1</FornaxToolVersion>
+    <FornaxToolVersion>0.14.0</FornaxToolVersion>
   </PropertyGroup>
 </Project>

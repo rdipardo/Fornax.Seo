@@ -31,9 +31,9 @@ let layout (ctx: SiteContents) (active: string) (content: HtmlElement seq) =
 
     let subtitle =
         if String.IsNullOrEmpty(active) then
-            if String.IsNullOrEmpty(tagline) then "" else (sprintf " | %s" tagline)
+            if String.IsNullOrEmpty(tagline) then "" else $" | {tagline}"
         else
-            sprintf " | %s" active
+            $" | {active}"
 
     let pages = ctx.TryGetValues<Pageloader.Page>() |> Option.defaultValue Seq.empty
 
@@ -67,7 +67,7 @@ let layout (ctx: SiteContents) (active: string) (content: HtmlElement seq) =
                 div [ Class "columns" ] [
                     div [ Class "stacked" ] [
                         p [] [
-                            !!(sprintf "&copy;&nbsp;%d&nbsp;" DateTime.Now.Year)
+                            !!($"&copy;&nbsp;%d{DateTime.Now.Year}&nbsp;")
                             !!siteAuthor.Name
                         ]
                     ]
@@ -91,7 +91,7 @@ let layout (ctx: SiteContents) (active: string) (content: HtmlElement seq) =
         head [] [
             meta [ CharSet "utf-8" ]
             meta [ Name "viewport"; Content "width=device-width, initial-scale=1" ]
-            title [] [ !!(sprintf "%s%s" pageTitle subtitle) ]
+            title [] [ !!($"{pageTitle}{subtitle}") ]
             link [ Rel "icon"
                    HtmlProperties.Type "image/png"
                    Sizes "32x32"

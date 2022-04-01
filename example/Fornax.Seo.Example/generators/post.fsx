@@ -40,7 +40,7 @@ let generate' (ctx: SiteContents) (page: string) =
               Modified = post.modified
               Tags = Some post.tags
               Meta =
-                  Some [ ("Image", defaultArg post.image (sprintf "%s/images/avatar.jpg" siteRoot))
+                  Some [ ("Image", defaultArg post.image $"{siteRoot}/images/avatar.jpg")
                          ("Publisher", defaultArg siteName siteAuthor.Name) ] }
 
         ctx.Add(postMeta)

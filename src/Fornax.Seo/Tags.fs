@@ -23,7 +23,7 @@ module Tags =
 
     let private getSchemaOrgType name =
         Schemata.Graph
-        |> Array.tryFind (fun s -> s.Id = (sprintf "schema:%s" name))
+        |> Array.tryFind (fun s -> s.Id = $"schema:{name}")
         |> function
         | Some schema -> schema.RdfsLabel.String |> Option.get
         | None -> invalidArg name "Invalid Schema.org type! See https://schema.org/docs/full.html"
@@ -60,12 +60,8 @@ module Tags =
         | (true, u) when List.contains u.Scheme [ Uri.UriSchemeHttps; Uri.UriSchemeHttp ] ->
             UriBuilder(u, Port = -1).Uri.AbsoluteUri
         | _ ->
-            let srcPath =
-                sprintf "%s,%s"
-                <| System.IO.Path.Combine(__SOURCE_DIRECTORY__, __SOURCE_FILE__)
-                <| __LINE__
-
-            eprintfn "WARNING: Can't resolve website root from %s' - use an absolute URL instead (%s)" url srcPath
+            let srcPath = $"{System.IO.Path.Combine(__SOURCE_DIRECTORY__, __SOURCE_FILE__)},{__LINE__}"
+            eprintfn $"WARNING: Can't resolve website root from {url}' - use an absolute URL instead ({srcPath})"
             null
 
     let private parseUrl root url canonical =
@@ -93,8 +89,7 @@ module Tags =
                     else
                         resource
 
-                sprintf "%s%s%s%s" domain.Scheme Uri.SchemeDelimiter domain.Host
-                <| ("/" + path).Replace("//", "/")
+                $"""{domain.Scheme}{Uri.SchemeDelimiter}{domain.Host}{("/" + path).Replace("//", "/")}"""
 
     let private toIsoDateString (date: DateTime option) =
         date
@@ -140,10 +135,7 @@ module Tags =
                 )
 
             let jsonLD = JObject.Parse(JsonConvert.SerializeObject(this, Formatting.None, jsonOptions))
-
-            let toCamelCase (str: string) =
-                (sprintf "%c%s" <| Char.ToLowerInvariant(str.[0]) <| str.Substring(1))
-                    .Replace('_', '\000')
+            let toCamelCase (str: string) = $"{Char.ToLowerInvariant(str.[0])}{str.Substring(1)}".Replace('_', '\000')
 
             metaOpt
             |> Map.iter
@@ -193,7 +185,7 @@ module Tags =
              |> Array.map (fun prop -> "og:" + prop.Name.ToLowerInvariant(), prop.GetValue(this, null).ToString())
              |> (Map.ofArray
                  >> Map.fold (fun lst p c -> lst @ [ meta [ Property p; Content c ] ]) []))
-            @ [ meta [ Name "generator"; Content("fornax v" + fornaxVersionInfo.FileVersion) ]
+            @ [ meta [ Name "generator"; Content $"fornax v{fornaxVersionInfo.FileVersion}" ]
                 meta [ Name "description"; Content this.Description ]
                 meta [ Name "author"; Content page.Author.Name ]
                 meta [ Name "twitter:card"; Content "summary" ]

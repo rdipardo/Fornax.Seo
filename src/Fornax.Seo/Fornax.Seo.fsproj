@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk" InitialTargets="ToolRestore">
   <PropertyGroup>
-    <VersionPrefix>1.0</VersionPrefix>
+    <VersionPrefix>1.1</VersionPrefix>
+    <VersionSuffix>rc-1</VersionSuffix>
     <Authors>Robert Di Pardo</Authors>
     <Copyright>Copyright (c) 2021 Robert Di Pardo and Contributors</Copyright>
     <Description>A SEO meta tag generator for Fornax (https://ionide.io/Tools/fornax.html)</Description>
@@ -48,7 +49,7 @@
   </Target>
   <Target Name="ConfigureProjectDependencies">
     <Exec EchoOff="true" WorkingDirectory="../FSharp.Data/" Command="git checkout -f $(FSharpDataVersion)"/>
-    <Exec EchoOff="true" WorkingDirectory="../Fornax/" Command="git checkout -f $(FornaxToolVersion)"/>
+    <Exec EchoOff="true" WorkingDirectory="../Fornax/" Command="git checkout -f v$(FornaxToolVersion)"/>
     <Copy SourceFiles="../../global.json" DestinationFolder="../FSharp.Data"/>
     <Copy SourceFiles="../../global.json" DestinationFolder="../Fornax"/>
     <Copy SourceFiles="../patches/Fornax.Core.fsproj;Directory.Build.props" DestinationFolder="../Fornax/src/Fornax.Core"/>
