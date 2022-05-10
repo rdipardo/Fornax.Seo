@@ -40,6 +40,7 @@ module Core =
         let jsonLd = JsonLinkData(page)
         let openGraph = OpenGraph({ page with ContentType = Some jsonLd.MainEntityOfPage.Schema })
         let tags = [ yield! openGraph.ToHtml(); jsonLd.ToHtml() ]
+
         let iconStyle = """
             .media-icon {
                 font-size: 2.5rem;
@@ -80,6 +81,7 @@ module Core =
         let siteAuthor = author.Name
         let email = author.Email.Trim()
         let socialMedia = author.SocialMedia
+
         let mediaIcons =
             [ ("bitbucket", "fa-bitbucket")
               ("deviantart", "fa-deviantart")
@@ -162,14 +164,16 @@ module Core =
                              $"Find {siteAuthor} on {siteName}")
 
                     a [ Href link; HtmlProperties.Title linkTitle; Class "navicon" ] [
-                        i [ Class(($"media-icon fa {icon}")); Custom("aria-hidden", "true") ] []
+                        i [ Class(($"media-icon fa {icon}"))
+                            HtmlProperties.Custom("aria-hidden", "true") ] []
                     ])
             )
 
         if not <| String.IsNullOrEmpty(email) then
             links
             @ [ a [ Href(Uri.UriSchemeMailto + ":" + email); Class "navicon" ] [
-                    i [ Class("media-icon fa fa-envelope"); Custom("aria-hidden", "true") ] []
+                    i [ Class("media-icon fa fa-envelope")
+                        HtmlProperties.Custom("aria-hidden", "true") ] []
                 ] ]
         else
             links

@@ -112,7 +112,8 @@ let layout (ctx: SiteContents) (active: string) (content: HtmlElement seq) =
                         a [ Class "navbar-item"; Href "/" ] [
                             img [ Src "/images/bulma.png"; Alt "Logo" ]
                         ]
-                        span [ Class "navbar-burger burger"; Custom("data-target", "navbarMenu") ] [
+                        span [ Class "navbar-burger burger"
+                               HtmlProperties.Custom("data-target", "navbarMenu") ] [
                             span [] []
                             span [] []
                             span [] []
