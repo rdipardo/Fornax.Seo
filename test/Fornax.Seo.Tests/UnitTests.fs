@@ -16,7 +16,10 @@ module UnitTests =
               "ell.stackexchange.com/users/00001/webmaster"
               "https://t.me/s/webmaster"
               "https://www.linkedin.com/in/webmaster"
-              "dev.to/webmaster" ]
+              "dev.to/webmaster"
+              "https://www.behance.net/some1else"
+              "https://scholar.google.com/citations?user=0X_qweryt24YUp"
+              "sourceforge.net/u/some1/profile/" ]
 
         let pageAuthor = { Name = "Webmaster"; Email = "some1@example.com"; SocialMedia = links }
 
@@ -159,6 +162,36 @@ module UnitTests =
         member x.``Can parse a Telegram profile address``() =
             let expected = $"""title="Find {pageAuthor.Name} on telegram" class="navicon">"""
             let linkContent = $"""href="{links.[4]}" """
+
+            x.TryFindLink(linkContent)
+            |> function
+            | Some link -> StringAssert.Contains(expected, HtmlElement.ToString link)
+            | None -> Assert.Fail($"Expected to find {linkContent}")
+
+        [<Test>]
+        member x.``Can parse a Bēhance profile address``() =
+            let expected = $"""title="Find {pageAuthor.Name} on behance" class="navicon">"""
+            let linkContent = $"""href="{links.[7]}" """
+
+            x.TryFindLink(linkContent)
+            |> function
+            | Some link -> StringAssert.Contains(expected, HtmlElement.ToString link)
+            | None -> Assert.Fail($"Expected to find {linkContent}")
+
+        [<Test>]
+        member x.``Can parse a Google Scholar citations search result``() =
+            let expected = $"""title="Find {pageAuthor.Name} on Google Scholar" class="navicon">"""
+            let linkContent = $"""href="{links.[8]}" """
+
+            x.TryFindLink(linkContent)
+            |> function
+            | Some link -> StringAssert.Contains(expected, HtmlElement.ToString link)
+            | None -> Assert.Fail($"Expected to find {linkContent}")
+
+        [<Test>]
+        member x.``Can parse a SourceForge profile from host name only``() =
+            let expected = $"""title="Find {pageAuthor.Name} on sourceforge" class="navicon">"""
+            let linkContent = $"""href="https://{links.[9]}" """
 
             x.TryFindLink(linkContent)
             |> function

@@ -83,7 +83,8 @@ module Core =
         let socialMedia = author.SocialMedia
 
         let mediaIcons =
-            [ ("bitbucket", "fa-bitbucket")
+            [ ("behance", "fa-behance-square")
+              ("bitbucket", "fa-bitbucket")
               ("deviantart", "fa-deviantart")
               ("facebook", "fa-facebook-official")
               ("flickr", "fa-flickr")
@@ -97,9 +98,11 @@ module Core =
               ("quora", "fa-quora")
               ("ravelry", "fa-ravelry")
               ("reddit", "fa-reddit")
+              ("scholar", "fa-graduation-cap")
               ("slack", "fa-slack")
               ("snapchat", "fa-snapchat-square")
               ("soundcloud", "fa-soundcloud")
+              ("sourceforge", "fa-fire")
               ("spotify", "fa-spotify")
               ("stackexchange", "fa-stack-exchange")
               ("stackoverflow", "fa-stack-overflow")
@@ -107,10 +110,12 @@ module Core =
               ("telegram", "fa-telegram")
               ("tumblr", "fa-tumblr-square")
               ("twitter", "fa-twitter")
+              ("viadeo", "fa-viadeo-square")
               ("wechat", "fa-weixin")
               ("weixin", "fa-weixin")
               ("weibo", "fa-weibo")
               ("whatsapp ", "fa-whatsapp")
+              ("xing", "fa-xing-square")
               ("youtube", "fa-youtube-play") ]
             |> Map.ofList
 
@@ -153,6 +158,7 @@ module Core =
 
                     let siteName =
                         match site with
+                        | "scholar" -> "Google Scholar"
                         | "t" -> "telegram"
                         | "" -> link
                         | _ -> site
