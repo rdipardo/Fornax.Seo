@@ -1,3 +1,9 @@
+## 1.1.0
+- Upgrade runtime target to .NET 6 (current LTS)
+- Bump Fornax.Core assembly version to 0.14.3
+- Integrate the newly added `HtmlElement.Custom` case
+- Provide icons for more social media profiles
+
 ## 1.0.0
 - Fix issues affecting binary compatibility with the current version of the fornax tool
 - Dynamically set the "generator" `meta` property from the file version of the Fornax.Core assembly
