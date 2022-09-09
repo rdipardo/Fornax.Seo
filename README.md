@@ -33,45 +33,48 @@ Visit [the wiki] to learn how to use this package with earlier `fornax` versions
 
 - Provide the root domain of your website:
 
-~~~fsharp
-// loaders/globalloader.fsx
-#r "../_lib/Fornax.Core.dll"
+    ```fsharp
+    // loaders/globalloader.fsx
+    #r "../_lib/Fornax.Core.dll"
 
-type SiteInfo = {
-    title: string
-    /// The root domain of your website - must be an absolute URL
-    baseUrl: string
-    description: string
-}
-~~~
+    type SiteInfo = {
+        title: string
+        /// The root domain of your website - must be an absolute URL
+        baseUrl: string
+        description: string
+    }
+    ```
 
 - Add personal authorship details, e.g.:
 
-~~~fsharp
-// loaders/globalloader.fsx
-#r "nuget: Fornax.Seo"
+    ```fsharp
+    // loaders/globalloader.fsx
+    #r "nuget: Fornax.Seo"
 
-open Fornax.Seo
+    open Fornax.Seo
 
-let loader (projectRoot: string) (siteContent: SiteContents) =
-    let siteInfo =
-        { title = "Sample Fornax blog"
-          baseUrl = "http://example.com"
-          description = "Just a simple blog" }
+    let loader (projectRoot: string) (siteContent: SiteContents) =
+        let siteInfo =
+            { title = "Sample Fornax blog"
+              baseUrl = "http://example.com"
+              description = "Just a simple blog" }
 
-    let onTheWeb =
-        [ "linkedin.com/in/username"
-          "github.com/username"
-          "bitbucket.org/username"
-          "facebook.com/username" ]
+        let onTheWeb =
+            [ "linkedin.com/in/username"
+              "github.com/username"
+              "bitbucket.org/username"
+              "facebook.com/username" ]
 
-    let siteAuthor = { Name = "Moi-même"; Email = "info@example.com"; SocialMedia = onTheWeb }
+        let siteAuthor =
+            { Name = "Moi-même"
+              Email = "info@example.com"
+              SocialMedia = onTheWeb }
 
-    siteContent.Add(siteInfo)
-    siteContent.Add(siteAuthor)
+        siteContent.Add(siteInfo)
+        siteContent.Add(siteAuthor)
 
-    siteContent
-~~~
+        siteContent
+    ```
 
 ### Collect metadata from a content item (e.g., a blog posting)
 
@@ -87,8 +90,15 @@ open Fornax.Seo
 let generate' (ctx: SiteContents) (page: string) =
     let siteInfo = ctx.TryGetValue<Globalloader.SiteInfo>()
     let siteName = siteInfo |> Option.map (fun si -> si.title)
-    let tagline = siteInfo |> Option.map (fun si -> si.description) |> Option.defaultValue ""
-    let siteAuthor = ctx.TryGetValue<ContentCreator>() |> Option.defaultValue ContentCreator.Default
+
+    let tagline =
+        siteInfo
+        |> Option.map (fun si -> si.description)
+        |> Option.defaultValue ""
+
+    let siteAuthor =
+        ctx.TryGetValue<ContentCreator>()
+        |> Option.defaultValue ContentCreator.Default
 
     let siteRoot =
         siteInfo
@@ -136,15 +146,9 @@ open Fornax.Seo
 // . . .
 
 let layout (ctx: SiteContents) (active: string) (content: HtmlElement seq) =
-    let siteInfo = ctx.TryGetValue<Globalloader.SiteInfo>()
-    let siteAuthor = ctx.TryGetValue<ContentCreator>() |> Option.defaultValue ContentCreator.Default
-    let pageTitle = siteInfo |> Option.map (fun si -> si.title) |> Option.defaultValue ""
-    let tagline = siteInfo |> Option.map (fun si -> si.description) |> Option.defaultValue ""
-
-    let siteRoot =
-        siteInfo
-        |> Option.map (fun si -> si.baseUrl)
-        |> Option.defaultValue ContentObject.Default.BaseUrl
+    let siteAuthor =
+        ctx.TryGetValue<ContentCreator>()
+        |> Option.defaultValue ContentCreator.Default
 
     let seoData =
         ctx.TryGetValues<ContentObject>()
@@ -155,20 +159,12 @@ let layout (ctx: SiteContents) (active: string) (content: HtmlElement seq) =
         |> Seq.tryFind (fun p -> p.Title.Contains(active))
         |> function
         | Some info -> info
-        | _ ->
-            { ContentObject.Default with
-                  Title = pageTitle
-                  Description = tagline
-                  BaseUrl = siteRoot
-                  SiteName = Some pageTitle
-                  Headline = Some tagline
-                  Author = siteAuthor }
+        | _ -> { ContentObject.Default with Author = siteAuthor }
 
     html [] [
         head [] [
             meta [ CharSet "utf-8" ]
             meta [ Name "viewport"; Content "width=device-width, initial-scale=1" ]
-            title [] [ !!pageTitle ]
             // . . .
             yield! seo pageMeta
         ]

@@ -62,7 +62,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
       - name: Publish release
         run: |-
-          dotnet nuget push release/Fornax.Seo.*.nupkg -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json --skip-duplicate
+          dotnet nuget push release\Fornax.Seo.*.nupkg -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json --skip-duplicate
           .\scripts\gendocs
         env:
           CI: true
