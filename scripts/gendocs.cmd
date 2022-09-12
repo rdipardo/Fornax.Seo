@@ -3,7 +3,7 @@ SETLOCAL
 SET "FSDOCS_CMD=build"
 SET "SITE_ROOT=root /"
 IF NOT "%CI%"=="" (
-    SET "SITE_ROOT=root https://heredocs.io/Fornax.Seo/"
+    SET "SITE_ROOT=root https://heredocs.io/"
 )
 IF "%1"=="live" (
     SET "FSDOCS_CMD=watch"
@@ -19,8 +19,8 @@ dotnet fsdocs %FSDOCS_CMD% --projects %CD%/src/Fornax.Seo/Fornax.Seo.fsproj ^
     --parameters %SITE_ROOT% ^
         fsdocs-logo-link https://www.nuget.org/packages/Fornax.Seo ^
         fsdocs-repository-link https://github.com/rdipardo/Fornax.Seo ^
-        fsdocs-license-link https://github.com/rdipardo/Fornax.Seo/blob/main/LICENSE ^
-        fsdocs-release-notes-link https://github.com/rdipardo/Fornax.Seo/blob/main/CHANGELOG.md
+        fsdocs-license-link https://raw.githubusercontent.com/rdipardo/Fornax.Seo/main/LICENSE ^
+        fsdocs-release-notes-link https://raw.githubusercontent.com/rdipardo/Fornax.Seo/main/CHANGELOG.md
 
 del docs\index.md
 ENDLOCAL

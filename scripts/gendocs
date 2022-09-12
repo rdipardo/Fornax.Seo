@@ -2,7 +2,7 @@
 FSDOCS_CMD=build
 SITE_ROOT='root /'
 if [ ! -z "$CI" ]; then
-    SITE_ROOT='root https://heredocs.io/Fornax.Seo/'
+    SITE_ROOT='root https://heredocs.io/'
 elif [ "$1" = "live" ]; then
     FSDOCS_CMD=watch
     SITE_ROOT=
@@ -17,7 +17,7 @@ dotnet fsdocs $FSDOCS_CMD --projects $(pwd)/src/Fornax.Seo/Fornax.Seo.fsproj \
     --parameters ${SITE_ROOT} \
         fsdocs-logo-link https://www.nuget.org/packages/Fornax.Seo \
         fsdocs-repository-link https://github.com/rdipardo/Fornax.Seo \
-        fsdocs-license-link https://github.com/rdipardo/Fornax.Seo/blob/main/LICENSE \
-        fsdocs-release-notes-link https://github.com/rdipardo/Fornax.Seo/blob/main/CHANGELOG.md
+        fsdocs-license-link https://raw.githubusercontent.com/rdipardo/Fornax.Seo/main/LICENSE \
+        fsdocs-release-notes-link https://raw.githubusercontent.com/rdipardo/Fornax.Seo/main/CHANGELOG.md
 
 rm -f docs/index.md
