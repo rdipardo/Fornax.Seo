@@ -207,8 +207,7 @@ Distributed under the terms of the [Mozilla Public License Version 2.0][].
 
 [structured data]: https://developers.google.com/search/docs/guides/intro-structured-data
 [absolute URLs]: https://stackoverflow.com/a/64830732
-[safest minimum version]: https://github.com/NuGet/Announcements/issues/56#issue-847215025
-[the documentation]: https://heredocs.io/Fornax.Seo
+[the documentation]: https://heredocs.io
 [from source]: https://github.com/ionide/Fornax#build-process
 [from nuget.org]: https://www.nuget.org/packages/Fornax
 [the wiki]: https://github.com/rdipardo/Fornax.Seo/wiki/FAQ#faq
