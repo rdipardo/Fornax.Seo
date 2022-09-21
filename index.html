@@ -18,11 +18,11 @@
     <script type="text/javascript" async
         src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 
-    <link rel="shortcut icon" type="image/x-png" href="https://heredocs.io/Fornax.Seo/img/logo.png">
-    <link type="text/css" rel="stylesheet" href="https://heredocs.io/Fornax.Seo/content/navbar-fixed-left.css" />
-    <link type="text/css" rel="stylesheet" href="https://heredocs.io/Fornax.Seo/content/fsdocs-default.css" />
-    <link type="text/css" rel="stylesheet" href="https://heredocs.io/Fornax.Seo/content/fsdocs-custom.css" />
-    <script type="text/javascript" src="https://heredocs.io/Fornax.Seo/content/fsdocs-tips.js"></script>
+    <link rel="shortcut icon" type="image/x-png" href="https://heredocs.io/img/logo.png">
+    <link type="text/css" rel="stylesheet" href="https://heredocs.io/content/navbar-fixed-left.css" />
+    <link type="text/css" rel="stylesheet" href="https://heredocs.io/content/fsdocs-default.css" />
+    <link type="text/css" rel="stylesheet" href="https://heredocs.io/content/fsdocs-custom.css" />
+    <script type="text/javascript" src="https://heredocs.io/content/fsdocs-tips.js"></script>
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -51,13 +51,13 @@
             <ul class="navbar-nav">
                 <li class="nav-header">Links</li>
                 <li class="nav-item" id="fsdocs-package-project-url">
-                    <a class="nav-link" href="https://heredocs.io/Fornax.Seo/">Introduction</a>
+                    <a class="nav-link" href="https://heredocs.io/">Introduction</a>
                 </li>
                 <li class="nav-item" id="fsdocs-license-link">
-                    <a class="nav-link" href="https://github.com/rdipardo/Fornax.Seo/blob/main/LICENSE">License</a>
+                    <a class="nav-link" href="https://raw.githubusercontent.com/rdipardo/Fornax.Seo/main/LICENSE">License</a>
                 </li>
                 <li class="nav-item" id="fsdocs-release-notes-link">
-                    <a class="nav-link" href="https://github.com/rdipardo/Fornax.Seo/blob/main/CHANGELOG.md">Release Notes</a>
+                    <a class="nav-link" href="https://raw.githubusercontent.com/rdipardo/Fornax.Seo/main/CHANGELOG.md">Release Notes</a>
                 </li>
                 <li class="nav-item" id="fsdocs-repository-link">
                     <a class="nav-link" href="https://github.com/rdipardo/Fornax.Seo">Source Repository</a>
@@ -65,14 +65,14 @@
 
                 <li class="nav-header">API Reference</li>
                 <li class="nav-item">
-                    <a class="nav-link" href="https://heredocs.io/Fornax.Seo/reference/fornax-seo.html">Modules</a>
+                    <a class="nav-link" href="https://heredocs.io/reference/fornax-seo.html">Modules</a>
                 </li>
             </ul>
         </div>
     </nav>
     <div class="container">
         <div class="masthead">
-            <a href="https://www.nuget.org/packages/Fornax.Seo"><img id="fsdocs-logo" src="https://heredocs.io/Fornax.Seo/img/logo.png" alt="Fornax.Seo
+            <a href="https://www.nuget.org/packages/Fornax.Seo"><img id="fsdocs-logo" src="https://heredocs.io/img/logo.png" alt="Fornax.Seo
 1.1"/></a>
         </div>
         <hr />
@@ -105,8 +105,8 @@ Visit <a href="https://github.com/rdipardo/Fornax.Seo/wiki/FAQ#faq">the wiki</a>
 </code></pre>
 <p><strong>IMPORTANT</strong></p>
 <ul>
-<li>Provide the root domain of your website:</li>
-</ul>
+<li>
+<p>Provide the root domain of your website:</p>
 <pre class="fssnip highlighted"><code lang="fsharp"><span class="c">// loaders/globalloader.fsx</span>
 <span class="pp">#r</span> <span class="s">&quot;../_lib/Fornax.Core.dll&quot;</span>
 
@@ -117,9 +117,9 @@ Visit <a href="https://github.com/rdipardo/Fornax.Seo/wiki/FAQ#faq">the wiki</a>
     <span class="id">description</span><span class="pn">:</span> <span onmouseout="hideTip(event, 'fs1', 3)" onmouseover="showTip(event, 'fs1', 3)" class="id">string</span>
 <span class="pn">}</span>
 </code></pre>
-<ul>
-<li>Add personal authorship details, e.g.:</li>
-</ul>
+</li>
+<li>
+<p>Add personal authorship details, e.g.:</p>
 <pre class="fssnip highlighted"><code lang="fsharp"><span class="c">// loaders/globalloader.fsx</span>
 <span class="pp">#r</span> <span class="s">&quot;nuget: Fornax.Seo&quot;</span>
 
@@ -137,13 +137,18 @@ Visit <a href="https://github.com/rdipardo/Fornax.Seo/wiki/FAQ#faq">the wiki</a>
           <span class="s">&quot;bitbucket.org/username&quot;</span>
           <span class="s">&quot;facebook.com/username&quot;</span> <span class="pn">]</span>
 
-    <span class="k">let</span> <span class="id">siteAuthor</span> <span class="o">=</span> <span class="pn">{</span> <span class="id">Name</span> <span class="o">=</span> <span class="s">&quot;Moi-m&#234;me&quot;</span><span class="pn">;</span> <span class="id">Email</span> <span class="o">=</span> <span class="s">&quot;info@example.com&quot;</span><span class="pn">;</span> <span class="id">SocialMedia</span> <span class="o">=</span> <span class="id">onTheWeb</span> <span class="pn">}</span>
+    <span class="k">let</span> <span class="id">siteAuthor</span> <span class="o">=</span>
+        <span class="pn">{</span> <span class="id">Name</span> <span class="o">=</span> <span class="s">&quot;Moi-m&#234;me&quot;</span>
+          <span class="id">Email</span> <span class="o">=</span> <span class="s">&quot;info@example.com&quot;</span>
+          <span class="id">SocialMedia</span> <span class="o">=</span> <span class="id">onTheWeb</span> <span class="pn">}</span>
 
     <span class="id">siteContent</span><span class="pn">.</span><span class="id">Add</span><span class="pn">(</span><span class="id">siteInfo</span><span class="pn">)</span>
     <span class="id">siteContent</span><span class="pn">.</span><span class="id">Add</span><span class="pn">(</span><span class="id">siteAuthor</span><span class="pn">)</span>
 
     <span class="id">siteContent</span>
 </code></pre>
+</li>
+</ul>
 <h3><a name="Collect-metadata-from-a-content-item-e-g-a-blog-posting" class="anchor" href="#Collect-metadata-from-a-content-item-e-g-a-blog-posting">Collect metadata from a content item (e.g., a blog posting)</a></h3>
 <pre class="fssnip highlighted"><code lang="fsharp"><span class="c">// generators/post.fsx</span>
 <span class="pp">#r</span> <span class="s">&quot;../_lib/Fornax.Core.dll&quot;</span>
@@ -156,8 +161,15 @@ Visit <a href="https://github.com/rdipardo/Fornax.Seo/wiki/FAQ#faq">the wiki</a>
 <span class="k">let</span> <span class="id">generate&#39;</span> <span class="pn">(</span><span class="id">ctx</span><span class="pn">:</span> <span class="id">SiteContents</span><span class="pn">)</span> <span class="pn">(</span><span class="id">page</span><span class="pn">:</span> <span onmouseout="hideTip(event, 'fs1', 5)" onmouseover="showTip(event, 'fs1', 5)" class="id">string</span><span class="pn">)</span> <span class="o">=</span>
     <span class="k">let</span> <span class="id">siteInfo</span> <span class="o">=</span> <span class="id">ctx</span><span class="pn">.</span><span class="id">TryGetValue</span><span class="pn">&lt;</span><span class="id">Globalloader</span><span class="pn">.</span><span class="id">SiteInfo</span><span class="pn">&gt;</span><span class="pn">(</span><span class="pn">)</span>
     <span class="k">let</span> <span class="id">siteName</span> <span class="o">=</span> <span class="id">siteInfo</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs2', 6)" onmouseover="showTip(event, 'fs2', 6)" class="id">Option</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs3', 7)" onmouseover="showTip(event, 'fs3', 7)" class="id">map</span> <span class="pn">(</span><span class="k">fun</span> <span class="id">si</span> <span class="k">-&gt;</span> <span class="id">si</span><span class="pn">.</span><span class="id">title</span><span class="pn">)</span>
-    <span class="k">let</span> <span class="id">tagline</span> <span class="o">=</span> <span class="id">siteInfo</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs2', 8)" onmouseover="showTip(event, 'fs2', 8)" class="id">Option</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs3', 9)" onmouseover="showTip(event, 'fs3', 9)" class="id">map</span> <span class="pn">(</span><span class="k">fun</span> <span class="id">si</span> <span class="k">-&gt;</span> <span class="id">si</span><span class="pn">.</span><span class="id">description</span><span class="pn">)</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs2', 10)" onmouseover="showTip(event, 'fs2', 10)" class="id">Option</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs4', 11)" onmouseover="showTip(event, 'fs4', 11)" class="id">defaultValue</span> <span class="s">&quot;&quot;</span>
-    <span class="k">let</span> <span class="id">siteAuthor</span> <span class="o">=</span> <span class="id">ctx</span><span class="pn">.</span><span class="id">TryGetValue</span><span class="pn">&lt;</span><span class="id">ContentCreator</span><span class="pn">&gt;</span><span class="pn">(</span><span class="pn">)</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs2', 12)" onmouseover="showTip(event, 'fs2', 12)" class="id">Option</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs4', 13)" onmouseover="showTip(event, 'fs4', 13)" class="id">defaultValue</span> <span class="id">ContentCreator</span><span class="pn">.</span><span class="id">Default</span>
+
+    <span class="k">let</span> <span class="id">tagline</span> <span class="o">=</span>
+        <span class="id">siteInfo</span>
+        <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs2', 8)" onmouseover="showTip(event, 'fs2', 8)" class="id">Option</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs3', 9)" onmouseover="showTip(event, 'fs3', 9)" class="id">map</span> <span class="pn">(</span><span class="k">fun</span> <span class="id">si</span> <span class="k">-&gt;</span> <span class="id">si</span><span class="pn">.</span><span class="id">description</span><span class="pn">)</span>
+        <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs2', 10)" onmouseover="showTip(event, 'fs2', 10)" class="id">Option</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs4', 11)" onmouseover="showTip(event, 'fs4', 11)" class="id">defaultValue</span> <span class="s">&quot;&quot;</span>
+
+    <span class="k">let</span> <span class="id">siteAuthor</span> <span class="o">=</span>
+        <span class="id">ctx</span><span class="pn">.</span><span class="id">TryGetValue</span><span class="pn">&lt;</span><span class="id">ContentCreator</span><span class="pn">&gt;</span><span class="pn">(</span><span class="pn">)</span>
+        <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs2', 12)" onmouseover="showTip(event, 'fs2', 12)" class="id">Option</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs4', 13)" onmouseover="showTip(event, 'fs4', 13)" class="id">defaultValue</span> <span class="id">ContentCreator</span><span class="pn">.</span><span class="id">Default</span>
 
     <span class="k">let</span> <span class="id">siteRoot</span> <span class="o">=</span>
         <span class="id">siteInfo</span>
@@ -202,39 +214,25 @@ Visit <a href="https://github.com/rdipardo/Fornax.Seo/wiki/FAQ#faq">the wiki</a>
 <span class="c">// . . .</span>
 
 <span class="k">let</span> <span class="id">layout</span> <span class="pn">(</span><span class="id">ctx</span><span class="pn">:</span> <span class="id">SiteContents</span><span class="pn">)</span> <span class="pn">(</span><span class="id">active</span><span class="pn">:</span> <span onmouseout="hideTip(event, 'fs1', 38)" onmouseover="showTip(event, 'fs1', 38)" class="id">string</span><span class="pn">)</span> <span class="pn">(</span><span class="id">content</span><span class="pn">:</span> <span class="id">HtmlElement</span> <span onmouseout="hideTip(event, 'fs14', 39)" onmouseover="showTip(event, 'fs14', 39)" class="id">seq</span><span class="pn">)</span> <span class="o">=</span>
-    <span class="k">let</span> <span class="id">siteInfo</span> <span class="o">=</span> <span class="id">ctx</span><span class="pn">.</span><span class="id">TryGetValue</span><span class="pn">&lt;</span><span class="id">Globalloader</span><span class="pn">.</span><span class="id">SiteInfo</span><span class="pn">&gt;</span><span class="pn">(</span><span class="pn">)</span>
-    <span class="k">let</span> <span class="id">siteAuthor</span> <span class="o">=</span> <span class="id">ctx</span><span class="pn">.</span><span class="id">TryGetValue</span><span class="pn">&lt;</span><span class="id">ContentCreator</span><span class="pn">&gt;</span><span class="pn">(</span><span class="pn">)</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs2', 40)" onmouseover="showTip(event, 'fs2', 40)" class="id">Option</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs4', 41)" onmouseover="showTip(event, 'fs4', 41)" class="id">defaultValue</span> <span class="id">ContentCreator</span><span class="pn">.</span><span class="id">Default</span>
-    <span class="k">let</span> <span class="id">pageTitle</span> <span class="o">=</span> <span class="id">siteInfo</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs2', 42)" onmouseover="showTip(event, 'fs2', 42)" class="id">Option</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs3', 43)" onmouseover="showTip(event, 'fs3', 43)" class="id">map</span> <span class="pn">(</span><span class="k">fun</span> <span class="id">si</span> <span class="k">-&gt;</span> <span class="id">si</span><span class="pn">.</span><span class="id">title</span><span class="pn">)</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs2', 44)" onmouseover="showTip(event, 'fs2', 44)" class="id">Option</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs4', 45)" onmouseover="showTip(event, 'fs4', 45)" class="id">defaultValue</span> <span class="s">&quot;&quot;</span>
-    <span class="k">let</span> <span class="id">tagline</span> <span class="o">=</span> <span class="id">siteInfo</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs2', 46)" onmouseover="showTip(event, 'fs2', 46)" class="id">Option</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs3', 47)" onmouseover="showTip(event, 'fs3', 47)" class="id">map</span> <span class="pn">(</span><span class="k">fun</span> <span class="id">si</span> <span class="k">-&gt;</span> <span class="id">si</span><span class="pn">.</span><span class="id">description</span><span class="pn">)</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs2', 48)" onmouseover="showTip(event, 'fs2', 48)" class="id">Option</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs4', 49)" onmouseover="showTip(event, 'fs4', 49)" class="id">defaultValue</span> <span class="s">&quot;&quot;</span>
-
-    <span class="k">let</span> <span class="id">siteRoot</span> <span class="o">=</span>
-        <span class="id">siteInfo</span>
-        <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs2', 50)" onmouseover="showTip(event, 'fs2', 50)" class="id">Option</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs3', 51)" onmouseover="showTip(event, 'fs3', 51)" class="id">map</span> <span class="pn">(</span><span class="k">fun</span> <span class="id">si</span> <span class="k">-&gt;</span> <span class="id">si</span><span class="pn">.</span><span class="id">baseUrl</span><span class="pn">)</span>
-        <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs2', 52)" onmouseover="showTip(event, 'fs2', 52)" class="id">Option</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs4', 53)" onmouseover="showTip(event, 'fs4', 53)" class="id">defaultValue</span> <span class="id">ContentObject</span><span class="pn">.</span><span class="id">Default</span><span class="pn">.</span><span class="id">BaseUrl</span>
+    <span class="k">let</span> <span class="id">siteAuthor</span> <span class="o">=</span>
+        <span class="id">ctx</span><span class="pn">.</span><span class="id">TryGetValue</span><span class="pn">&lt;</span><span class="id">ContentCreator</span><span class="pn">&gt;</span><span class="pn">(</span><span class="pn">)</span>
+        <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs2', 40)" onmouseover="showTip(event, 'fs2', 40)" class="id">Option</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs4', 41)" onmouseover="showTip(event, 'fs4', 41)" class="id">defaultValue</span> <span class="id">ContentCreator</span><span class="pn">.</span><span class="id">Default</span>
 
     <span class="k">let</span> <span class="id">seoData</span> <span class="o">=</span>
         <span class="id">ctx</span><span class="pn">.</span><span class="id">TryGetValues</span><span class="pn">&lt;</span><span class="id">ContentObject</span><span class="pn">&gt;</span><span class="pn">(</span><span class="pn">)</span>
-        <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs2', 54)" onmouseover="showTip(event, 'fs2', 54)" class="id">Option</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs4', 55)" onmouseover="showTip(event, 'fs4', 55)" class="id">defaultValue</span> <span onmouseout="hideTip(event, 'fs5', 56)" onmouseover="showTip(event, 'fs5', 56)" class="id">Seq</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs6', 57)" onmouseover="showTip(event, 'fs6', 57)" class="id">empty</span>
+        <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs2', 42)" onmouseover="showTip(event, 'fs2', 42)" class="id">Option</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs4', 43)" onmouseover="showTip(event, 'fs4', 43)" class="id">defaultValue</span> <span onmouseout="hideTip(event, 'fs5', 44)" onmouseover="showTip(event, 'fs5', 44)" class="id">Seq</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs6', 45)" onmouseover="showTip(event, 'fs6', 45)" class="id">empty</span>
 
     <span class="k">let</span> <span class="id">pageMeta</span> <span class="o">=</span>
         <span class="id">seoData</span>
-        <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs5', 58)" onmouseover="showTip(event, 'fs5', 58)" class="id">Seq</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs15', 59)" onmouseover="showTip(event, 'fs15', 59)" class="id">tryFind</span> <span class="pn">(</span><span class="k">fun</span> <span class="id">p</span> <span class="k">-&gt;</span> <span class="id">p</span><span class="pn">.</span><span class="id">Title</span><span class="pn">.</span><span class="id">Contains</span><span class="pn">(</span><span class="id">active</span><span class="pn">)</span><span class="pn">)</span>
+        <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs5', 46)" onmouseover="showTip(event, 'fs5', 46)" class="id">Seq</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs15', 47)" onmouseover="showTip(event, 'fs15', 47)" class="id">tryFind</span> <span class="pn">(</span><span class="k">fun</span> <span class="id">p</span> <span class="k">-&gt;</span> <span class="id">p</span><span class="pn">.</span><span class="id">Title</span><span class="pn">.</span><span class="id">Contains</span><span class="pn">(</span><span class="id">active</span><span class="pn">)</span><span class="pn">)</span>
         <span class="o">|&gt;</span> <span class="k">function</span>
-        <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs13', 60)" onmouseover="showTip(event, 'fs13', 60)" class="id">Some</span> <span class="id">info</span> <span class="k">-&gt;</span> <span class="id">info</span>
-        <span class="pn">|</span> <span class="id">_</span> <span class="k">-&gt;</span>
-            <span class="pn">{</span> <span class="id">ContentObject</span><span class="pn">.</span><span class="id">Default</span> <span class="k">with</span>
-                  <span class="id">Title</span> <span class="o">=</span> <span class="id">pageTitle</span>
-                  <span class="id">Description</span> <span class="o">=</span> <span class="id">tagline</span>
-                  <span class="id">BaseUrl</span> <span class="o">=</span> <span class="id">siteRoot</span>
-                  <span class="id">SiteName</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs13', 61)" onmouseover="showTip(event, 'fs13', 61)" class="id">Some</span> <span class="id">pageTitle</span>
-                  <span class="id">Headline</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs13', 62)" onmouseover="showTip(event, 'fs13', 62)" class="id">Some</span> <span class="id">tagline</span>
-                  <span class="id">Author</span> <span class="o">=</span> <span class="id">siteAuthor</span> <span class="pn">}</span>
+        <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs13', 48)" onmouseover="showTip(event, 'fs13', 48)" class="id">Some</span> <span class="id">info</span> <span class="k">-&gt;</span> <span class="id">info</span>
+        <span class="pn">|</span> <span class="id">_</span> <span class="k">-&gt;</span> <span class="pn">{</span> <span class="id">ContentObject</span><span class="pn">.</span><span class="id">Default</span> <span class="k">with</span> <span class="id">Author</span> <span class="o">=</span> <span class="id">siteAuthor</span> <span class="pn">}</span>
 
     <span class="id">html</span> <span class="pn">[</span><span class="pn">]</span> <span class="pn">[</span>
         <span class="id">head</span> <span class="pn">[</span><span class="pn">]</span> <span class="pn">[</span>
             <span class="id">meta</span> <span class="pn">[</span> <span class="id">CharSet</span> <span class="s">&quot;utf-8&quot;</span> <span class="pn">]</span>
             <span class="id">meta</span> <span class="pn">[</span> <span class="id">Name</span> <span class="s">&quot;viewport&quot;</span><span class="pn">;</span> <span class="id">Content</span> <span class="s">&quot;width=device-width, initial-scale=1&quot;</span> <span class="pn">]</span>
-            <span class="id">title</span> <span class="pn">[</span><span class="pn">]</span> <span class="pn">[</span> <span class="o">!!</span><span class="id">pageTitle</span> <span class="pn">]</span>
             <span class="c">// . . .</span>
             <span class="k">yield!</span> <span class="id">seo</span> <span class="id">pageMeta</span>
         <span class="pn">]</span>
@@ -270,11 +268,11 @@ Visit <a href="https://github.com/rdipardo/Fornax.Seo/wiki/FAQ#faq">the wiki</a>
 
         <link rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/JavaScript-autoComplete/1.0.4/auto-complete.css" />
-        <script type="text/javascript">var fsdocs_search_baseurl = 'https://heredocs.io/Fornax.Seo/';</script>
+        <script type="text/javascript">var fsdocs_search_baseurl = 'https://heredocs.io/';</script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.3.8/lunr.min.js"></script>
         <script type="text/javascript"
             src="https://cdnjs.cloudflare.com/ajax/libs/JavaScript-autoComplete/1.0.4/auto-complete.min.js"></script>
-        <script type="text/javascript" src="https://heredocs.io/Fornax.Seo/content/fsdocs-search.js"></script>
+        <script type="text/javascript" src="https://heredocs.io/content/fsdocs-search.js"></script>
     </div>
 </body>
 </html>
