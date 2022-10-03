@@ -18,7 +18,7 @@ jobs:
           submodules: 'recursive'
           fetch-depth: 0
       - name: Pre-build Install
-        uses: actions/setup-dotnet@v2
+        uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '6.0.200'
       - name: Build package
