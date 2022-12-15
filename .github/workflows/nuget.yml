@@ -18,7 +18,7 @@ jobs:
           submodules: 'recursive'
           fetch-depth: 0
       - name: Pre-build Install
-        uses: actions/setup-dotnet@v2
+        uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '6.0.200'
       - name: Build package
@@ -67,7 +67,7 @@ jobs:
         env:
           CI: true
       - name: Publish docs
-        uses: peaceiris/actions-gh-pages@v3.8.0
+        uses: peaceiris/actions-gh-pages@v3.9.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           enable_jekyll: false
