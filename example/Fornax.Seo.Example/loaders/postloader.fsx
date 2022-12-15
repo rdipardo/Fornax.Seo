@@ -2,6 +2,7 @@
 #r "../_lib/Markdig.dll"
 
 open Markdig
+open System.IO
 
 type PostConfig = {
     disableLiveRefresh: bool
@@ -117,8 +118,8 @@ let loadFile n =
 
 let loader (projectRoot: string) (siteContent: SiteContents) =
     let postsPath = System.IO.Path.Combine(projectRoot, contentDir)
-    System.IO.Directory.GetFiles postsPath
-    |> Array.filter (fun n -> n.EndsWith ".md")
+    Directory.GetFiles postsPath
+    |> Array.filter (fun n -> List.contains (Path.GetExtension n) Globalloader.contentFileTypes)
     |> Array.map loadFile
     |> Array.iter (fun p -> siteContent.Add p)
 

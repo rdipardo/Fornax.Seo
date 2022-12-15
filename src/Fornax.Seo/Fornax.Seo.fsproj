@@ -26,7 +26,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="FSharp.Data" Version="$(FSharpDataVersion)"/>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1"/>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2"/>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="../Fornax/src/Fornax.Core/Fornax.Core.fsproj">
@@ -51,7 +51,6 @@
   <Target Name="ConfigureProjectDependencies">
     <Exec EchoOff="true" WorkingDirectory="../FSharp.Data/" Command="git checkout -f $(FSharpDataVersion)"/>
     <Exec EchoOff="true" WorkingDirectory="../Fornax/" Command="git checkout -f v$(FornaxToolVersion)"/>
-    <Copy SourceFiles="../../global.json" DestinationFolder="../FSharp.Data"/>
     <Copy SourceFiles="../../global.json" DestinationFolder="../Fornax"/>
     <Copy SourceFiles="../patches/Fornax.Core.fsproj;Directory.Build.props" DestinationFolder="../Fornax/src/Fornax.Core"/>
   </Target>

@@ -1,16 +1,17 @@
 #r "_lib/Fornax.Core.dll"
+#load "loaders/globalloader.fsx"
 
 open Config
 open System.IO
 
 let postPredicate (projectRoot: string, page: string) =
     let ext = Path.GetExtension page
-    page.StartsWith("posts") && List.contains ext [".md"; ".markdown"]
+    page.StartsWith("posts") && List.contains ext Globalloader.contentFileTypes
 
 let staticPredicate (projectRoot: string, page: string) =
     let ext = Path.GetExtension page
     let fileShouldBeExcluded =
-        List.contains ext [ ".fsx"; ".fsproj"; ".json"; ".md"; ".markdown"; ".rst"; ".yml"; ".sh"; ".cmd" ] ||
+        List.contains ext (Globalloader.ignoredFileTypes @ Globalloader.contentFileTypes) ||
         page.Contains "_public" ||
         page.Contains "_bin" ||
         page.Contains "_lib" ||

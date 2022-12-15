@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-dotnet test /v:m /p:nowarn='"3218;3390"' test/Fornax.Seo.Tests/Fornax.Seo.Tests.fsproj
+dotnet test /v:m /p:nowarn='"3218;3384;3390"' test/Fornax.Seo.Tests/Fornax.Seo.Tests.fsproj
 if [ $? != 0 ]; then exit 1; fi
-cd example/Fornax.Seo.Example
+pushd example/Fornax.Seo.Example
 ./build $1
-cd ../..
+popd

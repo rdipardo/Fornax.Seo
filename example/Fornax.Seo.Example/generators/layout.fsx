@@ -3,7 +3,6 @@
 #if !FORNAX
 #load "../loaders/postloader.fsx"
 #load "../loaders/pageloader.fsx"
-#load "../loaders/globalloader.fsx"
 #endif
 
 open Html

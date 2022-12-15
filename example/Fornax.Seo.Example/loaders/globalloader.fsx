@@ -10,6 +10,9 @@ type SiteInfo = {
     postPageSize: int
 }
 
+let contentFileTypes = [".md"; ".markdown"]
+let ignoredFileTypes = [ ".fsx"; ".fsproj"; ".json"; ".rst"; ".yml"; ".sh"; ".cmd" ]
+
 let loader (projectRoot: string) (siteContent: SiteContents) =
     let siteInfo =
         { title = "Sample Fornax blog"
@@ -18,10 +21,10 @@ let loader (projectRoot: string) (siteContent: SiteContents) =
           postPageSize = 3 }
 
     let onTheWeb =
-        [ "linkedin.com/in/rdipardo"
+        [ "asciinema.org/~rdipardo"
           "github.com/rdipardo"
           "bitbucket.org/rdipardo"
-          "dev.to/rdipardo" ]
+          "sourceforge.net/u/robertdipardo/profile/" ]
 
     let siteAuthor = { Name = "rdipardo"; Email = "dipardo.r@gmail.com"; SocialMedia = onTheWeb }
 
