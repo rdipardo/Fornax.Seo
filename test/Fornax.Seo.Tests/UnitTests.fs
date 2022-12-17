@@ -7,6 +7,10 @@ module UnitTests =
     open Html
     open System.Diagnostics
 
+    type internal TestKind =
+        | Seo
+        | Meta
+
     [<TestFixture>]
     type UnitTest() =
         let links =
@@ -48,46 +52,66 @@ module UnitTests =
             socialMedia pageAuthor
             |> List.tryFind (fun tag -> (HtmlElement.ToString tag).Contains(content))
 
+        member private x.RunTest
+            (
+                toTest: TestKind,
+                toFind: string,
+                ?expected: string,
+                ?strAssert: (string * string) -> unit,
+                ?message: string
+            ) =
+            let toCompare = defaultArg expected toFind
+            let errorMsg = defaultArg message $"Expected to find {toFind}"
+
+            let tagFinder =
+                match toTest with
+                | Seo -> x.TryFindSeoTag
+                | Meta -> x.TryFindLink
+
+            tagFinder (toFind)
+            |> function
+            | Some html ->
+                strAssert
+                |> function
+                | None -> Assert.Pass()
+                | Some assertion -> assertion (toCompare, HtmlElement.ToString html)
+            | None -> Assert.Fail(errorMsg)
+
         member private x.Get opt = defaultArg opt ""
 
         [<Test>]
         member x.``Generates JSON-LD tag``() =
             let expected = """<script type="application/ld+json">"""
 
-            x.TryFindSeoTag(expected)
-            |> function
-            | Some _ -> Assert.Pass()
-            | None -> Assert.Fail($"Expected to find {expected}")
+            x.RunTest(Seo, expected)
 
         [<Test>]
         member x.``Generates OpenGraph tags``() =
             let expected =
                 $"""<meta property="og:type" content="{(defaultArg pageInfo.OpenGraphType "article").ToLower()}"/>"""
 
-            x.TryFindSeoTag(expected)
-            |> function
-            | Some _ -> Assert.Pass()
-            | None -> Assert.Fail($"Expected to find {expected}")
+            x.RunTest(Seo, expected)
 
         [<Test>]
         member x.``Metadata includes Fornax version``() =
             let fornaxVersionInfo = FileVersionInfo.GetVersionInfo((typeof<HtmlElement>).Assembly.Location)
+
             let expected =
                 $"""<meta name="generator" content="fornax v{fornaxVersionInfo.FileVersion}"/>"""
 
-            x.TryFindSeoTag(expected)
-            |> function
-            | Some _ -> Assert.Pass()
-            | None -> Assert.Fail($"Expected to find {expected}")
+            x.RunTest(Seo, expected)
 
         [<Test>]
         member x.``Social media links are styled when present``() =
             let expected = ".media-icon"
 
-            x.TryFindSeoTag("<style>")
-            |> function
-            | Some css -> StringAssert.Contains(expected, HtmlElement.ToString css)
-            | None -> Assert.Fail($"Expected to find {expected} within <style> element")
+            x.RunTest(
+                Seo,
+                "<style>",
+                expected,
+                StringAssert.Contains,
+                $"Expected to find {expected} within <style> element"
+            )
 
         [<Test>]
         member x.``No style is generated if no email and no links are present``() =
@@ -102,110 +126,76 @@ module UnitTests =
             let expected = $"""<a href="mailto:{pageAuthor.Email}" class="navicon">"""
             let linkContent = """<i class="media-icon fa fa-envelope" aria-hidden="true"></i>"""
 
-            x.TryFindLink(linkContent)
-            |> function
-            | Some link -> StringAssert.Contains(expected, HtmlElement.ToString link)
-            | None -> Assert.Fail($"Expected to find {expected}")
+            x.RunTest(Meta, linkContent, expected, StringAssert.Contains, $"Expected to find {expected}")
 
         [<Test>]
         member x.``Generates social media links with title``() =
             let expected = $"""title="Find {pageAuthor.Name} on linkedin" class="navicon">"""
             let linkContent = """<i class="media-icon fa fa-linkedin-square" aria-hidden="true"></i>"""
 
-            x.TryFindLink(linkContent)
-            |> function
-            | Some link -> StringAssert.Contains(expected, HtmlElement.ToString link)
-            | None -> Assert.Fail($"Expected to find {linkContent}")
+            x.RunTest(Meta, linkContent, expected, StringAssert.Contains)
 
         [<Test>]
         member x.``Can parse a Slack profile address from host name only``() =
             let expected = $"""title="Find {pageAuthor.Name} on slack" class="navicon">"""
             let linkContent = $"""href="https://{links.[0]}" """
 
-            x.TryFindLink(linkContent)
-            |> function
-            | Some link -> StringAssert.Contains(expected, HtmlElement.ToString link)
-            | None -> Assert.Fail($"Expected to find {linkContent}")
+            x.RunTest(Meta, linkContent, expected, StringAssert.Contains)
 
         [<Test>]
         member x.``Can parse a Snapchat profile address``() =
             let expected = $"""title="Find {pageAuthor.Name} on snapchat" class="navicon">"""
             let linkContent = $"""href="{links.[1]}" """
 
-            x.TryFindLink(linkContent)
-            |> function
-            | Some link -> StringAssert.Contains(expected, HtmlElement.ToString link)
-            | None -> Assert.Fail($"Expected to find {linkContent}")
+            x.RunTest(Meta, linkContent, expected, StringAssert.Contains)
 
         [<Test>]
         member x.``Can parse a Spotify profile address``() =
             let expected = $"""title="Find {pageAuthor.Name} on spotify" class="navicon">"""
             let linkContent = $"""href="{links.[2]}" """
 
-            x.TryFindLink(linkContent)
-            |> function
-            | Some link -> StringAssert.Contains(expected, HtmlElement.ToString link)
-            | None -> Assert.Fail($"Expected to find {linkContent}")
+            x.RunTest(Meta, linkContent, expected, StringAssert.Contains)
 
         [<Test>]
         member x.``Can parse a StackExchange profile address from host name only``() =
             let expected = $"""title="Find {pageAuthor.Name} on stackexchange" class="navicon">"""
             let linkContent = $"""href="https://{links.[3]}" """
 
-            x.TryFindLink(linkContent)
-            |> function
-            | Some link -> StringAssert.Contains(expected, HtmlElement.ToString link)
-            | None -> Assert.Fail($"Expected to find {linkContent}")
-
+            x.RunTest(Meta, linkContent, expected, StringAssert.Contains)
 
         [<Test>]
         member x.``Can parse a Telegram profile address``() =
             let expected = $"""title="Find {pageAuthor.Name} on telegram" class="navicon">"""
             let linkContent = $"""href="{links.[4]}" """
 
-            x.TryFindLink(linkContent)
-            |> function
-            | Some link -> StringAssert.Contains(expected, HtmlElement.ToString link)
-            | None -> Assert.Fail($"Expected to find {linkContent}")
+            x.RunTest(Meta, linkContent, expected, StringAssert.Contains)
 
         [<Test>]
         member x.``Can parse a Bēhance profile address``() =
             let expected = $"""title="Find {pageAuthor.Name} on behance" class="navicon">"""
             let linkContent = $"""href="{links.[7]}" """
 
-            x.TryFindLink(linkContent)
-            |> function
-            | Some link -> StringAssert.Contains(expected, HtmlElement.ToString link)
-            | None -> Assert.Fail($"Expected to find {linkContent}")
+            x.RunTest(Meta, linkContent, expected, StringAssert.Contains)
 
         [<Test>]
         member x.``Can parse a Google Scholar citations search result``() =
             let expected = $"""title="Find {pageAuthor.Name} on Google Scholar" class="navicon">"""
             let linkContent = $"""href="{links.[8]}" """
 
-            x.TryFindLink(linkContent)
-            |> function
-            | Some link -> StringAssert.Contains(expected, HtmlElement.ToString link)
-            | None -> Assert.Fail($"Expected to find {linkContent}")
+            x.RunTest(Meta, linkContent, expected, StringAssert.Contains)
 
         [<Test>]
         member x.``Can parse a SourceForge profile from host name only``() =
             let expected = $"""title="Find {pageAuthor.Name} on sourceforge" class="navicon">"""
             let linkContent = $"""href="https://{links.[9]}" """
 
-            x.TryFindLink(linkContent)
-            |> function
-            | Some link -> StringAssert.Contains(expected, HtmlElement.ToString link)
-            | None -> Assert.Fail($"Expected to find {linkContent}")
+            x.RunTest(Meta, linkContent, expected, StringAssert.Contains)
 
         [<Test>]
         member x.``Generates absolute URLs from relative links to unknown sites``() =
             let expected = $"""href="https://{links.[6]}" """
 
-            x.TryFindLink(expected)
-            |> function
-            | Some link -> StringAssert.Contains(expected, HtmlElement.ToString link)
-            | None -> Assert.Fail($"Expected to find {expected}")
+            x.RunTest(Meta, expected, expected, StringAssert.Contains)
 
         [<Test>]
         member x.``JsonLinkData ignores relative urls``() =
