@@ -94,7 +94,7 @@ module Tags =
     let private toIsoDateString (date: DateTime option) =
         date
         |> function
-        | Some d -> d.ToString("o")
+        | Some d -> d.ToString("yyyy-MM-ddTHH:mm:ssK")
         | None -> null
 
     let private dateModified (page: ContentObject) =
@@ -113,7 +113,7 @@ module Tags =
         let metaOpt = defaultArg page.Meta [ ("", "") ] |> Map.ofList
 
         [<JsonProperty("@context")>]
-        member val Context = SchemaDotOrgContext(Schemata.Context)
+        member val Context: string = SchemaDotOrgContext(Schemata.Context).Schema
 
         [<JsonProperty("@type")>]
         member val Schema: string = getSchemaOrgType objectType
@@ -135,7 +135,7 @@ module Tags =
                 )
 
             let jsonLD = JObject.Parse(JsonConvert.SerializeObject(this, Formatting.None, jsonOptions))
-            let toCamelCase (str: string) = $"{Char.ToLowerInvariant(str.[0])}{str.Substring(1)}".Replace('_', '\000')
+            let toCamelCase (str: string) = $"{Char.ToLowerInvariant(str.[0])}{str.Substring(1)}".Replace("_", "")
 
             metaOpt
             |> Map.iter
