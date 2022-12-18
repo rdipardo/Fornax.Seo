@@ -83,40 +83,40 @@ module Core =
         let socialMedia = author.SocialMedia
 
         let mediaIcons =
-            [ ("behance", "fa-behance-square")
-              ("bitbucket", "fa-bitbucket")
-              ("deviantart", "fa-deviantart")
-              ("facebook", "fa-facebook-official")
-              ("flickr", "fa-flickr")
-              ("gitlab", "fa-gitlab")
-              ("github", "fa-github")
-              ("instagram", "fa-instagram")
-              ("linkedin", "fa-linkedin-square")
-              ("meetup", "fa-meetup")
-              ("pinterest", "fa-pinterest-square ")
-              ("qq", "fa-qq")
-              ("quora", "fa-quora")
-              ("ravelry", "fa-ravelry")
-              ("reddit", "fa-reddit")
-              ("scholar", "fa-graduation-cap")
-              ("slack", "fa-slack")
-              ("snapchat", "fa-snapchat-square")
-              ("soundcloud", "fa-soundcloud")
-              ("sourceforge", "fa-fire")
-              ("spotify", "fa-spotify")
-              ("stackexchange", "fa-stack-exchange")
-              ("stackoverflow", "fa-stack-overflow")
-              ("t", "fa-telegram")
-              ("telegram", "fa-telegram")
-              ("tumblr", "fa-tumblr-square")
-              ("twitter", "fa-twitter")
-              ("viadeo", "fa-viadeo-square")
-              ("wechat", "fa-weixin")
-              ("weixin", "fa-weixin")
-              ("weibo", "fa-weibo")
-              ("whatsapp ", "fa-whatsapp")
-              ("xing", "fa-xing-square")
-              ("youtube", "fa-youtube-play") ]
+            [ ("behance", ("Bēhance", "fa-behance-square"))
+              ("bitbucket", ("Bitbucket", "fa-bitbucket"))
+              ("deviantart", ("DeviantArt", "fa-deviantart"))
+              ("facebook", ("Facebook", "fa-facebook-official"))
+              ("flickr", ("Flickr", "fa-flickr"))
+              ("gitlab", ("GitLab", "fa-gitlab"))
+              ("github", ("GitHub", "fa-github"))
+              ("instagram", ("Instagram", "fa-instagram"))
+              ("linkedin", ("LinkedIn", "fa-linkedin-square"))
+              ("meetup", ("Meetup", "fa-meetup"))
+              ("pinterest", ("Pinterest", "fa-pinterest-square "))
+              ("qq", ("Tencent QQ", "fa-qq"))
+              ("quora", ("Quora", "fa-quora"))
+              ("ravelry", ("Ravelry", "fa-ravelry"))
+              ("reddit", ("Reddit", "fa-reddit"))
+              ("scholar", ("Google Scholar", "fa-graduation-cap"))
+              ("slack", ("Slack", "fa-slack"))
+              ("snapchat", ("Snapchat", "fa-snapchat-square"))
+              ("soundcloud", ("SoundCloud", "fa-soundcloud"))
+              ("sourceforge", ("SourceForge", "fa-fire"))
+              ("spotify", ("Spotify", "fa-spotify"))
+              ("stackexchange", ("Stack Exchange", "fa-stack-exchange"))
+              ("stackoverflow", ("Stack Overflow", "fa-stack-overflow"))
+              ("t", ("Telegram", "fa-telegram"))
+              ("telegram", ("Telegram", "fa-telegram"))
+              ("tumblr", ("Tumblr", "fa-tumblr-square"))
+              ("twitter", ("Twitter", "fa-twitter"))
+              ("viadeo", ("Viadeo", "fa-viadeo-square"))
+              ("wechat", ("WeChat (微信)", "fa-weixin"))
+              ("weixin", ("Weixin (微信)", "fa-weixin"))
+              ("weibo", ("Weibo (新浪微博)", "fa-weibo"))
+              ("whatsapp", ("WhatsApp", "fa-whatsapp"))
+              ("xing", ("Xing", "fa-xing-square"))
+              ("youtube", ("YouTube", "fa-youtube-play")) ]
             |> Map.ofList
 
         let links =
@@ -126,12 +126,14 @@ module Core =
                     let noMatch = (lnk, "", "fa-external-link")
 
                     (if Uri.IsWellFormedUriString(lnk, UriKind.RelativeOrAbsolute) then
-                         let link =
+                         let siteName =
                              lnk.Split([| '/'; '.' |], StringSplitOptions.RemoveEmptyEntries)
                              |> Array.tryFind (fun part -> Map.containsKey part mediaIcons)
                              |> function
                              | Some site -> site
                              | None -> lnk
+
+                         let siteInfo = Map.tryFind siteName mediaIcons
 
                          Uri.TryCreate(lnk, UriKind.RelativeOrAbsolute)
                          |> function
@@ -149,19 +151,19 @@ module Core =
                                      $"{Uri.UriSchemeHttps}{Uri.SchemeDelimiter}{uri.OriginalString}"
                                          .Replace("///", "//")
 
-                             (siteLink, link, Map.tryFind link mediaIcons |> Option.defaultValue "fa-external-link")
+                             (siteLink,
+                              siteInfo |> Option.defaultValue ("", "") |> fst,
+                              siteInfo |> Option.defaultValue ("", "fa-external-link") |> snd)
                          | _ -> noMatch
                      else
                          noMatch))
                 >> (fun siteInfo ->
-                    let link, site, icon = siteInfo
+                    let link, siteName, icon = siteInfo
 
                     let siteName =
-                        match site with
-                        | "scholar" -> "Google Scholar"
-                        | "t" -> "telegram"
+                        match siteName with
                         | "" -> link
-                        | _ -> site
+                        | _ -> siteName
 
                     let linkTitle =
                         (if String.IsNullOrEmpty(siteAuthor) then

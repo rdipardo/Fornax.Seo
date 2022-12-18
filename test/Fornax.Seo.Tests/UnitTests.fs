@@ -130,49 +130,49 @@ module UnitTests =
 
         [<Test>]
         member x.``Generates social media links with title``() =
-            let expected = $"""title="Find {pageAuthor.Name} on linkedin" class="navicon">"""
+            let expected = $"""title="Find {pageAuthor.Name} on LinkedIn" class="navicon">"""
             let linkContent = """<i class="media-icon fa fa-linkedin-square" aria-hidden="true"></i>"""
 
             x.RunTest(Meta, linkContent, expected, StringAssert.Contains)
 
         [<Test>]
         member x.``Can parse a Slack profile address from host name only``() =
-            let expected = $"""title="Find {pageAuthor.Name} on slack" class="navicon">"""
+            let expected = $"""title="Find {pageAuthor.Name} on Slack" class="navicon">"""
             let linkContent = $"""href="https://{links.[0]}" """
 
             x.RunTest(Meta, linkContent, expected, StringAssert.Contains)
 
         [<Test>]
         member x.``Can parse a Snapchat profile address``() =
-            let expected = $"""title="Find {pageAuthor.Name} on snapchat" class="navicon">"""
+            let expected = $"""title="Find {pageAuthor.Name} on Snapchat" class="navicon">"""
             let linkContent = $"""href="{links.[1]}" """
 
             x.RunTest(Meta, linkContent, expected, StringAssert.Contains)
 
         [<Test>]
         member x.``Can parse a Spotify profile address``() =
-            let expected = $"""title="Find {pageAuthor.Name} on spotify" class="navicon">"""
+            let expected = $"""title="Find {pageAuthor.Name} on Spotify" class="navicon">"""
             let linkContent = $"""href="{links.[2]}" """
 
             x.RunTest(Meta, linkContent, expected, StringAssert.Contains)
 
         [<Test>]
         member x.``Can parse a StackExchange profile address from host name only``() =
-            let expected = $"""title="Find {pageAuthor.Name} on stackexchange" class="navicon">"""
+            let expected = $"""title="Find {pageAuthor.Name} on Stack Exchange" class="navicon">"""
             let linkContent = $"""href="https://{links.[3]}" """
 
             x.RunTest(Meta, linkContent, expected, StringAssert.Contains)
 
         [<Test>]
         member x.``Can parse a Telegram profile address``() =
-            let expected = $"""title="Find {pageAuthor.Name} on telegram" class="navicon">"""
+            let expected = $"""title="Find {pageAuthor.Name} on Telegram" class="navicon">"""
             let linkContent = $"""href="{links.[4]}" """
 
             x.RunTest(Meta, linkContent, expected, StringAssert.Contains)
 
         [<Test>]
         member x.``Can parse a Bēhance profile address``() =
-            let expected = $"""title="Find {pageAuthor.Name} on behance" class="navicon">"""
+            let expected = $"""title="Find {pageAuthor.Name} on Bēhance" class="navicon">"""
             let linkContent = $"""href="{links.[7]}" """
 
             x.RunTest(Meta, linkContent, expected, StringAssert.Contains)
@@ -186,7 +186,7 @@ module UnitTests =
 
         [<Test>]
         member x.``Can parse a SourceForge profile from host name only``() =
-            let expected = $"""title="Find {pageAuthor.Name} on sourceforge" class="navicon">"""
+            let expected = $"""title="Find {pageAuthor.Name} on SourceForge" class="navicon">"""
             let linkContent = $"""href="https://{links.[9]}" """
 
             x.RunTest(Meta, linkContent, expected, StringAssert.Contains)
