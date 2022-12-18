@@ -6,14 +6,13 @@ SET NL=^
 
 dotnet fsi /exec scripts/release-notes.fsx
 
-DIR /B release\notes.txt 2>NUL
-IF NOT %ERRORLEVEL% == 0 (GOTO END)
+IF NOT EXIST ".\release\notes.txt" (GOTO END)
 
 FOR /F "tokens=* USEBACKQ" %%F IN (`type release\notes.txt`) DO (
 SET "PackageReleaseNotes=%%F"
 )
 
-git describe --tags 2>NUL
+git describe --candidates=0 2>NUL:
 IF NOT %ERRORLEVEL% == 0 (
   FOR /F "tokens=* USEBACKQ" %%F IN (`git rev-parse --short HEAD`) DO (
   SET "BUILD_NUMBER=--version-suffix %%F"
@@ -21,7 +20,7 @@ IF NOT %ERRORLEVEL% == 0 (
 )
 
 dotnet restore src/Fornax.Seo/Fornax.Seo.fsproj
-dotnet pack /v:m /p:nowarn=\"3218;3390\" src/Fornax.Seo/Fornax.Seo.fsproj -c Release -o release %BUILD_NUMBER%
+dotnet pack /v:m /p:nowarn=\"3218;3384;3390\" src/Fornax.Seo/Fornax.Seo.fsproj -c Release -o release %BUILD_NUMBER%
 
 :END
 ENDLOCAL

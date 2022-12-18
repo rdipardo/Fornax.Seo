@@ -1,3 +1,10 @@
+## 1.1.1
+- Bump FSharp.Data to 4.2.10
+- Bump Newtonsoft.Json to 13.0.2
+- Serialize JSON-LD `@context` property as a simple string
+- Use a shorter timestamp format in JSON-LD and OpenGraph fields
+- Make social media link titles more readable
+
 ## 1.1.0
 - Upgrade runtime target to .NET 6 (current LTS)
 - Bump Fornax.Core assembly version to 0.14.3

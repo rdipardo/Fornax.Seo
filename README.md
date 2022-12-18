@@ -65,7 +65,7 @@ Visit [the wiki] to learn how to use this package with earlier `fornax` versions
               "bitbucket.org/username"
               "facebook.com/username" ]
 
-        let siteAuthor =
+        let siteAuthor: ContentCreator =
             { Name = "Moi-même"
               Email = "info@example.com"
               SocialMedia = onTheWeb }
@@ -110,7 +110,7 @@ let generate' (ctx: SiteContents) (page: string) =
         |> Option.defaultValue Seq.empty
         |> Seq.find (fun p -> p.file = page)
 
-    let postMeta =
+    let postMeta: ContentObject =
         { Title = post.title
           BaseUrl = siteRoot
           Url = post.file.Replace(System.IO.Path.GetExtension post.file, ".html")
