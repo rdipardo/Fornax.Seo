@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="keywords" content="seo;OpenGraph;json-ld;Fornax;f#" />
     <meta name="author" content="Robert Di Pardo">
-    <link rel="canonical" href="https://heredocs.io/Fornax.Seo/" />
+    <link rel="canonical" href="https://heredocs.io/" />
     <link rel="stylesheet" id="theme_link"
         href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.3.1/materia/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -73,7 +73,7 @@
     <div class="container">
         <div class="masthead">
             <a href="https://www.nuget.org/packages/Fornax.Seo"><img id="fsdocs-logo" src="https://heredocs.io/img/logo.png" alt="Fornax.Seo
-1.1"/></a>
+1.1.1"/></a>
         </div>
         <hr />
         <div class="container" id="fsdocs-content">
@@ -137,7 +137,7 @@ Visit <a href="https://github.com/rdipardo/Fornax.Seo/wiki/FAQ#faq">the wiki</a>
           <span class="s">&quot;bitbucket.org/username&quot;</span>
           <span class="s">&quot;facebook.com/username&quot;</span> <span class="pn">]</span>
 
-    <span class="k">let</span> <span class="id">siteAuthor</span> <span class="o">=</span>
+    <span class="k">let</span> <span class="id">siteAuthor</span><span class="pn">:</span> <span class="id">ContentCreator</span> <span class="o">=</span>
         <span class="pn">{</span> <span class="id">Name</span> <span class="o">=</span> <span class="s">&quot;Moi-m&#234;me&quot;</span>
           <span class="id">Email</span> <span class="o">=</span> <span class="s">&quot;info@example.com&quot;</span>
           <span class="id">SocialMedia</span> <span class="o">=</span> <span class="id">onTheWeb</span> <span class="pn">}</span>
@@ -181,7 +181,7 @@ Visit <a href="https://github.com/rdipardo/Fornax.Seo/wiki/FAQ#faq">the wiki</a>
         <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs2', 18)" onmouseover="showTip(event, 'fs2', 18)" class="id">Option</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs4', 19)" onmouseover="showTip(event, 'fs4', 19)" class="id">defaultValue</span> <span onmouseout="hideTip(event, 'fs5', 20)" onmouseover="showTip(event, 'fs5', 20)" class="id">Seq</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs6', 21)" onmouseover="showTip(event, 'fs6', 21)" class="id">empty</span>
         <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs5', 22)" onmouseover="showTip(event, 'fs5', 22)" class="id">Seq</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs7', 23)" onmouseover="showTip(event, 'fs7', 23)" class="id">find</span> <span class="pn">(</span><span class="k">fun</span> <span class="id">p</span> <span class="k">-&gt;</span> <span class="id">p</span><span class="pn">.</span><span class="id">file</span> <span class="o">=</span> <span class="id">page</span><span class="pn">)</span>
 
-    <span class="k">let</span> <span class="id">postMeta</span> <span class="o">=</span>
+    <span class="k">let</span> <span class="id">postMeta</span><span class="pn">:</span> <span class="id">ContentObject</span> <span class="o">=</span>
         <span class="pn">{</span> <span class="id">Title</span> <span class="o">=</span> <span class="id">post</span><span class="pn">.</span><span class="id">title</span>
           <span class="id">BaseUrl</span> <span class="o">=</span> <span class="id">siteRoot</span>
           <span class="id">Url</span> <span class="o">=</span> <span class="id">post</span><span class="pn">.</span><span class="id">file</span><span class="pn">.</span><span class="id">Replace</span><span class="pn">(</span><span onmouseout="hideTip(event, 'fs8', 24)" onmouseover="showTip(event, 'fs8', 24)" class="id">System</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs9', 25)" onmouseover="showTip(event, 'fs9', 25)" class="id">IO</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs10', 26)" onmouseover="showTip(event, 'fs10', 26)" class="id">Path</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs11', 27)" onmouseover="showTip(event, 'fs11', 27)" class="id">GetExtension</span> <span class="id">post</span><span class="pn">.</span><span class="id">file</span><span class="pn">,</span> <span class="s">&quot;.html&quot;</span><span class="pn">)</span>
