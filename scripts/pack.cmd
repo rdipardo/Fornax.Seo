@@ -12,7 +12,7 @@ FOR /F "tokens=* USEBACKQ" %%F IN (`type release\notes.txt`) DO (
 SET "PackageReleaseNotes=%%F"
 )
 
-git describe --candidates=0 2>NUL:
+git describe --tags 2>NUL:
 IF NOT %ERRORLEVEL% == 0 (
   FOR /F "tokens=* USEBACKQ" %%F IN (`git rev-parse --short HEAD`) DO (
   SET "BUILD_NUMBER=--version-suffix %%F"
