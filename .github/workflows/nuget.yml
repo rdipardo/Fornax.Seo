@@ -67,7 +67,7 @@ jobs:
         env:
           CI: true
       - name: Publish docs
-        uses: peaceiris/actions-gh-pages@v3.9.0
+        uses: peaceiris/actions-gh-pages@v3.9.1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           enable_jekyll: false
