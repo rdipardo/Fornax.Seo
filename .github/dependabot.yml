@@ -9,13 +9,27 @@ updates:
       prefix: third-party
     labels:
       - "upstream"
-      - "dependencies"
-    assignees:
-      - "rdipardo"
+  - package-ecosystem: "nuget"
+    directory: "/src/Fornax.Seo"
+    ignore:
+      - dependency-name: "FSharp.Data"
+    schedule:
+      interval: "weekly"
+    target-branch: "next"
+  - package-ecosystem: "nuget"
+    directory: "/test/Fornax.Seo.Tests"
+    schedule:
+      interval: "weekly"
+    target-branch: "next"
+  - package-ecosystem: "nuget"
+    directory: "/example/Fornax.Seo.Example"
+    schedule:
+      interval: "weekly"
+    target-branch: "next"
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
     target-branch: "next"
     commit-message:
       prefix: gh-actions

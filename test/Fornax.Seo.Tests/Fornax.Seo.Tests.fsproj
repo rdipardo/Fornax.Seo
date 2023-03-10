@@ -12,7 +12,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="../../src/Fornax.Seo/Fornax.Seo.fsproj"/>
-    <ProjectReference Include="../../src/Fornax/src/Fornax.Core/Fornax.Core.fsproj"/>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="UnitTests.fs"/>

@@ -26,13 +26,8 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="FSharp.Data" Version="$(FSharpDataVersion)"/>
+    <PackageReference Include="Fornax.Core" Version="0.15.1"/>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.2"/>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="../Fornax/src/Fornax.Core/Fornax.Core.fsproj">
-      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
-      <IncludeAssets>Fornax.Core.dll</IncludeAssets>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="../FSharp.Data/src/FSharp.Data.DesignTime/FSharp.Data.DesignTime.fsproj">
@@ -40,22 +35,10 @@
       <IncludeAssets>FSharp.Data.DesignTime.dll</IncludeAssets>
     </ProjectReference>
   </ItemGroup>
-  <PropertyGroup>
-    <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);CopyProjectReferencesToPackage</TargetsForTfmSpecificBuildOutput>
-  </PropertyGroup>
-  <Target DependsOnTargets="ResolveReferences" Name="CopyProjectReferencesToPackage">
-    <ItemGroup>
-      <BuildOutputInPackage Include="@(ReferenceCopyLocalPaths-&gt;WithMetadataValue('ReferenceSourceTarget', 'ProjectReference'))"/>
-    </ItemGroup>
-  </Target>
   <Target Name="ConfigureProjectDependencies">
     <Exec EchoOff="true" WorkingDirectory="../FSharp.Data/" Command="git checkout -f $(FSharpDataVersion)"/>
-    <Exec EchoOff="true" WorkingDirectory="../Fornax/" Command="git checkout -f v$(FornaxToolVersion)"/>
-    <Copy SourceFiles="../../global.json" DestinationFolder="../Fornax"/>
-    <Copy SourceFiles="../patches/Fornax.Core.fsproj;Directory.Build.props" DestinationFolder="../Fornax/src/Fornax.Core"/>
   </Target>
   <Target Name="ToolRestore" DependsOnTargets="ConfigureProjectDependencies">
-    <Exec Command="dotnet tool restore --tool-manifest ../Fornax/.config/dotnet-tools.json" EchoOff="true"/>
     <Exec Command="dotnet tool restore --tool-manifest ../FSharp.Data/.config/dotnet-tools.json" EchoOff="true"/>
   </Target>
 </Project>

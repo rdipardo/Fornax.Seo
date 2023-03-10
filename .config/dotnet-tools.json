@@ -13,6 +13,12 @@
       "commands": [
         "fsdocs"
       ]
+    },
+    "fornax": {
+      "version": "0.15.1",
+      "commands": [
+        "fornax"
+      ]
     }
   }
 }

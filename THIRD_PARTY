@@ -1,11 +1,6 @@
 
 The Fornax.Seo NuGet package distributes assemblies compiled from source code belonging to these projects:
 
-Fornax
-------
-The Fornax CLI tool and assemblies are both distributed under the terms of the MIT License.
-More information is available at https://github.com/ionide/Fornax/blob/master/LICENSE.md
-
 FSharp.Data
 ------------
 FSharp.Data is distributed under the terms of the Apache License, Version 2.0.
