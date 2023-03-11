@@ -14,10 +14,10 @@ try
     let notes =
         Array.except latest changes
         |> Array.takeWhile (not << matchHeading)
-        |> String.concat "!NL!"
+        |> String.concat Environment.NewLine
 
     FileInfo(noteText).Directory.Create()
     File.WriteAllText(noteText, notes)
 
-    printfn "---\n%s\n---" <| (File.ReadAllText(noteText)).Replace("!NL!", Environment.NewLine)
+    printfn "---\n%s\n---" <| (File.ReadAllText(noteText))
 with exc -> printfn "%s" <| (sprintf "%s: %s" <| exc.GetType().Name <| exc.Message)

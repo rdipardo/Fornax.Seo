@@ -1,6 +1,0 @@
-#!/usr/bin/env bash
-FORNAX_CMD=build
-if [ "$1" = "live" ]; then FORNAX_CMD=watch; fi
-dotnet build /v:m /p:nowarn='"3218;3384;3390"' -o _lib -c Release
-dotnet build /v:m ../../src/Fornax/src/Fornax/Fornax.fsproj -o ../bin -c Release
-dotnet ../bin/Fornax.dll $FORNAX_CMD

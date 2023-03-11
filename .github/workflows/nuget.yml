@@ -20,22 +20,22 @@ jobs:
       - name: Pre-build Install
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '6.0.200'
-      - name: Build package
-        run: scripts\pack
+          dotnet-version: '6.0.x'
       - name: Cache packages
         uses: actions/cache@v3
         with:
           path: |
            ~/.nuget/packages
-           ${{ github.workspace }}/src/Fornax/.paket
-           ${{ github.workspace }}/src/Fornax/paket-files
+           ${{ github.workspace }}/.paket
+           ${{ github.workspace }}/paket-files
            ${{ github.workspace }}/src/FSharp.Data/.paket
            ${{ github.workspace }}/src/FSharp.Data/paket-files
           key: ${{ runner.os }}-nuget-${{ hashFiles('src/Fornax.Seo/Directory.Build.props') }}
           restore-keys: |-
             ${{ runner.os }}-nuget-
             ${{ runner.os }}-
+      - name: Build package
+        run: dotnet fake build -e CI=true -t Pack
       - name: Collect release info
         run: |
           $REL=${env:GITHUB_REF}.Split('/')[2]
@@ -63,7 +63,6 @@ jobs:
       - name: Publish release
         run: |-
           dotnet nuget push release\Fornax.Seo.*.nupkg -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json --skip-duplicate
-          .\scripts\gendocs
         env:
           CI: true
       - name: Publish docs

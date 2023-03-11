@@ -26,13 +26,13 @@ jobs:
       - name: Pre-test install
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '6.0.200'
+          dotnet-version: '6.0.x'
       - name: Cache packages
         uses: actions/cache@v3
         with:
           path: |-
-           ${{ github.workspace }}/src/Fornax/.paket
-           ${{ github.workspace }}/src/Fornax/paket-files
+           ${{ github.workspace }}/.paket
+           ${{ github.workspace }}/paket-files
            ${{ github.workspace }}/src/FSharp.Data/.paket
            ${{ github.workspace }}/src/FSharp.Data/paket-files
           key: ${{ runner.os }}-nuget-${{ hashFiles('src/Fornax.Seo/Directory.Build.props') }}
@@ -40,9 +40,7 @@ jobs:
             ${{ runner.os }}-nuget-
             ${{ runner.os }}-
       - name: Run tests
-        if: ${{ !startsWith(runner.os, 'windows') }}
-        run: scripts/ci
-      - name: Run tests (Windows)
-        if: ${{ startsWith(runner.os, 'windows') }}
-        run: scripts\ci
-        shell: cmd
+        run: |-
+         dotnet tool restore
+         dotnet paket restore
+         dotnet fake build -e CI=true

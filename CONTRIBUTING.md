@@ -14,49 +14,23 @@ If you already have the source tree locally, run
 
 _All platforms need a .NET SDK at version 6.0.100 or later_
 
-#### Windows
 
 To run unit tests and build a sample website:
 
-~~~bat
-  scripts\ci
-  :: or, to also serve the site at localhost:8080
-  scripts\ci live
-~~~
+    dotnet fake build -e CI=true
+
 
 To browse a local copy of [the documentation][]:
 
-~~~bat
-  scripts\gendocs live
-~~~
+    dotnet fake build -t Docs live
 
-
-#### Linux, macOS
-
-Run tests with:
-
-~~~sh
-  scripts/ci
-  # or
-  scripts/ci live
-~~~
-
-Browse docs with:
-
-~~~sh
-  scripts/gendocs live
-~~~
 
 
 ### Pull Requests
 
 Before committing your changes, make sure your code is formatted:
 
-       # on Windows
-       scripts\format
-
-       # or, on Linux and macOS
-       scripts/format
+    dotnet fake build -t Format
 
 GitHub users can follow the [well-documented steps][] to creating forks
 and pull requests.
@@ -84,8 +58,8 @@ if they prefer.
 ### Licensing your contributions
 
 This project is licensed under the [Mozilla Public License, Version 2.0][].
-If you contribute new code files (not including test files and scripts), please
-put a [license notice][] at the top, like this:
+If you contribute new code files, please put a [license notice][] at the top,
+like this:
 
 ~~~
 //
@@ -93,7 +67,7 @@ put a [license notice][] at the top, like this:
 //
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this file,
-// You can obtain one at http://mozilla.org/MPL/2.0/.
+// You can obtain one at https://mozilla.org/MPL/2.0/.
 //
 ~~~
 
