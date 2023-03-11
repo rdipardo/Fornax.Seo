@@ -28,7 +28,7 @@
   <ItemGroup>
     <PackageReference Include="FSharp.Data" Version="$(FSharpDataVersion)"/>
     <PackageReference Include="Fornax.Core" Version="0.15.1"/>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.2"/>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3"/>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="../FSharp.Data/src/FSharp.Data.DesignTime/FSharp.Data.DesignTime.fsproj">
