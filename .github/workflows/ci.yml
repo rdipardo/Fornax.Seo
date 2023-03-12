@@ -32,9 +32,7 @@ jobs:
         with:
           path: |-
            ${{ github.workspace }}/.paket
-           ${{ github.workspace }}/paket-files
            ${{ github.workspace }}/src/FSharp.Data/.paket
-           ${{ github.workspace }}/src/FSharp.Data/paket-files
           key: ${{ runner.os }}-nuget-${{ hashFiles('src/Fornax.Seo/Directory.Build.props') }}
           restore-keys: |-
             ${{ runner.os }}-nuget-
