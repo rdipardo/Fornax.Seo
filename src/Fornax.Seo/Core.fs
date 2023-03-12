@@ -171,17 +171,22 @@ module Core =
                          else
                              $"Find {siteAuthor} on {siteName}")
 
-                    a [ Href link; HtmlProperties.Title linkTitle; Class "navicon" ] [
-                        i [ Class(($"media-icon fa {icon}"))
-                            HtmlProperties.Custom("aria-hidden", "true") ] []
+                    a [ Href link
+                        HtmlProperties.Title linkTitle
+                        Class "navicon"
+                        HtmlProperties.Custom("aria-label", linkTitle) ] [
+                        i [ Class(($"media-icon fa {icon}")) ] []
                     ])
             )
 
         if not <| String.IsNullOrEmpty(email) then
+            let linkTitle = $"Contact {siteAuthor} at {email}"
+
             links
-            @ [ a [ Href(Uri.UriSchemeMailto + ":" + email); Class "navicon" ] [
-                    i [ Class("media-icon fa fa-envelope")
-                        HtmlProperties.Custom("aria-hidden", "true") ] []
+            @ [ a [ Href(Uri.UriSchemeMailto + ":" + email)
+                    Class "navicon"
+                    HtmlProperties.Custom("aria-label", linkTitle) ] [
+                    i [ Class("media-icon fa fa-envelope") ] []
                 ] ]
         else
             links
