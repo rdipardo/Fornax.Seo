@@ -21,7 +21,7 @@ A SEO meta tag generator for [Fornax](https://ionide.io/Tools/fornax.html)
 
 **NOTE**
 
-The following requires `fornax` [0.14.0 or newer][from nuget.org].
+The following requires `fornax` [0.15.1 or newer][from nuget.org].
 Visit [the wiki] to learn how to use this package with earlier `fornax` versions.
 
 - Change into a project directory and scaffold a new website
@@ -29,13 +29,41 @@ Visit [the wiki] to learn how to use this package with earlier `fornax` versions
 
       fornax new
 
+- Install and set up [`paket`](https://fsprojects.github.io/Paket/index.html):
+
+
+      dotnet tool install paket
+      dotnet paket init
+
+- Configure dependencies, e.g. at minimum:
+
+    ```sh
+    # paket.dependencies
+
+    source https://api.nuget.org/v3/index.json
+    framework: net6.0, netstandard2.0, netstandard2.1
+    generate_load_scripts: true
+    storage: none
+
+    # . . .
+    nuget Fornax.Seo      >= 1.2.0  # pulls in the Fornax.Core package
+    nuget Markdig
+    #  . . .
+    ```
+
+- Install the packages:
+
+
+      dotnet paket install
+
+
 **IMPORTANT**
 
 - Provide the root domain of your website:
 
     ```fsharp
     // loaders/globalloader.fsx
-    #r "../_lib/Fornax.Core.dll"
+    #load @"../.paket/load/net6.0/Fornax.Core.fsx"
 
     type SiteInfo = {
         title: string
@@ -49,7 +77,7 @@ Visit [the wiki] to learn how to use this package with earlier `fornax` versions
 
     ```fsharp
     // loaders/globalloader.fsx
-    #r "nuget: Fornax.Seo"
+    #load @"../.paket/load/net6.0/Fornax.Seo.fsx"
 
     open Fornax.Seo
 
@@ -80,9 +108,8 @@ Visit [the wiki] to learn how to use this package with earlier `fornax` versions
 
 ~~~fsharp
 // generators/post.fsx
-#r "../_lib/Fornax.Core.dll"
-#r "nuget: Fornax.Seo"
-#load "layout.fsx"
+#load @"../.paket/load/net6.0/Fornax.Seo.fsx"
+#load @"layout.fsx"
 
 open Html
 open Fornax.Seo
@@ -137,8 +164,7 @@ let generate' (ctx: SiteContents) (page: string) =
 
 ~~~fsharp
 // generators/layout.fsx
-#r "../_lib/Fornax.Core.dll"
-#r "nuget: Fornax.Seo"
+#load @"../.paket/load/net6.0/Fornax.Seo.fsx"
 
 open Html
 open Fornax.Seo

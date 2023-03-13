@@ -10,7 +10,7 @@ let private toParamString (args: 'T seq when 'T :> obj) = Seq.map (fun a -> $"{a
 
 /// <summary>
 /// A generic command line argument
-/// <summary>
+/// </summary>
 type CommandArg(param: string, value: string) =
     member val Param = param
     member val Value = value
@@ -24,7 +24,7 @@ type CommandArgList(args: CommandArg seq) =
 
 /// <summary>
 /// A generic command line property
-/// <summary>
+/// </summary>
 type CommandProperty(prop: string, value: string) =
     member val Prop = prop
     member val Value = value
@@ -38,7 +38,7 @@ type CommandPropertyList(props: CommandProperty seq) =
 
 /// <summary>
 /// A command line parameter for the fsdocs tool
-/// <summary>
+/// </summary>
 type FsdocsParameter(param: string, value: string, ?prefix: bool) =
     inherit CommandArg(param, value)
 

@@ -1,3 +1,10 @@
+## 1.2.0
+- Drop the Fornax.Core.dll assembly from distribution
+- Make the Fornax.Core NuGet package a runtime dependency
+- Bump Newtonsoft.Json to 13.0.3
+- Use FAKE to orchestrate development workflows
+- Generate `aria-label` attributes for all social media links
+
 ## 1.1.1
 - Bump FSharp.Data to 4.2.10
 - Bump Newtonsoft.Json to 13.0.2
