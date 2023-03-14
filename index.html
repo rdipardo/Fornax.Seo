@@ -73,7 +73,7 @@
     <div class="container">
         <div class="masthead">
             <a href="https://www.nuget.org/packages/Fornax.Seo"><img id="fsdocs-logo" src="https://heredocs.io/img/logo.png" alt="Fornax.Seo
-1.1.1"/></a>
+1.2.0"/></a>
         </div>
         <hr />
         <div class="container" id="fsdocs-content">
@@ -96,19 +96,45 @@
 </ul>
 <h2><a name="Usage-example" class="anchor" href="#Usage-example">Usage example</a></h2>
 <p><strong>NOTE</strong></p>
-<p>The following requires <code>fornax</code> <a href="https://www.nuget.org/packages/Fornax">0.14.0 or newer</a>.
+<p>The following requires <code>fornax</code> <a href="https://www.nuget.org/packages/Fornax">0.15.1 or newer</a>.
 Visit <a href="https://github.com/rdipardo/Fornax.Seo/wiki/FAQ#faq">the wiki</a> to learn how to use this package with earlier <code>fornax</code> versions.</p>
 <ul>
 <li>Change into a project directory and scaffold a new website</li>
 </ul>
 <pre class="fssnip highlighted"><code lang="fsharp">  <span class="id">fornax</span> <span class="k">new</span>
 </code></pre>
+<ul>
+<li>Install and set up <a href="https://fsprojects.github.io/Paket/index.html"><code>paket</code></a>:</li>
+</ul>
+<pre class="fssnip highlighted"><code lang="fsharp">  <span class="id">dotnet</span> <span class="id">tool</span> <span class="id">install</span> <span class="id">paket</span>
+  <span class="id">dotnet</span> <span class="id">paket</span> <span class="id">init</span>
+</code></pre>
+<ul>
+<li>
+<p>Configure dependencies, e.g. at minimum:</p>
+<table class="pre"><tr><td class="snippet"><pre class="fssnip"><code lang="ini"># paket.dependencies
+
+source https://api.nuget.org/v3/index.json
+framework: net6.0, netstandard2.0, netstandard2.1
+generate_load_scripts: true
+storage: none
+
+# . . .
+nuget Fornax.Seo      &gt;= 1.2.0  # pulls in the Fornax.Core package
+nuget Markdig
+#  . . .
+</code></pre></td></tr></table>
+</li>
+<li>Install the packages:</li>
+</ul>
+<pre class="fssnip highlighted"><code lang="fsharp">  <span class="id">dotnet</span> <span class="id">paket</span> <span class="id">install</span>
+</code></pre>
 <p><strong>IMPORTANT</strong></p>
 <ul>
 <li>
 <p>Provide the root domain of your website:</p>
 <pre class="fssnip highlighted"><code lang="fsharp"><span class="c">// loaders/globalloader.fsx</span>
-<span class="pp">#r</span> <span class="s">&quot;../_lib/Fornax.Core.dll&quot;</span>
+<span class="pp">#load</span> <span class="s">@&quot;../.paket/load/net6.0/Fornax.Core.fsx&quot;</span>
 
 <span class="k">type</span> <span class="id">SiteInfo</span> <span class="o">=</span> <span class="pn">{</span>
     <span class="id">title</span><span class="pn">:</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="id">string</span>
@@ -121,7 +147,7 @@ Visit <a href="https://github.com/rdipardo/Fornax.Seo/wiki/FAQ#faq">the wiki</a>
 <li>
 <p>Add personal authorship details, e.g.:</p>
 <pre class="fssnip highlighted"><code lang="fsharp"><span class="c">// loaders/globalloader.fsx</span>
-<span class="pp">#r</span> <span class="s">&quot;nuget: Fornax.Seo&quot;</span>
+<span class="pp">#load</span> <span class="s">@&quot;../.paket/load/net6.0/Fornax.Seo.fsx&quot;</span>
 
 <span class="k">open</span> <span class="id">Fornax</span><span class="pn">.</span><span class="id">Seo</span>
 
@@ -151,9 +177,8 @@ Visit <a href="https://github.com/rdipardo/Fornax.Seo/wiki/FAQ#faq">the wiki</a>
 </ul>
 <h3><a name="Collect-metadata-from-a-content-item-e-g-a-blog-posting" class="anchor" href="#Collect-metadata-from-a-content-item-e-g-a-blog-posting">Collect metadata from a content item (e.g., a blog posting)</a></h3>
 <pre class="fssnip highlighted"><code lang="fsharp"><span class="c">// generators/post.fsx</span>
-<span class="pp">#r</span> <span class="s">&quot;../_lib/Fornax.Core.dll&quot;</span>
-<span class="pp">#r</span> <span class="s">&quot;nuget: Fornax.Seo&quot;</span>
-<span class="pp">#load</span> <span class="s">&quot;layout.fsx&quot;</span>
+<span class="pp">#load</span> <span class="s">@&quot;../.paket/load/net6.0/Fornax.Seo.fsx&quot;</span>
+<span class="pp">#load</span> <span class="s">@&quot;layout.fsx&quot;</span>
 
 <span class="k">open</span> <span class="id">Html</span>
 <span class="k">open</span> <span class="id">Fornax</span><span class="pn">.</span><span class="id">Seo</span>
@@ -205,8 +230,7 @@ Visit <a href="https://github.com/rdipardo/Fornax.Seo/wiki/FAQ#faq">the wiki</a>
 </code></pre>
 <h3><a name="Render-SEO-metadata-in-your-page-layout" class="anchor" href="#Render-SEO-metadata-in-your-page-layout">Render SEO metadata in your page layout</a></h3>
 <pre class="fssnip highlighted"><code lang="fsharp"><span class="c">// generators/layout.fsx</span>
-<span class="pp">#r</span> <span class="s">&quot;../_lib/Fornax.Core.dll&quot;</span>
-<span class="pp">#r</span> <span class="s">&quot;nuget: Fornax.Seo&quot;</span>
+<span class="pp">#load</span> <span class="s">@&quot;../.paket/load/net6.0/Fornax.Seo.fsx&quot;</span>
 
 <span class="k">open</span> <span class="id">Html</span>
 <span class="k">open</span> <span class="id">Fornax</span><span class="pn">.</span><span class="id">Seo</span>
