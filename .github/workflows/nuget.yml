@@ -34,7 +34,10 @@ jobs:
             ${{ runner.os }}-nuget-
             ${{ runner.os }}-
       - name: Build package
-        run: dotnet fake build -e CI=true -t Pack
+        run: |-
+          dotnet tool restore
+          dotnet paket restore
+          dotnet fake build -e CI=true -t Pack
       - name: Collect release info
         run: |
           $REL=${env:GITHUB_REF}.Split('/')[2]

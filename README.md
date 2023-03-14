@@ -37,7 +37,7 @@ Visit [the wiki] to learn how to use this package with earlier `fornax` versions
 
 - Configure dependencies, e.g. at minimum:
 
-    ```sh
+    ```ini
     # paket.dependencies
 
     source https://api.nuget.org/v3/index.json
