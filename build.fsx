@@ -140,8 +140,7 @@ Target.create
         let runArg = buildOrWatch args
         let homepage = Path.Combine("docs", "index.md")
         let siteRoot = if Environment.hasEnvironVar ("CI") then "https://heredocs.io/" else "/"
-        let gitBranch = Git.Information.getBranchName __SOURCE_DIRECTORY__
-        let props = [ CmdProp("RepositoryBranch", gitBranch); CmdProp("Configuration", "Release") ]
+        let props = [ CmdProp("RepositoryBranch", "main"); CmdProp("Configuration", "Release") ]
 
         let fsdocParams =
             [ FsdocsParam("root", siteRoot, false)
