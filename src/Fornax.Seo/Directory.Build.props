@@ -1,5 +1,5 @@
 <Project>
   <PropertyGroup>
-    <FSharpDataVersion>6.1.1-beta</FSharpDataVersion>
+    <FSharpDataVersion>6.2.0</FSharpDataVersion>
   </PropertyGroup>
 </Project>
