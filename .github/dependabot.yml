@@ -13,6 +13,10 @@ updates:
     directory: "/src/Fornax.Seo"
     ignore:
       - dependency-name: "FSharp.Data"
+      - dependency-name: "Microsoft.NET.Test.Sdk"
+      - dependency-name: "NUnit3TestAdapter"
+      - dependency-name: "NUnit"
+      - dependency-name: "Markdig"
     schedule:
       interval: "weekly"
     target-branch: "next"
