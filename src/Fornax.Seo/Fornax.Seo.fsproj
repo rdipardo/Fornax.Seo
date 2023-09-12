@@ -4,6 +4,7 @@
     <Authors>Robert Di Pardo</Authors>
     <Copyright>Copyright (c) 2021 Robert Di Pardo and Contributors</Copyright>
     <Description>A SEO meta tag generator for Fornax</Description>
+    <PackageIcon>logo.png</PackageIcon>
     <PackageProjectUrl>https://rdipardo.github.io/Fornax.Seo</PackageProjectUrl>
     <RepositoryUrl>https://github.com/rdipardo/Fornax.Seo</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
@@ -26,6 +27,7 @@
     <None Include="../../README.md" Pack="true" PackagePath="/"/>
     <None Include="../../LICENSE" Pack="true" PackagePath="/"/>
     <None Include="../../THIRD_PARTY" Pack="true" PackagePath="/"/>
+    <None Include="../../docs/img/logo.png" Pack="true" PackagePath="/" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="FSharp.Data" Version="$(FSharpDataVersion)"/>
