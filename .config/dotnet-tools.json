@@ -9,7 +9,7 @@
       ]
     },
     "fsdocs-tool": {
-      "version": "16.1.1",
+      "version": "19.1.1",
       "commands": [
         "fsdocs"
       ]
@@ -21,7 +21,7 @@
       ]
     },
     "paket": {
-      "version": "7.2.1",
+      "version": "8.0.0",
       "commands": [
         "paket"
       ]

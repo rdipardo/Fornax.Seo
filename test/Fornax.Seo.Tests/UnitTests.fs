@@ -1,10 +1,12 @@
 namespace Fornax.Seo.Tests
 
+module StringAssert =
+    let Contains (toFind: string, toSearch: string) = NUnit.Framework.Assert.That(toSearch.Contains(toFind))
+
 module UnitTests =
     open NUnit.Framework
     open Fornax.Seo
     open Fornax.Seo.Tags
-    open Html
     open System.Diagnostics
 
     type internal TestKind =
@@ -76,8 +78,6 @@ module UnitTests =
                 | None -> Assert.Pass()
                 | Some assertion -> assertion (toCompare, HtmlElement.ToString html)
             | None -> Assert.Fail(errorMsg)
-
-        member private x.Get opt = defaultArg opt ""
 
         [<Test>]
         member x.``Generates JSON-LD tag``() =
@@ -221,14 +221,14 @@ module UnitTests =
             let bad = { pageInfo with BaseUrl = "/public"; Url = "/news/posting.php" }
             let json = JsonLinkData(bad)
 
-            Assert.Null(json.MainEntityOfPage.Id)
+            Assert.That(obj.ReferenceEquals(null, json.MainEntityOfPage.Id))
 
         [<Test>]
         member x.``JsonLinkData ignores invalid urls``() =
             let bad = { pageInfo with BaseUrl = "@#$%$!://nodomain/"; Url = "/news/topics/index.htm" }
             let json = JsonLinkData(bad)
 
-            Assert.Null(json.MainEntityOfPage.Id)
+            Assert.That(obj.ReferenceEquals(null, json.MainEntityOfPage.Id))
 
         [<Test>]
         member x.``Validates ContentObject's Schema.org Type``() =
