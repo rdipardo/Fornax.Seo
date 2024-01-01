@@ -45,7 +45,7 @@ jobs:
           .\scripts\changelog.ps1 | Out-File release_notes.txt -Encoding utf8
         shell: powershell
       - name: Save package
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Fornax.Seo.${{ env.RELEASE_VERSION }}.nupkg
           path: ${{ github.workspace }}/release/*.nupkg
