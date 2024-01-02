@@ -2,7 +2,7 @@
 
 Please make all pull requests to the "next" branch. Get it by running
 
-    git clone --branch next --recursive https://github.com/rdipardo/Fornax.Seo
+    git clone --branch next https://github.com/rdipardo/Fornax.Seo
 
 If you already have the source tree locally, run
 

@@ -11,12 +11,6 @@ namespace Fornax.Seo
 /// Public representations of web content metadata
 [<AutoOpen>]
 module Models =
-    open FSharp.Data
-
-    [<Literal>]
-    let private SchemaDotOrg = @"https://schema.org/version/latest/schemaorg-current-https.jsonld"
-
-    type internal SchemaProvider = JsonProvider<SchemaDotOrg>
 
     /// Represents the author of a web content item
     type ContentCreator =

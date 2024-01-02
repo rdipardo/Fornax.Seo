@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk" InitialTargets="ToolRestore">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <VersionPrefix>1.2.0</VersionPrefix>
     <Authors>Robert Di Pardo</Authors>
@@ -26,19 +26,11 @@
     <Compile Include="Core.fs"/>
     <None Include="../../README.md" Pack="true" PackagePath="/"/>
     <None Include="../../LICENSE" Pack="true" PackagePath="/"/>
-    <None Include="../../THIRD_PARTY" Pack="true" PackagePath="/"/>
     <None Include="../../docs/img/logo.png" Pack="true" PackagePath="/" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="FSharp.Data" Version="$(FSharpDataVersion)"/>
     <PackageReference Include="Fornax.Core" Version="0.15.1"/>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3"/>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="../FSharp.Data/src/FSharp.Data.DesignTime/FSharp.Data.DesignTime.fsproj">
-      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
-      <IncludeAssets>FSharp.Data.DesignTime.dll</IncludeAssets>
-    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);CopyProjectReferencesToPackage</TargetsForTfmSpecificBuildOutput>
@@ -47,11 +39,5 @@
     <ItemGroup>
       <BuildOutputInPackage Include="@(ReferenceCopyLocalPaths-&gt;WithMetadataValue('ReferenceSourceTarget', 'ProjectReference'))"/>
     </ItemGroup>
-  </Target>
-  <Target Name="ConfigureProjectDependencies">
-    <Exec EchoOff="true" WorkingDirectory="../FSharp.Data/" Command="git checkout -f $(FSharpDataVersion)"/>
-  </Target>
-  <Target Name="ToolRestore" DependsOnTargets="ConfigureProjectDependencies">
-    <Exec Command="dotnet tool restore --tool-manifest ../FSharp.Data/.config/dotnet-tools.json" EchoOff="true"/>
   </Target>
 </Project>

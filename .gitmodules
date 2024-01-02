@@ -1,4 +1,0 @@
-[submodule "src/FSharp.Data"]
-	path = src/FSharp.Data
-	url = https://github.com/fsprojects/FSharp.Data.git
-	branch = main

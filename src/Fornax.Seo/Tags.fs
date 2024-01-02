@@ -15,17 +15,16 @@ module Tags =
     open StructuredData
     open Newtonsoft.Json
     open Newtonsoft.Json.Linq
-    open Newtonsoft.Json.Serialization
     open System
     open System.Diagnostics
 
-    let private Schemata = SchemaProvider.GetSample()
+    let private Schemata = SchemaDotOrg.SchemaProvider()
 
     let private getSchemaOrgType name =
         Schemata.Graph
         |> Array.tryFind (fun s -> s.Id = $"schema:{name}")
         |> function
-        | Some schema -> schema.RdfsLabel.String |> Option.get
+        | Some schema -> schema.RdfsLabel
         | None -> invalidArg name "Invalid Schema.org type! See https://schema.org/docs/full.html"
 
     let private getOpenGraphType (name: string) =
@@ -113,7 +112,7 @@ module Tags =
         let metaOpt = defaultArg page.Meta [ ("", "") ] |> Map.ofList
 
         [<JsonProperty("@context")>]
-        member val Context: string = SchemaDotOrgContext(Schemata.Context).Schema
+        member val Context: string = Schemata.Context.Schema
 
         [<JsonProperty("@type")>]
         member val Schema: string = getSchemaOrgType objectType
@@ -128,12 +127,6 @@ module Tags =
         member val DateModified = toIsoDateString (dateModified page)
 
         override this.ToString() =
-            let jsonOptions =
-                JsonSerializerSettings(
-                    NullValueHandling = NullValueHandling.Ignore,
-                    ContractResolver = CamelCasePropertyNamesContractResolver()
-                )
-
             let jsonLD = JObject.Parse(JsonConvert.SerializeObject(this, Formatting.None, jsonOptions))
             let toCamelCase (str: string) = $"{Char.ToLowerInvariant(str.[0])}{str.Substring(1)}".Replace("_", "")
 
