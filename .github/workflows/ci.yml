@@ -13,7 +13,7 @@ jobs:
   unit_tests:
     strategy:
       matrix:
-        os: [ubuntu-20.04, macos-latest, windows-latest]
+        os: [ubuntu-latest, macos-latest, windows-latest]
     runs-on: ${{ matrix.os }}
     env:
       DOTNET_NOLOGO: true
@@ -24,7 +24,7 @@ jobs:
           submodules: 'recursive'
           fetch-depth: 0
       - name: Pre-test install
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '6.0.x'
       - name: Cache packages
@@ -32,9 +32,7 @@ jobs:
         with:
           path: |-
            ${{ github.workspace }}/.paket
-           ${{ github.workspace }}/src/FSharp.Data/.paket
-           ${{ github.workspace }}/src/FSharp.Data/packages
-          key: ${{ runner.os }}-nuget-${{ hashFiles('src/Fornax.Seo/Directory.Build.props') }}
+          key: ${{ runner.os }}-nuget-${{ hashFiles('src/Fornax.Seo/Fornax.Seo.fsproj') }}
           restore-keys: |-
             ${{ runner.os }}-nuget-
             ${{ runner.os }}-

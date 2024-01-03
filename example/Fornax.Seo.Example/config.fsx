@@ -4,6 +4,10 @@
 open Config
 open System.IO
 
+let hasChanged (assetPath: string) =
+    (not <| File.Exists($@"_public\{assetPath}")) ||
+    (File.GetLastWriteTime(assetPath) > File.GetLastWriteTime($@"_public\{assetPath}"))
+
 let postPredicate (projectRoot: string, page: string) =
     let ext = Path.GetExtension page
     page.StartsWith("posts") && List.contains ext Globalloader.contentFileTypes
@@ -11,6 +15,7 @@ let postPredicate (projectRoot: string, page: string) =
 let staticPredicate (projectRoot: string, page: string) =
     let ext = Path.GetExtension page
     let fileShouldBeExcluded =
+        hasChanged page |> not ||
         List.contains ext (Globalloader.ignoredFileTypes @ Globalloader.contentFileTypes) ||
         page.Contains "_public" ||
         page.Contains "_bin" ||

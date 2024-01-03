@@ -6,6 +6,9 @@ on:
 jobs:
   package:
     runs-on: windows-latest
+    permissions:
+      actions: read
+      contents: write
     defaults:
       run:
         shell: cmd
@@ -18,7 +21,7 @@ jobs:
           submodules: 'recursive'
           fetch-depth: 0
       - name: Pre-build Install
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '6.0.x'
       - name: Cache packages
@@ -27,9 +30,7 @@ jobs:
           path: |
            ~/.nuget/packages
            ${{ github.workspace }}/.paket
-           ${{ github.workspace }}/src/FSharp.Data/.paket
-           ${{ github.workspace }}/src/FSharp.Data/packages
-          key: ${{ runner.os }}-nuget-${{ hashFiles('src/Fornax.Seo/Directory.Build.props') }}
+          key: ${{ runner.os }}-nuget-${{ hashFiles('src/Fornax.Seo/Fornax.Seo.fsproj') }}
           restore-keys: |-
             ${{ runner.os }}-nuget-
             ${{ runner.os }}-
@@ -45,7 +46,7 @@ jobs:
           .\scripts\changelog.ps1 | Out-File release_notes.txt -Encoding utf8
         shell: powershell
       - name: Save package
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Fornax.Seo.${{ env.RELEASE_VERSION }}.nupkg
           path: ${{ github.workspace }}/release/*.nupkg
