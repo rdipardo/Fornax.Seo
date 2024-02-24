@@ -12,25 +12,34 @@ If you already have the source tree locally, run
 
 ### Development
 
-_All platforms need a .NET SDK at version 6.0.100 or later_
+_All platforms need a .NET SDK at version 8.0.100 or later_
 
 
 To run unit tests and build a sample website:
 
-    dotnet fake build -e CI=true
+    build -e CI=true
 
+or (on Linux or macOS):
+
+    ./build -e CI=true
 
 To browse a local copy of [the documentation][]:
 
-    dotnet fake build -t Docs live
+    build Docs live
 
+or:
 
+    ./build Docs live
 
 ### Pull Requests
 
 Before committing your changes, make sure your code is formatted:
 
-    dotnet fake build -t Format
+    build Format
+
+or:
+
+    ./build Format
 
 GitHub users can follow the [well-documented steps][] to creating forks
 and pull requests.

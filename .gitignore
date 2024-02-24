@@ -171,6 +171,7 @@ DocProject/Help/Html2
 DocProject/Help/html
 .fsdocs/
 output/
+site/
 
 # Click-Once directory
 publish/
@@ -301,6 +302,7 @@ _Pvt_Extensions
 
 # Paket dependency manager
 .paket/paket.exe
+.paket/load/
 paket-files/
 
 # FAKE - F# Make

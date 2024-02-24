@@ -1,16 +1,14 @@
 //
-// Copyright (c) 2023 Robert Di Pardo and Contributors
+// Copyright (c) 2023,2024 Robert Di Pardo and Contributors
 //
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this file,
 // You can obtain one at https://mozilla.org/MPL/2.0/.
 //
 
-#r "paket: groupref fake //"
-
-#if !FAKE
-#load ".fake/build.fsx/intellisense.fsx"
-#endif
+#load ".paket/load/netstandard2.0/fake/Fake.Core.Target.fsx"
+#load ".paket/load/netstandard2.0/fake/Fake.DotNet.Cli.fsx"
+#load ".paket/load/netstandard2.0/fake/Fake.Tools.Git.fsx"
 
 open System.IO
 open Fake.Core
@@ -28,6 +26,15 @@ type private FsdocsParam = Types.FsdocsParameter
 type private ArgList = Types.CommandArgList
 type private PropList = Types.CommandPropertyList
 type private FsdocsParamList = Types.FsdocsParameterList
+
+// https://github.com/fsprojects/FAKE/issues/2719#issuecomment-1563725381
+System.Environment.GetCommandLineArgs()
+|> (Array.skipWhile (fun (x: string) -> x.Equals(__SOURCE_FILE__) |> not)
+    >> Array.tail
+    >> Array.toList)
+|> Context.FakeExecutionContext.Create false __SOURCE_FILE__
+|> Context.RuntimeContext.Fake
+|> Context.setExecutionContext
 
 /// <summary>
 /// Retrieves the path to the XML descriptor and root directory of each managed project
@@ -68,6 +75,8 @@ let private buildOrWatch (args: TargetParameter) =
     | None -> "build"
 
 Target.initEnvironment ()
+
+let CI_BUILD = Environment.hasEnvironVar ("CI")
 
 // --------------------------------------------------------------------------------------
 // Build targets
@@ -139,7 +148,7 @@ Target.create
     (fun args ->
         let runArg = buildOrWatch args
         let homepage = Path.Combine("docs", "index.md")
-        let siteRoot = if Environment.hasEnvironVar ("CI") then "https://heredocs.io/" else "/"
+        let siteRoot = if CI_BUILD then "https://rdipardo.github.io/Fornax.Seo/" else "/"
         let props = [ CmdProp("RepositoryBranch", "main"); CmdProp("Configuration", "Release") ]
 
         let fsdocParams =
@@ -154,6 +163,7 @@ Target.create
 
         let cmdArgs =
             [ CmdArg("projects", Path.GetFullPath(Project.File("Main")))
+              CmdArg("output", Path.Combine(__SOURCE_DIRECTORY__, "site"))
               CmdArg("properties", $"{PropList(props)}")
               CmdArg("parameters", $"{FsdocsParamList(fsdocParams)}")
               CmdArg("eval", "")
@@ -175,7 +185,7 @@ Target.create
     "Format"
     (fun _ ->
         seq {
-            yield! !! "**/*.fsx" -- ".fake/" -- "src/**" -- "example/**"
+            yield! !! "**/*.fsx" -- ".fake/" -- ".paket/**" -- "example/**"
             yield! !! "src/Fornax.Seo/*.fs"
             yield! !! "test/Fornax.Seo.Tests/*.fs"
         }
@@ -196,12 +206,11 @@ Target.create
         |> Shell.cleanDirs)
 
 // --------------------------------------------------------------------------------------
-"Test"
-=?> ("Docs", Environment.hasEnvironVar ("CI"))
-=?> ("Clean", Environment.hasEnvironVar ("CI"))
-==> "Pack"
+"Test" =?> ("Docs", CI_BUILD) =?> ("Clean", CI_BUILD) ==> "Pack"
 
-"Test" =?> ("Demo", Environment.hasEnvironVar ("CI")) ==> "All"
+"Test" =?> ("Demo", CI_BUILD) ==> "All"
 "Build" ==> "Docs"
 
-Target.runOrDefaultWithArguments "All"
+Target.getArguments ()
+|> (Option.defaultValue Array.empty >> Array.tryHead >> Option.defaultValue "All")
+|> Target.runOrDefaultWithArguments

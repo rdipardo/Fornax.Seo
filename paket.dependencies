@@ -1,13 +1,12 @@
-version 7.1.5
+version 8.0.3
 
 group fake
   source https://api.nuget.org/v3/index.json
   storage: none
   strategy: min
-  framework: net6.0
+  generate_load_scripts: true
+  framework: net8.0
 
-  nuget FSharp.Core                 ~> 6.0.0
-  nuget Fake.Core.Tasks                6.0.0
-  nuget Fake.Core.Target               6.0.0
-  nuget Fake.DotNet.Cli                6.0.0
-  nuget Fake.Tools.Git                 6.0.0
+  nuget Fake.Core.Target
+  nuget Fake.DotNet.Cli
+  nuget Fake.Tools.Git

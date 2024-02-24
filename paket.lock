@@ -1,9 +1,10 @@
 
 
 GROUP fake
+GENERATE-LOAD-SCRIPTS: ON
 STORAGE: NONE
 STRATEGY: MIN
-RESTRICTION: == net6.0
+RESTRICTION: == net8.0
 NUGET
   remote: https://api.nuget.org/v3/index.json
     BlackFox.VsWhere (1.1)
@@ -128,21 +129,21 @@ NUGET
       Microsoft.Build.Framework (>= 16.10)
       Microsoft.Build.Utilities.Core (>= 16.10)
     Newtonsoft.Json (13.0.1)
-    NuGet.Common (6.0.2)
+    NuGet.Common (6.9.1)
       NuGet.Frameworks (>= 6.0.2)
-    NuGet.Configuration (6.0.2)
+    NuGet.Configuration (6.9.1)
       NuGet.Common (>= 6.0.2)
       System.Security.Cryptography.ProtectedData (>= 4.4)
-    NuGet.Frameworks (6.0.2)
-    NuGet.Packaging (6.0.2)
+    NuGet.Frameworks (6.9.1)
+    NuGet.Packaging (6.9.1)
       Newtonsoft.Json (>= 13.0.1)
       NuGet.Configuration (>= 6.0.2)
       NuGet.Versioning (>= 6.0.2)
       System.Security.Cryptography.Cng (>= 5.0)
       System.Security.Cryptography.Pkcs (>= 5.0)
-    NuGet.Protocol (6.0.2)
+    NuGet.Protocol (6.9.1)
       NuGet.Packaging (>= 6.0.2)
-    NuGet.Versioning (6.0.2)
+    NuGet.Versioning (6.9.1)
     System.Collections.Immutable (7.0)
       System.Runtime.CompilerServices.Unsafe (>= 6.0)
     System.Configuration.ConfigurationManager (7.0)

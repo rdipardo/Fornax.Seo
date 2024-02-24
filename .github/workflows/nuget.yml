@@ -23,9 +23,9 @@ jobs:
       - name: Pre-build Install
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '6.0.x'
+          dotnet-version: '8.0.x'
       - name: Cache packages
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
            ~/.nuget/packages
@@ -36,9 +36,7 @@ jobs:
             ${{ runner.os }}-
       - name: Build package
         run: |-
-          dotnet tool restore
-          dotnet paket restore
-          dotnet fake build -e CI=true -t Pack
+          .\build.cmd -e CI=true Pack
       - name: Collect release info
         run: |
           $REL=${env:GITHUB_REF}.Split('/')[2]

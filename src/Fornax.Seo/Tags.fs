@@ -8,7 +8,9 @@
 
 namespace Fornax.Seo
 
+/// <summary>
 /// Internal representations of HTML elements generated from SEO metadata
+/// </summary>
 /// <exclude />
 module Tags =
     open Html

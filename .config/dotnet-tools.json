@@ -21,15 +21,9 @@
       ]
     },
     "paket": {
-      "version": "8.0.0",
+      "version": "8.0.3",
       "commands": [
         "paket"
-      ]
-    },
-    "fake-cli": {
-      "version": "6.0.0",
-      "commands": [
-        "fake"
       ]
     }
   }

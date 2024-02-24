@@ -8,7 +8,9 @@
 
 namespace Fornax.Seo
 
+/// <summary>
 /// Internal representations of SEO metadata objects
+/// </summary>
 /// <exclude />
 module StructuredData =
     open Html
