@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <VersionPrefix>1.2.0</VersionPrefix>
+    <VersionPrefix>1.3.0</VersionPrefix>
     <Authors>Robert Di Pardo</Authors>
     <Copyright>Copyright (c) 2021 Robert Di Pardo and Contributors</Copyright>
     <Description>A SEO meta tag generator for Fornax</Description>
@@ -16,6 +16,7 @@
     <OutputType>Library</OutputType>
     <TargetFrameWork>netstandard2.0</TargetFrameWork>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <DebugType>embedded</DebugType>
     <NoWarn>3218;3384;3390</NoWarn>
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>

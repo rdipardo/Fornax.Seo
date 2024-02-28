@@ -85,6 +85,6 @@ like this:
 [well-documented steps]: https://docs.github.com/en/github/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork
 [the issue tracker]: https://github.com/rdipardo/Fornax.Seo/issues
 [the project owner]: mailto:dipardo.r@gmail.com
-[the documentation]: https://heredocs.io
+[the documentation]: https://rdipardo.github.io/Fornax.Seo
 [Mozilla Public License, Version 2.0]: https://www.mozilla.org/en-US/MPL/2.0/
 [license notice]: https://www.mozilla.org/en-US/MPL/headers/

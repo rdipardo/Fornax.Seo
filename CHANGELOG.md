@@ -1,3 +1,8 @@
+## 1.3.0
+- Upgrade runtime target to .NET 8
+- Drop FSharp.Data.DesignTime from distribution
+- Include Source Link metadata and embedded symbols in release builds
+
 ## 1.2.0
 - Drop the Fornax.Core.dll assembly from distribution
 - Make the Fornax.Core NuGet package a runtime dependency

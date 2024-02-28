@@ -41,7 +41,7 @@ Visit [the wiki] to learn how to use this package with earlier `fornax` versions
     # paket.dependencies
 
     source https://api.nuget.org/v3/index.json
-    framework: net6.0, netstandard2.0, netstandard2.1
+    framework: net8.0, netstandard2.0, netstandard2.1
     generate_load_scripts: true
     storage: none
 
@@ -63,7 +63,7 @@ Visit [the wiki] to learn how to use this package with earlier `fornax` versions
 
     ```fsharp
     // loaders/globalloader.fsx
-    #load @"../.paket/load/net6.0/Fornax.Core.fsx"
+    #load @"../.paket/load/net8.0/Fornax.Core.fsx"
 
     type SiteInfo = {
         title: string
@@ -77,7 +77,7 @@ Visit [the wiki] to learn how to use this package with earlier `fornax` versions
 
     ```fsharp
     // loaders/globalloader.fsx
-    #load @"../.paket/load/net6.0/Fornax.Seo.fsx"
+    #load @"../.paket/load/net8.0/Fornax.Seo.fsx"
 
     open Fornax.Seo
 
@@ -108,7 +108,7 @@ Visit [the wiki] to learn how to use this package with earlier `fornax` versions
 
 ~~~fsharp
 // generators/post.fsx
-#load @"../.paket/load/net6.0/Fornax.Seo.fsx"
+#load @"../.paket/load/net8.0/Fornax.Seo.fsx"
 #load @"layout.fsx"
 
 open Html
@@ -164,7 +164,7 @@ let generate' (ctx: SiteContents) (page: string) =
 
 ~~~fsharp
 // generators/layout.fsx
-#load @"../.paket/load/net6.0/Fornax.Seo.fsx"
+#load @"../.paket/load/net8.0/Fornax.Seo.fsx"
 
 open Html
 open Fornax.Seo
@@ -233,7 +233,7 @@ Distributed under the terms of the [Mozilla Public License Version 2.0][].
 
 [structured data]: https://developers.google.com/search/docs/guides/intro-structured-data
 [absolute URLs]: https://stackoverflow.com/a/64830732
-[the documentation]: https://heredocs.io
+[the documentation]: https://rdipardo.github.io/Fornax.Seo
 [from source]: https://github.com/ionide/Fornax#build-process
 [from nuget.org]: https://www.nuget.org/packages/Fornax
 [the wiki]: https://github.com/rdipardo/Fornax.Seo/wiki/FAQ#faq

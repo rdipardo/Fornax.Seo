@@ -132,6 +132,16 @@ Target.create
                 else
                     None
 
+            let msbuildParams =
+                // make packages more Source-Link-friendly
+                if CI_BUILD then
+                    { msbuildParams with
+                          Properties =
+                              msbuildParams.Properties
+                              @ [ ("ContinuousIntegrationBuild", "true"); ("EmbedAllSources", "true") ] }
+                else
+                    msbuildParams
+
             let packParams (opts: DotNet.PackOptions) =
                 { opts with
                       MSBuildParams = msbuildParams
