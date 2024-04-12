@@ -66,13 +66,32 @@ jobs:
           dotnet nuget push release\Fornax.Seo.*.nupkg -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json --skip-duplicate
         env:
           CI: true
-      - name: Publish docs
-        uses: peaceiris/actions-gh-pages@v3.9.3
+
+  publish_docs:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    runs-on: ubuntu-latest
+    env:
+      DOTNET_NOLOGO: true
+      DOTNET_CLI_TELEMETRY_OPTOUT: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          enable_jekyll: false
-          publish_dir: './output'
-          publish_branch: api
-          user_name: 'Fornax.Seo [action]'
-          user_email: 'Fornax.Seo@users.noreply.github.com'
-          commit_message: '${{ github.event.head_commit.message }}'
+          dotnet-version: '8.0.x'
+      - name: Build docs
+        run: ./build -e CI=true Docs
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './site'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

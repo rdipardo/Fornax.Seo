@@ -216,7 +216,7 @@ Target.create
         |> Shell.cleanDirs)
 
 // --------------------------------------------------------------------------------------
-"Test" =?> ("Docs", CI_BUILD) =?> ("Clean", CI_BUILD) ==> "Pack"
+"Test" =?> ("Clean", CI_BUILD) ==> "Pack"
 
 "Test" =?> ("Demo", CI_BUILD) ==> "All"
 "Build" ==> "Docs"
