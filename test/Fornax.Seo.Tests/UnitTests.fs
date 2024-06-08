@@ -17,6 +17,8 @@ module UnitTests =
 
     [<TestFixture>]
     type UnitTest() =
+        let twitterLink = "https://twitter.com/someBody/"
+        let xLink = "https://x.com/someBody/"
         let unmapped = "dev.to/webmaster"
 
         let links =
@@ -27,6 +29,9 @@ module UnitTests =
               "https://t.me/s/webmaster"
               "https://www.linkedin.com/in/webmaster"
               unmapped
+              twitterLink
+              xLink
+              "xing.com/someBodyElse"
               "https://www.behance.net/some1else"
               "https://scholar.google.com/citations?user=0X_qweryt24YUp"
               "sourceforge.net/u/some1/profile/" ]
@@ -165,6 +170,19 @@ module UnitTests =
         [<Test>]
         member x.``Can parse a SourceForge profile from host name only``() =
             x.RunTest(Meta, x.XPathFor "SourceForge" "fire")
+
+        [<Test>]
+        member x.``Xing profiles generate Xing icons``() = x.RunTest(Meta, x.XPathFor "Xing" "xing-square")
+
+        [<Test>]
+        member x.``X profiles generate X icons``() =
+            let expected = $"""//a [@href="{xLink}"]/i [@class="media-icon fa x-twitter"]"""
+            x.RunTest(Meta, expected)
+
+        [<Test>]
+        member x.``Old Twitter profiles also generate X icons``() =
+            let expected = $"""//a [@href="{twitterLink}"]/i [@class="media-icon fa x-twitter"]"""
+            x.RunTest(Meta, expected)
 
         [<Test>]
         member x.``Generates absolute URLs from relative links to unknown sites``() =

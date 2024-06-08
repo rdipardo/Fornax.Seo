@@ -46,6 +46,10 @@ module Core =
                 font-size: 2.5rem;
                 padding: 0.75rem;
             }
+            .media-icon.x-twitter::after {
+                content: '\1D54F';
+                font-family: sans-serif;
+            }
             a.navicon, a.navicon:focus, a.navicon:active, a.navicon:hover, a.navicon:visited {
                 text-decoration: none;
                 outline: 0;
@@ -109,12 +113,13 @@ module Core =
               ("t", ("Telegram", "fa-telegram"))
               ("telegram", ("Telegram", "fa-telegram"))
               ("tumblr", ("Tumblr", "fa-tumblr-square"))
-              ("twitter", ("Twitter", "fa-twitter"))
+              ("twitter", ("X", "x-twitter"))
               ("viadeo", ("Viadeo", "fa-viadeo-square"))
               ("wechat", ("WeChat (微信)", "fa-weixin"))
               ("weixin", ("Weixin (微信)", "fa-weixin"))
               ("weibo", ("Weibo (新浪微博)", "fa-weibo"))
               ("whatsapp", ("WhatsApp", "fa-whatsapp"))
+              ("x", ("X", "x-twitter"))
               ("xing", ("Xing", "fa-xing-square"))
               ("youtube", ("YouTube", "fa-youtube-play")) ]
             |> Map.ofList
