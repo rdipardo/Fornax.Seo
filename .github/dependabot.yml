@@ -3,7 +3,6 @@ updates:
   - package-ecosystem: "nuget"
     directory: "/src/Fornax.Seo"
     ignore:
-      - dependency-name: "FSharp.Data"
       - dependency-name: "Microsoft.NET.Test.Sdk"
       - dependency-name: "NUnit3TestAdapter"
       - dependency-name: "NUnit"
@@ -12,15 +11,16 @@ updates:
       interval: "weekly"
     target-branch: "next"
   - package-ecosystem: "nuget"
-    directory: "/test/Fornax.Seo.Tests"
+    directories:
+      - "/test/Fornax.Seo.Tests"
+      - "/example/Fornax.Seo.Example"
     schedule:
       interval: "weekly"
     target-branch: "next"
-  - package-ecosystem: "nuget"
-    directory: "/example/Fornax.Seo.Example"
-    schedule:
-      interval: "weekly"
-    target-branch: "next"
+    groups:
+      testing:
+        patterns:
+          - "*"
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:

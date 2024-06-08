@@ -5,6 +5,8 @@ module StringAssert =
 
 module UnitTests =
     open NUnit.Framework
+    open Html
+    open HtmlAgilityPack
     open Fornax.Seo
     open Fornax.Seo.Tags
     open System.Diagnostics
@@ -15,6 +17,8 @@ module UnitTests =
 
     [<TestFixture>]
     type UnitTest() =
+        let unmapped = "dev.to/webmaster"
+
         let links =
             [ "acmeinc.enterprise.slack.com"
               "https://story.snapchat.com/u/webmaster"
@@ -22,7 +26,7 @@ module UnitTests =
               "ell.stackexchange.com/users/00001/webmaster"
               "https://t.me/s/webmaster"
               "https://www.linkedin.com/in/webmaster"
-              "dev.to/webmaster"
+              unmapped
               "https://www.behance.net/some1else"
               "https://scholar.google.com/citations?user=0X_qweryt24YUp"
               "sourceforge.net/u/some1/profile/" ]
@@ -46,13 +50,20 @@ module UnitTests =
               Tags = Some [ "advice"; "careers"; "blogging" ]
               Meta = Some [ ("Image", "/avatar.jpg"); ("Publisher", pageAuthor.Name) ] }
 
-        member private x.TryFindSeoTag(content: string) =
-            seo pageInfo
-            |> List.tryFind (fun tag -> (HtmlElement.ToString tag).Contains(content))
+        let pageMeta, authorMeta = (HtmlDocument(), HtmlDocument())
 
-        member private x.TryFindLink(content: string) =
-            socialMedia pageAuthor
-            |> List.tryFind (fun tag -> (HtmlElement.ToString tag).Contains(content))
+        do
+            pageMeta.LoadHtml(head [] [ yield! seo pageInfo ] |> HtmlElement.ToString)
+            authorMeta.LoadHtml(div [] [ yield! socialMedia pageAuthor ] |> HtmlElement.ToString)
+
+        member private __.TryFindTag (kind: TestKind) (xpath: string) =
+            let doc = [ (Seo, pageMeta); (Meta, authorMeta) ] |> (Map.ofList >> Map.find kind)
+            doc.DocumentNode.SelectSingleNode(xpath) |> Option.ofObj
+
+        member private __.XPathFor siteName className =
+            let linkTitle = $"Find {pageAuthor.Name} on {siteName}"
+            $"""//a [@title="{linkTitle}" and @class="navicon" and @aria-label="{linkTitle}"]"""
+            + $"""/i [@class="media-icon fa fa-{className}"]"""
 
         member private x.RunTest
             (
@@ -65,30 +76,22 @@ module UnitTests =
             let toCompare = defaultArg expected toFind
             let errorMsg = defaultArg message $"Expected to find {toFind}"
 
-            let tagFinder =
-                match toTest with
-                | Seo -> x.TryFindSeoTag
-                | Meta -> x.TryFindLink
-
-            tagFinder (toFind)
+            x.TryFindTag toTest toFind
             |> function
             | Some html ->
                 strAssert
                 |> function
                 | None -> Assert.Pass()
-                | Some assertion -> assertion (toCompare, HtmlElement.ToString html)
+                | Some assertion -> assertion (toCompare, html.InnerText)
             | None -> Assert.Fail(errorMsg)
 
         [<Test>]
-        member x.``Generates JSON-LD tag``() =
-            let expected = """<script type="application/ld+json">"""
-
-            x.RunTest(Seo, expected)
+        member x.``Generates JSON-LD tag``() = x.RunTest(Seo, """//script[@type="application/ld+json"]""")
 
         [<Test>]
         member x.``Generates OpenGraph tags``() =
             let expected =
-                $"""<meta property="og:type" content="{(defaultArg pageInfo.OpenGraphType "article").ToLower()}"/>"""
+                $"""//meta [@property="og:type" and @content="{(defaultArg pageInfo.OpenGraphType "article").ToLower()}"]"""
 
             x.RunTest(Seo, expected)
 
@@ -97,7 +100,7 @@ module UnitTests =
             let fornaxVersionInfo = FileVersionInfo.GetVersionInfo((typeof<HtmlElement>).Assembly.Location)
 
             let expected =
-                $"""<meta name="generator" content="fornax v{fornaxVersionInfo.FileVersion}"/>"""
+                $"""//meta [@name="generator" and @content="fornax v{fornaxVersionInfo.FileVersion}"]"""
 
             x.RunTest(Seo, expected)
 
@@ -107,7 +110,7 @@ module UnitTests =
 
             x.RunTest(
                 Seo,
-                "<style>",
+                "//style",
                 expected,
                 StringAssert.Contains,
                 $"Expected to find {expected} within <style> element"
@@ -124,97 +127,48 @@ module UnitTests =
         [<Test>]
         member x.``Generates a mailto: link``() =
             let label = $"Contact {pageAuthor.Name} at {pageAuthor.Email}"
-            let expected = $"""<a href="mailto:{pageAuthor.Email}" class="navicon" aria-label="{label}">"""
-            let linkContent = """<i class="media-icon fa fa-envelope"></i>"""
 
-            x.RunTest(Meta, linkContent, expected, StringAssert.Contains, $"Expected to find {expected}")
+            let expected =
+                $"""//a [@href="mailto:{pageAuthor.Email}" and @class="navicon" and @aria-label="{label}"]"""
+                + """/i [@class="media-icon fa fa-envelope"]"""
+
+            x.RunTest(Meta, expected)
 
         [<Test>]
         member x.``Generates social media links with title``() =
-            let expected =
-                $"""title="Find {pageAuthor.Name} on LinkedIn" class="navicon" aria-label="Find {pageAuthor.Name} on LinkedIn">"""
-
-            let linkContent = """<i class="media-icon fa fa-linkedin-square"></i>"""
-
-            x.RunTest(Meta, linkContent, expected, StringAssert.Contains)
+            x.RunTest(Meta, x.XPathFor "LinkedIn" "linkedin-square")
 
         [<Test>]
         member x.``Can parse a Slack profile address from host name only``() =
-            let expected =
-                $"""title="Find {pageAuthor.Name} on Slack" class="navicon" aria-label="Find {pageAuthor.Name} on Slack">"""
-
-            let linkContent = $"""href="https://{links.[0]}" """
-
-            x.RunTest(Meta, linkContent, expected, StringAssert.Contains)
+            x.RunTest(Meta, x.XPathFor "Slack" "slack")
 
         [<Test>]
-        member x.``Can parse a Snapchat profile address``() =
-            let expected =
-                $"""title="Find {pageAuthor.Name} on Snapchat" class="navicon" aria-label="Find {pageAuthor.Name} on Snapchat">"""
-
-            let linkContent = $"""href="{links.[1]}" """
-
-            x.RunTest(Meta, linkContent, expected, StringAssert.Contains)
+        member x.``Can parse a Snapchat profile address``() = x.RunTest(Meta, x.XPathFor "Snapchat" "snapchat-square")
 
         [<Test>]
-        member x.``Can parse a Spotify profile address``() =
-            let expected =
-                $"""title="Find {pageAuthor.Name} on Spotify" class="navicon" aria-label="Find {pageAuthor.Name} on Spotify">"""
-
-            let linkContent = $"""href="{links.[2]}" """
-
-            x.RunTest(Meta, linkContent, expected, StringAssert.Contains)
+        member x.``Can parse a Spotify profile address``() = x.RunTest(Meta, x.XPathFor "Spotify" "spotify")
 
         [<Test>]
         member x.``Can parse a StackExchange profile address from host name only``() =
-            let expected =
-                $"""title="Find {pageAuthor.Name} on Stack Exchange" class="navicon" aria-label="Find {pageAuthor.Name} on Stack Exchange">"""
-
-            let linkContent = $"""href="https://{links.[3]}" """
-
-            x.RunTest(Meta, linkContent, expected, StringAssert.Contains)
+            x.RunTest(Meta, x.XPathFor "Stack Exchange" "stack-exchange")
 
         [<Test>]
-        member x.``Can parse a Telegram profile address``() =
-            let expected =
-                $"""title="Find {pageAuthor.Name} on Telegram" class="navicon" aria-label="Find {pageAuthor.Name} on Telegram">"""
-
-            let linkContent = $"""href="{links.[4]}" """
-
-            x.RunTest(Meta, linkContent, expected, StringAssert.Contains)
+        member x.``Can parse a Telegram profile address``() = x.RunTest(Meta, x.XPathFor "Telegram" "telegram")
 
         [<Test>]
-        member x.``Can parse a Bēhance profile address``() =
-            let expected =
-                $"""title="Find {pageAuthor.Name} on Bēhance" class="navicon" aria-label="Find {pageAuthor.Name} on Bēhance">"""
-
-            let linkContent = $"""href="{links.[7]}" """
-
-            x.RunTest(Meta, linkContent, expected, StringAssert.Contains)
+        member x.``Can parse a Bēhance profile address``() = x.RunTest(Meta, x.XPathFor "Bēhance" "behance-square")
 
         [<Test>]
         member x.``Can parse a Google Scholar citations search result``() =
-            let expected =
-                $"""title="Find {pageAuthor.Name} on Google Scholar" class="navicon" aria-label="Find {pageAuthor.Name} on Google Scholar">"""
-
-            let linkContent = $"""href="{links.[8]}" """
-
-            x.RunTest(Meta, linkContent, expected, StringAssert.Contains)
+            x.RunTest(Meta, x.XPathFor "Google Scholar" "graduation-cap")
 
         [<Test>]
         member x.``Can parse a SourceForge profile from host name only``() =
-            let expected =
-                $"""title="Find {pageAuthor.Name} on SourceForge" class="navicon" aria-label="Find {pageAuthor.Name} on SourceForge">"""
-
-            let linkContent = $"""href="https://{links.[9]}" """
-
-            x.RunTest(Meta, linkContent, expected, StringAssert.Contains)
+            x.RunTest(Meta, x.XPathFor "SourceForge" "fire")
 
         [<Test>]
         member x.``Generates absolute URLs from relative links to unknown sites``() =
-            let expected = $"""href="https://{links.[6]}" """
-
-            x.RunTest(Meta, expected, expected, StringAssert.Contains)
+            x.RunTest(Meta, $"""//a [@href="https://{unmapped}"]""")
 
         [<Test>]
         member x.``JsonLinkData ignores relative urls``() =
