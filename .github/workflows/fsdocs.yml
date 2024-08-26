@@ -15,6 +15,7 @@ permissions:
   pages: write
   id-token: write
 
+jobs:
   publish_docs:
     environment:
       name: github-pages
