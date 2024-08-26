@@ -1,0 +1,41 @@
+name: API Docs
+
+on:
+  push:
+    paths:
+      - 'docs/**'
+      - 'src/Fornax.Seo/*.fs'
+      - '.github/workflows/fsdocs.yml'
+      - 'README.md'
+    tags:
+      - '**'
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+  publish_docs:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: windows-latest
+    env:
+      DOTNET_NOLOGO: true
+      DOTNET_CLI_TELEMETRY_OPTOUT: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - name: Build docs
+        run: .\build.cmd -e CI=true Docs
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './site'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

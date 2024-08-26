@@ -3,6 +3,7 @@
 [![Nuget version][]][Package host]
 [![NuGet workflow status][]][NuGet Workflow]
 [![Test workflow status][]][Test Workflow]
+[![Docs workflow status][]][Docs Workflow]
 
 A SEO meta tag generator for [Fornax](https://ionide.io/Tools/fornax.html)
 
@@ -243,6 +244,8 @@ Distributed under the terms of the [Mozilla Public License Version 2.0][].
 [NuGet workflow status]: https://github.com/rdipardo/Fornax.Seo/actions/workflows/nuget.yml/badge.svg
 [Test Workflow]: https://github.com/rdipardo/Fornax.Seo/actions/workflows/ci.yml
 [Test workflow status]: https://github.com/rdipardo/Fornax.Seo/actions/workflows/ci.yml/badge.svg
+[Docs Workflow]: https://github.com/rdipardo/Fornax.Seo/actions/workflows/fsdocs.yml
+[Docs workflow status]: https://github.com/rdipardo/Fornax.Seo/actions/workflows/fsdocs.yml/badge.svg
 
 [Fornax CLI tool]: https://github.com/ionide/Fornax
 [Mozilla Public License Version 2.0]: https://github.com/rdipardo/Fornax.Seo/blob/main/LICENSE
