@@ -1,3 +1,6 @@
+## 1.3.1
+- Update icon for X/Twitter profiles
+
 ## 1.3.0
 - Upgrade runtime target to .NET 8
 - Drop FSharp.Data.DesignTime from distribution

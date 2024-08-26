@@ -62,7 +62,7 @@ module Tags =
             UriBuilder(u, Port = -1).Uri.AbsoluteUri
         | _ ->
             let srcPath = $"{System.IO.Path.Combine(__SOURCE_DIRECTORY__, __SOURCE_FILE__)},{__LINE__}"
-            eprintfn $"WARNING: Can't resolve domain from {url}' - use an absolute URL instead ({srcPath})"
+            Console.Error.WriteLine($"WARNING: Can't resolve domain from %A{url} - use an absolute URL instead ({srcPath})")
             null
 
     let private parseUrl root url canonical =

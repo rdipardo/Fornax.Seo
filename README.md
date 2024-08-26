@@ -208,17 +208,16 @@ let layout (ctx: SiteContents) (active: string) (content: HtmlElement seq) =
 
 ### .NET
 
-- [json-ld.net](https://github.com/linked-data-dotnet/json-ld.net)
 - [OpenGraph-Net](https://ghorsey.github.io/OpenGraph-Net)
+
+### .NET Framework
+
+- [json-ld.net](https://www.nuget.org/packages/json-ld.net)
+- [Wavenet.Umbraco8.Seo](https://www.nuget.org/packages/Wavenet.Umbraco8.Seo)
 
 ### ASP.NET
 
-- [Winton.AspNetCore.Seo](https://github.com/wintoncode/Winton.AspNetCore.Seo)
-- [Definux.Seo](https://github.com/Definux/Seo)
-
-### [Umbraco](https://umbraco.com)
-
-- [Wavenet.Umbraco8.Seo](https://www.nuget.org/packages/Wavenet.Umbraco8.Seo)
+- [Winton.AspNetCore.Seo](https://www.nuget.org/packages/Winton.AspNetCore.Seo)
 
 
 ## Contributing
