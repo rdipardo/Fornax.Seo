@@ -6,25 +6,29 @@
       "version": "4.4.0",
       "commands": [
         "fantomas"
-      ]
+      ],
+      "rollForward": false
     },
     "fsdocs-tool": {
       "version": "19.1.1",
       "commands": [
         "fsdocs"
-      ]
+      ],
+      "rollForward": false
     },
     "fornax": {
       "version": "0.15.1",
       "commands": [
         "fornax"
-      ]
+      ],
+      "rollForward": false
     },
     "paket": {
-      "version": "8.0.3",
+      "version": "9.0.2",
       "commands": [
         "paket"
-      ]
+      ],
+      "rollForward": false
     }
   }
 }

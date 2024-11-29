@@ -181,8 +181,8 @@ Target.create
               CmdArg("strict", "") ]
 
         try
-            Shell.cleanDir "output"
-            Shell.copyFile homepage "README.MD"
+            Shell.cleanDir "site"
+            Shell.copyFile homepage "README.md"
 
             let result = DotNet.exec id "fsdocs" $"{runArg} {ArgList(cmdArgs)}"
 
