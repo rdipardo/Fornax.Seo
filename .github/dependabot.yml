@@ -8,6 +8,8 @@ updates:
       - dependency-name: "NUnit3TestAdapter"
       - dependency-name: "NUnit"
       - dependency-name: "Markdig"
+      - dependency-name: "fantomas-tool"
+      - dependency-name: "fsdocs-tool"
     schedule:
       interval: "weekly"
     target-branch: "next"
@@ -18,6 +20,8 @@ updates:
     ignore:
       - dependency-name: "Fornax.Core"
       - dependency-name: "Newtonsoft.Json"
+      - dependency-name: "fantomas-tool"
+      - dependency-name: "fsdocs-tool"
     schedule:
       interval: "weekly"
     target-branch: "next"

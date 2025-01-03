@@ -31,6 +31,10 @@ module UnitTests =
               unmapped
               twitterLink
               xLink
+              "www.discordapp.com/users/some1"
+              "https://bsky.app/profile/no1"
+              "https://mastodon.social/@nob0dy"
+              "tiktok.com/@0x7fffffff"
               "xing.com/someBodyElse"
               "https://www.behance.net/some1else"
               "https://scholar.google.com/citations?user=0X_qweryt24YUp"
@@ -65,10 +69,10 @@ module UnitTests =
             let doc = [ (Seo, pageMeta); (Meta, authorMeta) ] |> (Map.ofList >> Map.find kind)
             doc.DocumentNode.SelectSingleNode(xpath) |> Option.ofObj
 
-        member private __.XPathFor siteName className =
+        member private __.XPathFor(siteName, className, ?variant: string) =
             let linkTitle = $"Find {pageAuthor.Name} on {siteName}"
             $"""//a [@title="{linkTitle}" and @class="navicon" and @aria-label="{linkTitle}"]"""
-            + $"""/i [@class="media-icon fa fa-{className}"]"""
+            + $"""/i [@class="media-icon fa-{(defaultArg variant "brands")} fa-{className}"]"""
 
         member private x.RunTest
             (
@@ -135,53 +139,66 @@ module UnitTests =
 
             let expected =
                 $"""//a [@href="mailto:{pageAuthor.Email}" and @class="navicon" and @aria-label="{label}"]"""
-                + """/i [@class="media-icon fa fa-envelope"]"""
+                + """/i [@class="media-icon fa-solid fa-envelope"]"""
 
             x.RunTest(Meta, expected)
 
         [<Test>]
-        member x.``Generates social media links with title``() =
-            x.RunTest(Meta, x.XPathFor "LinkedIn" "linkedin-square")
+        member x.``Generates social media links with titles``() = x.RunTest(Meta, x.XPathFor("LinkedIn", "linkedin"))
 
         [<Test>]
         member x.``Can parse a Slack profile address from host name only``() =
-            x.RunTest(Meta, x.XPathFor "Slack" "slack")
+            x.RunTest(Meta, x.XPathFor("Slack", "slack"))
 
         [<Test>]
-        member x.``Can parse a Snapchat profile address``() = x.RunTest(Meta, x.XPathFor "Snapchat" "snapchat-square")
+        member x.``Can parse a Snapchat profile address``() = x.RunTest(Meta, x.XPathFor("Snapchat", "snapchat-square"))
 
         [<Test>]
-        member x.``Can parse a Spotify profile address``() = x.RunTest(Meta, x.XPathFor "Spotify" "spotify")
+        member x.``Can parse a Spotify profile address``() = x.RunTest(Meta, x.XPathFor("Spotify", "spotify"))
 
         [<Test>]
         member x.``Can parse a StackExchange profile address from host name only``() =
-            x.RunTest(Meta, x.XPathFor "Stack Exchange" "stack-exchange")
+            x.RunTest(Meta, x.XPathFor("Stack Exchange", "stack-exchange"))
 
         [<Test>]
-        member x.``Can parse a Telegram profile address``() = x.RunTest(Meta, x.XPathFor "Telegram" "telegram")
+        member x.``Can parse a Telegram profile address``() = x.RunTest(Meta, x.XPathFor("Telegram", "telegram"))
 
         [<Test>]
-        member x.``Can parse a Bēhance profile address``() = x.RunTest(Meta, x.XPathFor "Bēhance" "behance-square")
+        member x.``Can parse a Bēhance profile address``() = x.RunTest(Meta, x.XPathFor("Bēhance", "behance-square"))
 
         [<Test>]
         member x.``Can parse a Google Scholar citations search result``() =
-            x.RunTest(Meta, x.XPathFor "Google Scholar" "graduation-cap")
+            x.RunTest(Meta, x.XPathFor("Google Scholar", "graduation-cap", "solid"))
 
         [<Test>]
         member x.``Can parse a SourceForge profile from host name only``() =
-            x.RunTest(Meta, x.XPathFor "SourceForge" "fire")
+            x.RunTest(Meta, x.XPathFor("SourceForge", "fire", "solid"))
 
         [<Test>]
-        member x.``Xing profiles generate Xing icons``() = x.RunTest(Meta, x.XPathFor "Xing" "xing-square")
+        member x.``Bluesky profiles generate Bluesky icons``() = x.RunTest(Meta, x.XPathFor("Bluesky", "bluesky"))
+
+        [<Test>]
+        member x.``Discord profiles generate Discord icons``() = x.RunTest(Meta, x.XPathFor("Discord", "discord"))
+
+        [<Test>]
+        member x.``Mastodon profiles generate Mastodon icons``() = x.RunTest(Meta, x.XPathFor("Mastodon", "mastodon"))
+
+        [<Test>]
+        member x.``TikTok profiles generate TikTok icons``() = x.RunTest(Meta, x.XPathFor("TikTok", "tiktok"))
+
+        [<Test>]
+        member x.``Xing profiles generate Xing icons``() = x.RunTest(Meta, x.XPathFor("Xing", "xing-square"))
 
         [<Test>]
         member x.``X profiles generate X icons``() =
-            let expected = $"""//a [@href="{xLink}"]/i [@class="media-icon fa x-twitter"]"""
+            let expected = $"""//a [@href="{xLink}"]/i [@class="media-icon fa-brands fa-x-twitter"]"""
             x.RunTest(Meta, expected)
 
         [<Test>]
         member x.``Old Twitter profiles also generate X icons``() =
-            let expected = $"""//a [@href="{twitterLink}"]/i [@class="media-icon fa x-twitter"]"""
+            let expected =
+                $"""//a [@href="{twitterLink}"]/i [@class="media-icon fa-brands fa-x-twitter"]"""
+
             x.RunTest(Meta, expected)
 
         [<Test>]

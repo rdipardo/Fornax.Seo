@@ -39,7 +39,7 @@ module Core =
         let links = author.SocialMedia
         let jsonLd = JsonLinkData(page)
         let openGraph = OpenGraph({ page with ContentType = Some jsonLd.MainEntityOfPage.Schema })
-        let tags = [ yield! openGraph.ToHtml(); jsonLd.ToHtml() ]
+        let tags = ResizeArray([ yield! openGraph.ToHtml(); jsonLd.ToHtml() ])
 
         let iconStyle = """
             .media-icon {
@@ -65,15 +65,21 @@ module Core =
 
         let minify markup = Regex.Replace(markup, @"(?<=[{}:;,])\s+", "").Trim()
 
-        if List.isEmpty links && String.IsNullOrEmpty(email) then
-            tags
-        else
-            tags
-            @ [ link [ Rel "stylesheet"
-                       Media "screen"
-                       Href @"https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" ]
-                style [] [ !!(minify iconStyle) ] ]
+        if not <| (List.isEmpty links && String.IsNullOrEmpty(email)) then
+            tags.AddRange(
+                [ link [ Rel "stylesheet"
+                         Media "screen"
+                         Href @"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.0/css/fontawesome.min.css" ]
+                  link [ Rel "stylesheet"
+                         Media "screen"
+                         Href @"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.0/css/solid.min.css" ]
+                  link [ Rel "stylesheet"
+                         Media "screen"
+                         Href @"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.0/css/brands.min.css" ]
+                  style [] [ !!(minify iconStyle) ] ]
+            )
 
+        tags.ToArray() |> List.ofArray
 
     /// <summary>
     ///   Generates links to the social media profiles of the given <paramref name="author"/>
@@ -89,46 +95,51 @@ module Core =
         let mediaIcons =
             [ ("behance", ("Bēhance", "fa-behance-square"))
               ("bitbucket", ("Bitbucket", "fa-bitbucket"))
+              ("bsky", ("Bluesky", "fa-bluesky"))
               ("deviantart", ("DeviantArt", "fa-deviantart"))
-              ("facebook", ("Facebook", "fa-facebook-official"))
+              ("discordapp", ("Discord", "fa-discord"))
+              ("facebook", ("Facebook", "fa-facebook"))
               ("flickr", ("Flickr", "fa-flickr"))
               ("gitlab", ("GitLab", "fa-gitlab"))
               ("github", ("GitHub", "fa-github"))
               ("instagram", ("Instagram", "fa-instagram"))
-              ("linkedin", ("LinkedIn", "fa-linkedin-square"))
+              ("linkedin", ("LinkedIn", "fa-linkedin"))
+              ("mastodon", ("Mastodon", "fa-mastodon"))
               ("meetup", ("Meetup", "fa-meetup"))
-              ("pinterest", ("Pinterest", "fa-pinterest-square "))
+              ("pinterest", ("Pinterest", "fa-pinterest-square"))
               ("qq", ("Tencent QQ", "fa-qq"))
               ("quora", ("Quora", "fa-quora"))
               ("ravelry", ("Ravelry", "fa-ravelry"))
               ("reddit", ("Reddit", "fa-reddit"))
-              ("scholar", ("Google Scholar", "fa-graduation-cap"))
+              ("scholar", ("Google Scholar", "fa-solid fa-graduation-cap"))
               ("slack", ("Slack", "fa-slack"))
               ("snapchat", ("Snapchat", "fa-snapchat-square"))
               ("soundcloud", ("SoundCloud", "fa-soundcloud"))
-              ("sourceforge", ("SourceForge", "fa-fire"))
+              ("sourceforge", ("SourceForge", "fa-solid fa-fire"))
               ("spotify", ("Spotify", "fa-spotify"))
               ("stackexchange", ("Stack Exchange", "fa-stack-exchange"))
               ("stackoverflow", ("Stack Overflow", "fa-stack-overflow"))
               ("t", ("Telegram", "fa-telegram"))
               ("telegram", ("Telegram", "fa-telegram"))
+              ("tiktok", ("TikTok", "fa-tiktok"))
               ("tumblr", ("Tumblr", "fa-tumblr-square"))
-              ("twitter", ("X", "x-twitter"))
+              ("twitter", ("X", "fa-x-twitter"))
               ("viadeo", ("Viadeo", "fa-viadeo-square"))
               ("wechat", ("WeChat (微信)", "fa-weixin"))
               ("weixin", ("Weixin (微信)", "fa-weixin"))
               ("weibo", ("Weibo (新浪微博)", "fa-weibo"))
               ("whatsapp", ("WhatsApp", "fa-whatsapp"))
-              ("x", ("X", "x-twitter"))
+              ("x", ("X", "fa-x-twitter"))
               ("xing", ("Xing", "fa-xing-square"))
-              ("youtube", ("YouTube", "fa-youtube-play")) ]
+              ("youtube", ("YouTube", "fa-youtube")) ]
             |> Map.ofList
 
         let links =
             socialMedia
             |> List.map (
                 (fun lnk ->
-                    let noMatch = (lnk, "", "fa-external-link")
+                    let defaultLinkIcon = "fa-solid fa-arrow-up-right-from-square"
+                    let noMatch = (lnk, "", defaultLinkIcon)
 
                     (if Uri.IsWellFormedUriString(lnk, UriKind.RelativeOrAbsolute) then
                          let siteName =
@@ -158,7 +169,7 @@ module Core =
 
                              (siteLink,
                               siteInfo |> Option.defaultValue ("", "") |> fst,
-                              siteInfo |> Option.defaultValue ("", "fa-external-link") |> snd)
+                              siteInfo |> Option.defaultValue ("", defaultLinkIcon) |> snd)
                          | _ -> noMatch
                      else
                          noMatch))
@@ -176,11 +187,19 @@ module Core =
                          else
                              $"Find {siteAuthor} on {siteName}")
 
+                    let className =
+                        List.tryFind
+                            (fun c -> icon.Contains(c))
+                            [ "fa-brands"; "fa-solid"; "fa-regular"; "fa-light"; "fa-thin" ]
+                        |> function
+                        | Some _ -> String.Empty
+                        | None -> "fa-brands"
+
                     a [ Href link
                         HtmlProperties.Title linkTitle
                         Class "navicon"
                         HtmlProperties.Custom("aria-label", linkTitle) ] [
-                        i [ Class(($"media-icon fa {icon}")) ] []
+                        i [ Class(Regex.Replace($"media-icon {className} {icon}", @"\s{2,}", " ")) ] []
                     ])
             )
 
@@ -191,7 +210,7 @@ module Core =
             @ [ a [ Href(Uri.UriSchemeMailto + ":" + email)
                     Class "navicon"
                     HtmlProperties.Custom("aria-label", linkTitle) ] [
-                    i [ Class("media-icon fa fa-envelope") ] []
+                    i [ Class("media-icon fa-solid fa-envelope") ] []
                 ] ]
         else
             links
