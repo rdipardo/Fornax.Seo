@@ -1,3 +1,7 @@
+## 1.4.0
+- Update static assets to Font Awesome 6
+- Provide new profile icons for Bluesky, Mastodon, TikTok, Discord, etc.
+
 ## 1.3.1
 - Update icon for X/Twitter profiles
 

@@ -7,6 +7,8 @@ on:
       - 'src/Fornax.Seo/*.fs'
       - '.github/workflows/fsdocs.yml'
       - 'README.md'
+    branches-ignore:
+      - 'dependabot/**'
     tags:
       - '**'
 
