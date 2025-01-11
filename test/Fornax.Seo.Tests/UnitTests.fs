@@ -35,6 +35,7 @@ module UnitTests =
               "https://bsky.app/profile/no1"
               "https://mastodon.social/@nob0dy"
               "tiktok.com/@0x7fffffff"
+              "patreon.com/404"
               "xing.com/someBodyElse"
               "https://www.behance.net/some1else"
               "https://scholar.google.com/citations?user=0X_qweryt24YUp"
@@ -64,6 +65,11 @@ module UnitTests =
         do
             pageMeta.LoadHtml(head [] [ yield! seo pageInfo ] |> HtmlElement.ToString)
             authorMeta.LoadHtml(div [] [ yield! socialMedia pageAuthor ] |> HtmlElement.ToString)
+
+        member private __.TryFindTagName (content: HtmlElement list) (tagName: string) =
+            let doc = HtmlDocument()
+            div [] content |> HtmlElement.ToString |> doc.LoadHtml
+            doc.DocumentNode.SelectSingleNode($"//{tagName}") |> Option.ofObj
 
         member private __.TryFindTag (kind: TestKind) (xpath: string) =
             let doc = [ (Seo, pageMeta); (Meta, authorMeta) ] |> (Map.ofList >> Map.find kind)
@@ -127,11 +133,19 @@ module UnitTests =
 
         [<Test>]
         member x.``No style is generated if no email and no links are present``() =
-            seo { pageInfo with Author = { pageAuthor with Email = ""; SocialMedia = [] } }
-            |> List.tryFind (fun tag -> (HtmlElement.ToString tag).Contains("<style>"))
+            "style"
+            |> x.TryFindTagName(seo { pageInfo with Author = { pageAuthor with Email = ""; SocialMedia = [] } })
             |> function
             | Some _ -> Assert.Fail($"Expected no <style> tag")
             | None -> Assert.Pass()
+
+        [<Test>]
+        member x.``Just an email will also generate style``() =
+            "style"
+            |> x.TryFindTagName(seo { pageInfo with Author = { pageAuthor with SocialMedia = [] } })
+            |> function
+            | Some _ -> Assert.Pass()
+            | None -> Assert.Fail($"Expected a <style> tag")
 
         [<Test>]
         member x.``Generates a mailto: link``() =
@@ -185,6 +199,9 @@ module UnitTests =
 
         [<Test>]
         member x.``TikTok profiles generate TikTok icons``() = x.RunTest(Meta, x.XPathFor("TikTok", "tiktok"))
+
+        [<Test>]
+        member x.``Patreon profiles generate Patreon icons``() = x.RunTest(Meta, x.XPathFor("Patreon", "patreon"))
 
         [<Test>]
         member x.``Xing profiles generate Xing icons``() = x.RunTest(Meta, x.XPathFor("Xing", "xing-square"))

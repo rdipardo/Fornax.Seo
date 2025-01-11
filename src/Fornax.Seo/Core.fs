@@ -106,6 +106,7 @@ module Core =
               ("linkedin", ("LinkedIn", "fa-linkedin"))
               ("mastodon", ("Mastodon", "fa-mastodon"))
               ("meetup", ("Meetup", "fa-meetup"))
+              ("patreon", ("Patreon", "fa-patreon"))
               ("pinterest", ("Pinterest", "fa-pinterest-square"))
               ("qq", ("Tencent QQ", "fa-qq"))
               ("quora", ("Quora", "fa-quora"))

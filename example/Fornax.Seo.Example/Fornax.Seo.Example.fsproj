@@ -9,6 +9,6 @@
     <ProjectReference Include="../../src/Fornax.Seo/Fornax.Seo.fsproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Markdig" Version="0.39.1" />
+    <PackageReference Include="Markdig" Version="0.40.0" />
   </ItemGroup>
 </Project>
