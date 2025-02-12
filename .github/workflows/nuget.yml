@@ -16,13 +16,13 @@ jobs:
       DOTNET_NOLOGO: true
       DOTNET_CLI_TELEMETRY_OPTOUT: true
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - name: Pre-build Install
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@3951f0dfe7a07e2313ec93c75700083e2005cbab # v4.3.0
         with:
           dotnet-version: '8.0.x'
       - name: Cache packages
-        uses: actions/cache@v4
+        uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
         with:
           path: |
            ~/.nuget/packages
@@ -41,14 +41,14 @@ jobs:
           .\scripts\changelog.ps1 | Out-File release_notes.txt -Encoding utf8
         shell: powershell
       - name: Save package
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
         with:
           name: Fornax.Seo.${{ env.RELEASE_VERSION }}.nupkg
           path: ${{ github.workspace }}/release/*.nupkg
           retention-days: 30
           if-no-files-found: error
       - name: Prepare release
-        uses: ncipollo/release-action@v1
+        uses: ncipollo/release-action@cdcc88a9acf3ca41c16c37bb7d21b9ad48560d87 # v1.15.0
         with:
           artifacts: ${{ github.workspace }}/release/*.nupkg
           bodyFile: release_notes.txt

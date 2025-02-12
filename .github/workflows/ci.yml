@@ -9,6 +9,8 @@ on:
       - next
     tags-ignore:
       - '**'
+permissions:
+  contents: read
 jobs:
   unit_tests:
     strategy:
@@ -22,13 +24,13 @@ jobs:
       DOTNET_NOLOGO: true
       DOTNET_CLI_TELEMETRY_OPTOUT: true
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - name: Pre-test install
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@3951f0dfe7a07e2313ec93c75700083e2005cbab # v4.3.0
         with:
           dotnet-version: '8.0.x'
       - name: Cache packages
-        uses: actions/cache@v4
+        uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
         with:
           path: |-
            ${{ github.workspace }}/.paket
