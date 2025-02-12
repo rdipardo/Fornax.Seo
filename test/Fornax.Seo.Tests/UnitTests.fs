@@ -256,7 +256,3 @@ module UnitTests =
                 TestDelegate(fun () -> seo ({ pageInfo with OpenGraphType = Some "" }) |> ignore)
 
             Assert.Throws<System.ArgumentException>(f) |> ignore
-
-module Program =
-    [<EntryPoint>]
-    let main _ = 0
