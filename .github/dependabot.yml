@@ -34,5 +34,7 @@ updates:
     schedule:
       interval: "monthly"
     target-branch: "next"
-    commit-message:
-      prefix: gh-actions
+    groups:
+      gh-actions:
+        patterns:
+          - "*"
