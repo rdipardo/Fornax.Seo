@@ -3,6 +3,7 @@ updates:
   - package-ecosystem: "nuget"
     directory: "/src/Fornax.Seo"
     ignore:
+      - dependency-name: "Fornax.Core"
       - dependency-name: "HtmlAgilityPack"
       - dependency-name: "Microsoft.NET.Test.Sdk"
       - dependency-name: "NUnit3TestAdapter"
