@@ -97,15 +97,16 @@ Target.create
 Target.create
     "Demo"
     (fun args ->
-        let demoBuildParams (opts: DotNet.BuildOptions) =
-            { buildParams (opts) with
-                  OutputPath = Some(Path.Combine(Project.Dir("Demo"), "_lib")) }
-
         let fornaxCmd = buildOrWatch args
 
-        Project.File("Demo") |> DotNet.build demoBuildParams
+        let (|Ok|Error|) (proc: ProcessResult) = if proc.OK then Ok else Error(proc.Messages)
 
-        DotNet.exec demoRunParams "fornax" fornaxCmd |> ignore)
+        match (DotNet.exec demoRunParams "paket" "update") with
+        | Ok ->
+            match (DotNet.exec demoRunParams "paket" "restore") with
+            | Ok -> DotNet.exec demoRunParams "fornax" fornaxCmd |> ignore
+            | Error errs -> failwith $"""{String.concat " " errs}"""
+        | Error errs -> failwith $"""{String.concat " " errs}""")
 
 // --------------------------------------------------------------------------------------
 Target.create
@@ -219,6 +220,9 @@ Target.create
 "Test" =?> ("Clean", CI_BUILD) ==> "Pack"
 
 "Test" =?> ("Demo", CI_BUILD) ==> "All"
+
+"Pack" ==> "Demo"
+
 "Build" ==> "Docs"
 
 Target.getArguments ()

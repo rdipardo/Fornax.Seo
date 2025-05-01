@@ -1,5 +1,5 @@
-#r "../_lib/Fornax.Core.dll"
-#r "../_lib/Markdig.dll"
+#load "../.paket/load/netstandard2.0/fornax_demo/Fornax.Core.fsx"
+#load "../.paket/load/netstandard2.0/fornax_demo/Markdig.fsx"
 
 open Markdig
 open System.IO

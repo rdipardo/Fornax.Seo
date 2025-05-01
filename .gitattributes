@@ -2,6 +2,7 @@
 **.sln              text   eol=crlf
 **.fsproj           text   eol=crlf
 **.props            text   eol=crlf
+**.targets          text   eol=crlf
 **.cmd              text   eol=crlf
 **.bat              text   eol=crlf
 *.json              text   eol=lf

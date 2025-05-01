@@ -34,6 +34,7 @@ jobs:
         with:
           path: |-
            ${{ github.workspace }}/.paket
+           ${{ github.workspace }}/example/Fornax.Seo.Example/.paket
           key: ${{ runner.os }}-nuget-${{ hashFiles('paket.lock') }}
           restore-keys: |-
             ${{ runner.os }}-nuget-

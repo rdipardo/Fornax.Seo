@@ -1,4 +1,4 @@
-#r "../_lib/Fornax.Core.dll"
+#load "../.paket/load/netstandard2.0/fornax_demo/Fornax.Core.fsx"
 #load "layout.fsx"
 
 open Html
