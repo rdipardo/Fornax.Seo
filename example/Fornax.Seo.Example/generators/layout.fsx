@@ -1,5 +1,4 @@
-#r "../_lib/Fornax.Core.dll"
-#r "../_lib/Fornax.Seo.dll"
+#load "../.paket/load/netstandard2.0/fornax_demo/Fornax.Seo.fsx"
 #if !FORNAX
 #load "../loaders/postloader.fsx"
 #load "../loaders/pageloader.fsx"

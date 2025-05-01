@@ -1,0 +1,12 @@
+version 9.0.2
+
+group fornax_demo
+  source https://api.nuget.org/v3/index.json
+  source ../../release
+  storage: packages
+  strategy: min
+  generate_load_scripts: true
+  framework: netstandard2.0
+
+  nuget Markdig ~> 0.41.0
+  nuget Fornax.Seo @> 1.4 prerelease

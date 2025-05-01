@@ -17,7 +17,6 @@ updates:
   - package-ecosystem: "nuget"
     directories:
       - "/test/Fornax.Seo.Tests"
-      - "/example/Fornax.Seo.Example"
     ignore:
       - dependency-name: "Fornax.Core"
       - dependency-name: "Newtonsoft.Json"

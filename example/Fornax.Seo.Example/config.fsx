@@ -1,4 +1,4 @@
-#r "_lib/Fornax.Core.dll"
+#load ".paket/load/netstandard2.0/fornax_demo/Fornax.Core.fsx"
 #load "loaders/globalloader.fsx"
 
 open Config
@@ -17,6 +17,8 @@ let staticPredicate (projectRoot: string, page: string) =
     let fileShouldBeExcluded =
         hasChanged page |> not ||
         List.contains ext (Globalloader.ignoredFileTypes @ Globalloader.contentFileTypes) ||
+        page.Contains "packages" ||
+        page.Contains "paket" ||
         page.Contains "_public" ||
         page.Contains "_bin" ||
         page.Contains "_lib" ||
