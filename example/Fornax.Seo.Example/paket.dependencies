@@ -8,5 +8,5 @@ group fornax_demo
   generate_load_scripts: true
   framework: netstandard2.0
 
-  nuget Markdig ~> 0.41.0
+  nuget Markdig ~> 0.41.3
   nuget Fornax.Seo @> 1.4 prerelease
