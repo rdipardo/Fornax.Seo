@@ -175,6 +175,12 @@ module Tags =
         member val Image = tryGetResource metaOpt "image"
 
         member this.ToHtml() =
+            let cardContent =
+                if this.Image |> (Option.ofObj >> Option.isSome) then
+                    "summary_large_image"
+                else
+                    "summary"
+
             (this.GetType().GetProperties()
              |> Array.filter (fun prop -> not <| obj.ReferenceEquals(prop.GetValue(this, null), null))
              |> Array.map (fun prop -> "og:" + prop.Name.ToLowerInvariant(), prop.GetValue(this, null).ToString())
@@ -183,8 +189,15 @@ module Tags =
             @ [ meta [ Name "generator"; Content $"fornax v{fornaxVersionInfo.FileVersion}" ]
                 meta [ Name "description"; Content this.Description ]
                 meta [ Name "author"; Content page.Author.Name ]
-                meta [ Name "twitter:card"; Content "summary" ]
-                meta [ Property "twitter:title"; Content this.Title ] ]
+                meta [ Name "twitter:card"; Content cardContent ]
+                meta [ Name "twitter:title"; Content this.Title ]
+                meta [ Name "twitter:description"; Content this.Description ]
+                yield!
+                    (this.Image
+                     |> Option.ofObj
+                     |> function
+                     | Some img -> [ meta [ Name "twitter:image"; Content img ] ]
+                     | None -> []) ]
               @ (if isArticle then
                      let article =
                          { Published_time = toIsoDateString page.Published
