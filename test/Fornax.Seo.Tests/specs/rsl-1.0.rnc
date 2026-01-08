@@ -1,0 +1,167 @@
+###########################################################################
+# From https://rslstandard.org/rsl#appendix-a-rsl-relax-ng-compact-schema #
+# Copyright (c) 2025 RSL Collective. Licensed under CC BY-ND 4.0.         #
+# Slightly revised for compatibility with Mono's RelaxngValidatingReader  #
+###########################################################################
+
+# RELAX NG Compact Syntax Grammar for RSL Version 1
+
+default namespace = "https://rslstandard.org/rsl"
+namespace xsd = "http://www.w3.org/2001/XMLSchema-datatypes"
+
+# Namespace extensions
+anyAttribute =
+  attribute * - rsl:* { text }
+
+anyElement =
+  element * - rsl:* {
+    (anyAttribute | text | anyElement)*
+  }
+
+qnameToken = xsd:token {
+  pattern = "[A-Za-z_][A-Za-z0-9_.-]*:[A-Za-z_][A-Za-z0-9_.-]*"
+}
+
+# Primitives
+boolLower  = "true" | "false"
+iso4217    = xsd:string { pattern = "[A-Z]{3}" }
+geoToken   = xsd:token  { pattern = "([A-Z]{2}|EU)" }
+email      = xsd:string { pattern = "^[A-Za-z0-9+.-]+@[A-Za-z0-9+.-]+(\.[A-Za-z]{2,})$" }
+absoluteURI = xsd:anyURI { pattern = "^[A-Za-z][A-Za-z0-9+.-]*:.*" }
+contactURI = xsd:anyURI | email
+
+# Vocabularies
+rslUsageToken   = "all" | "ai-all" | "ai-train" |
+                  "ai-input" | "ai-index" | "search"
+usageToken      = rslUsageToken | qnameToken
+
+rslUserToken    = "commercial" | "non-commercial" |
+                  "education" | "government" | "personal"
+userToken       = rslUserToken | qnameToken
+
+rslPaymentToken = "purchase" | "subscription" | "training" |
+                  "crawl" | "use" | "contribution" |
+                  "attribution" | "free"
+paymentToken    = rslPaymentToken | qnameToken
+
+warrantyToken   = "ownership" | "authority" | "no-infringement" |
+                  "privacy-consent" | "no-malware"
+
+disclaimerToken = "as-is" | "no-warranty" |
+                  "no-liability" | "no-indemnity"
+
+# Lists
+usageList      = list { usageToken+ }
+userList       = list { userToken+ }
+geoList        = list { geoToken+ }
+warrantyList   = list { warrantyToken+ }
+disclaimerList = list { disclaimerToken+ }
+
+# Root
+start = element rsl { anyAttribute*, content+, anyElement* }
+
+# Content Element
+content =
+  element content {
+    attribute url       { xsd:anyURI | "" },
+    attribute server    { xsd:anyURI }?,
+    attribute encrypted { boolLower }?,
+    attribute lastmod   { xsd:dateTime }?,
+    license+,
+    alternate*,
+    schema?,
+    copyright?,
+    terms?,
+    anyElement*
+  }
+
+# License Element
+license =
+  element license {
+    permitsUsage?, permitsUser?, permitsGeo?,
+    prohibitsUsage?, prohibitsUser?, prohibitsGeo?,
+    payment?,
+    legalWarranty?, legalDisclaimer?,
+    legalAttestation?, legalContact?, legalProof?,
+    anyElement*
+  }
+
+# Permits Types
+permitsUsage = element permits { attribute type { "usage" }, usageList }
+permitsUser  = element permits { attribute type { "user"  }, userList  }
+permitsGeo   = element permits { attribute type { "geo"   }, geoList   }
+
+# Prohibits Types
+prohibitsUsage = element prohibits { attribute type { "usage" }, usageList }
+prohibitsUser  = element prohibits { attribute type { "user"  }, userList  }
+prohibitsGeo   = element prohibits { attribute type { "geo"   }, geoList   }
+
+# Payment Element
+payment =
+  element payment {
+    attribute type { paymentToken }?,
+    (standard? & custom? & amount? & accepts?),
+    anyElement*
+  }
+
+# Standard Element
+standard = element standard { absoluteURI }
+
+# Custom Element
+custom = element custom { xsd:anyURI }
+
+# Amount Element
+amount =
+  element amount {
+    attribute currency { iso4217 },
+    xsd:decimal
+  }
+
+# Accepts Element
+accepts =
+  element accepts {
+    attribute type { xsd:string },
+    text
+  }
+
+# Legal Element
+legalWarranty  =
+  element legal { attribute type { "warranty"  }, warrantyList }
+
+legalDisclaimer =
+  element legal { attribute type { "disclaimer" }, disclaimerList }
+
+legalAttestation =
+  element legal { attribute type { "attestation" }, boolLower }
+
+legalContact =
+  element legal { attribute type { "contact" }, contactURI }
+
+legalProof =
+  element legal { attribute type { "proof" }, list { absoluteURI+ } }
+
+# Alternate Element
+alternate =
+  element alternate {
+    attribute type { xsd:string }?,
+    xsd:anyURI
+  }
+
+# Schema Element
+schema =
+  element schema {
+    attribute type { "application/ld+json" }?,
+    ( xsd:anyURI | text )
+  }
+
+# Copyright Element
+copyright =
+  element copyright {
+    attribute type         { "person" | "organization" }?,
+    attribute contactEmail { xsd:string }?,
+    attribute contactUrl   { xsd:anyURI }?,
+    text
+  }
+
+# Terms Element
+terms = element terms { xsd:anyURI }

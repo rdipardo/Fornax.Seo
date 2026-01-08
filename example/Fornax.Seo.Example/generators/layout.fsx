@@ -102,6 +102,7 @@ let layout (ctx: SiteContents) (active: string) (content: HtmlElement seq) =
                    HtmlProperties.Type "text/css"
                    Href "/style/style.css" ]
             yield! seo pageMeta
+            rsl pageMeta (siteInfo |> Option.map (fun si -> si.credits))
         ]
         body [] [
             nav [ Class "navbar is-dark" ] [

@@ -8,5 +8,6 @@
 *.json              text   eol=lf
 scripts/changelog   text   eol=lf
 build               text   eol=lf
+test/**/specs/**    text   eol=lf
 example/**          linguist-documentation
 docs/**             linguist-documentation

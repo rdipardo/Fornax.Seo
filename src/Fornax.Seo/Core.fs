@@ -13,6 +13,8 @@ namespace Fornax.Seo
 module Core =
     open Html
     open Tags
+    open Standards
+    open Rsl.DOM
     open System
     open System.Text.RegularExpressions
 
@@ -215,3 +217,34 @@ module Core =
                 ] ]
         else
             links
+
+    /// <summary>
+    ///  Generates an inline RSL license for an individual web page
+    /// </summary>
+    /// <param name="page">
+    ///  The web page to which the license will apply
+    /// </param>
+    /// <param name="license">
+    ///  An optional <see cref="T:Fornax.Seo.Rsl.DOM.License"/>; if <c>None</c>, the return value of
+    ///  <see cref="M:Fornax.Seo.Rsl.DOM.License.FreeAndSearchable"/> is used
+    /// </param>
+    /// <returns>
+    ///  A &lt;<c>script</c>&gt; tag containing an RSL license for the given <paramref name="page"/>
+    /// </returns>
+    let rsl (page: ContentObject) (license: License option) : HtmlElement =
+        let doc =
+            Content(
+                url = (page.Url |> Helpers.Url.ofString),
+                license = [ defaultArg license License.FreeAndSearchable ],
+                copyright =
+                    ({ Type = Some Rsl.CopyrightHolder.Person
+                       ContactEmail = page.Author.Email
+                       ContactUrl = $"mailto:{page.Author.Email}" }),
+                lastmod =
+                    (page.Modified
+                     |> Option.orElse page.Published
+                     |> Option.defaultValue System.DateTime.Now)
+            )
+            |> (List.singleton >> Root >> Rsl.toHtmlElement)
+
+        script [ HtmlProperties.Type "application/rsl+xml" ] [ doc ]

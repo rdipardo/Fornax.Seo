@@ -20,6 +20,31 @@ module Tags =
     open System
     open System.Diagnostics
 
+    module internal Helpers =
+        type DateTime with
+            member this.ToRfc3339() = this.ToString("yyyy-MM-ddTHH:mm:ssK")
+
+        type Net.Mail.MailAddress with
+            static member inline TryCreate(str) =
+                if Text.RegularExpressions.Regex.IsMatch(str, @"^[A-Za-z0-9+.-]+@[A-Za-z0-9+.-]+(\.[A-Za-z]{2,})$") then
+                    (true, Net.Mail.MailAddress(str))
+                else
+                    (false, null)
+
+        let toCamelCase (str: string) = $"{Char.ToLowerInvariant(str.[0])}{str.Substring 1}".Replace("_", "")
+        let perror (str: string) = Console.Error.WriteLine str
+
+        module Url =
+            let inline toString (u: System.Uri) = if u.IsAbsoluteUri then u.AbsoluteUri else u.OriginalString
+
+            let inline ofString str =
+                ((Uri.TryCreate(str, UriKind.RelativeOrAbsolute)
+                  |> (snd >> Option.ofObj >> Option.map toString >> Option.defaultValue "")),
+                 UriKind.RelativeOrAbsolute)
+                |> System.Uri
+
+    open Helpers
+
     let private Schemata = SchemaDotOrg.SchemaProvider()
 
     let private getSchemaOrgType name =
@@ -62,7 +87,7 @@ module Tags =
             UriBuilder(u, Port = -1).Uri.AbsoluteUri
         | _ ->
             let srcPath = $"{System.IO.Path.Combine(__SOURCE_DIRECTORY__, __SOURCE_FILE__)},{__LINE__}"
-            Console.Error.WriteLine($"WARNING: Can't resolve domain from %A{url} - use an absolute URL instead ({srcPath})")
+            perror $"WARNING: Can't resolve domain from %A{url} - use an absolute URL instead ({srcPath})"
             null
 
     let private parseUrl root url canonical =
@@ -95,7 +120,7 @@ module Tags =
     let private toIsoDateString (date: DateTime option) =
         date
         |> function
-        | Some d -> d.ToString("yyyy-MM-ddTHH:mm:ssK")
+        | Some d -> d.ToRfc3339()
         | None -> null
 
     let private dateModified (page: ContentObject) =
@@ -130,7 +155,6 @@ module Tags =
 
         override this.ToString() =
             let jsonLD = JObject.Parse(JsonConvert.SerializeObject(this, Formatting.None, jsonOptions))
-            let toCamelCase (str: string) = $"{Char.ToLowerInvariant(str.[0])}{str.Substring(1)}".Replace("_", "")
 
             metaOpt
             |> Map.iter

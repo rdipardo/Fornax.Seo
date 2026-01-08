@@ -17,11 +17,11 @@ module UnitTests =
 
     [<TestFixture>]
     type UnitTest() =
-        let twitterLink = "https://twitter.com/someBody/"
-        let xLink = "https://x.com/someBody/"
-        let unmapped = "dev.to/webmaster"
+        static let twitterLink = "https://twitter.com/someBody/"
+        static let xLink = "https://x.com/someBody/"
+        static let unmapped = "dev.to/webmaster"
 
-        let links =
+        static let links =
             [ "acmeinc.enterprise.slack.com"
               "https://story.snapchat.com/u/webmaster"
               "https://open.spotify.com/user/er811nzvdw2cy2qgkrlei9sqe/playlist/2lzTTRqhYS6AkHPIvdX9u3?si=KcZxfwiIR7OBPCzj20utaQ"
@@ -41,9 +41,9 @@ module UnitTests =
               "https://scholar.google.com/citations?user=0X_qweryt24YUp"
               "sourceforge.net/u/some1/profile/" ]
 
-        let pageAuthor = { Name = "Webmaster"; Email = "some1@example.com"; SocialMedia = links }
+        static let pageAuthor = { Name = "Webmaster"; Email = "some1@example.com"; SocialMedia = links }
 
-        let pageInfo =
+        static let pageInfo =
             { Title = "A New Blog Posting"
               BaseUrl = "https://1fabblog"
               Url = "/news/new-post/2021/05/03/index.php#main_content"
@@ -63,8 +63,10 @@ module UnitTests =
         let pageMeta, authorMeta = (HtmlDocument(), HtmlDocument())
 
         do
-            pageMeta.LoadHtml(head [] [ yield! seo pageInfo ] |> HtmlElement.ToString)
+            pageMeta.LoadHtml(head [] [ yield! seo pageInfo; rsl pageInfo None ] |> HtmlElement.ToString)
             authorMeta.LoadHtml(div [] [ yield! socialMedia pageAuthor ] |> HtmlElement.ToString)
+
+        static member val internal ContentMeta = pageInfo
 
         member private __.TryFindTagName (content: HtmlElement list) (tagName: string) =
             let doc = HtmlDocument()
@@ -108,6 +110,21 @@ module UnitTests =
             let expected =
                 $"""//meta [@property="og:type" and @content="{(defaultArg pageInfo.OpenGraphType "article").ToLower()}"]"""
 
+            x.RunTest(Seo, expected)
+
+        [<Test>]
+        member x.``Generates OpenGraph social media card preview image``() =
+            let expected = $"""//meta [@property="og:image"]"""
+            x.RunTest(Seo, expected)
+
+        [<Test>]
+        member x.``Also generates X/Twitter card preview image``() =
+            let expected = $"""//meta [@name="twitter:image"]"""
+            x.RunTest(Seo, expected)
+
+        [<Test>]
+        member x.``Preview image influences X/Twitter card type``() =
+            let expected = $"""//meta [@name="twitter:card" and @content="summary_large_image"]"""
             x.RunTest(Seo, expected)
 
         [<Test>]

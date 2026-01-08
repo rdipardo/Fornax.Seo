@@ -1,11 +1,13 @@
 #load "../.paket/load/netstandard2.0/fornax_demo/Fornax.Seo.fsx"
 
 open Fornax.Seo
+open Fornax.Seo.Rsl.DOM
 
 type SiteInfo = {
     title: string
     baseUrl: string
     description: string
+    credits: License
     postPageSize: int
 }
 
@@ -17,6 +19,7 @@ let loader (projectRoot: string) (siteContent: SiteContents) =
         { title = "Sample Fornax blog"
           baseUrl = "http://example.com"
           description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+          credits = License.FreeAndOpenSource(@"https://creativecommons.org/publicdomain/zero/1.0")
           postPageSize = 3 }
 
     let onTheWeb =
