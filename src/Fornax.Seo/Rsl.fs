@@ -486,7 +486,7 @@ module Rsl =
 
                         if u.IsAbsoluteUri then
                             $"{AttributeValue.Url u}"
-                        else if scope.IsContact then
+                        else if scope = Scopes.Legal.Contact then
                             uri.Trim()
                             |> Net.Mail.MailAddress.TryCreate
                             |> function
@@ -505,7 +505,7 @@ module Rsl =
                     |> function
                     | Some uri -> tryParse uri |> entities.Add
                     | None ->
-                        if scope.IsContact then
+                        if scope = Scopes.Legal.Contact then
                             invalidArg (nameof specifics) "A single contact URL or email is required."
                         else
                             let uris = specs |> (Array.map tryParse >> String.concat " ")
