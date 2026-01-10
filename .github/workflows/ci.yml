@@ -42,5 +42,4 @@ jobs:
           files: ./coverage.xml
           disable_search: true
           disable_telem: true
-          dry_run: true # TESTING
           token: ${{ secrets.CODECOV_TOKEN }}
