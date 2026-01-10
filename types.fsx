@@ -1,12 +1,10 @@
 //
-// Copyright (c) 2023 Robert Di Pardo and Contributors
+// Copyright (c) 2023,2026 Robert Di Pardo and Contributors
 //
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this file,
 // You can obtain one at https://mozilla.org/MPL/2.0/.
 //
-
-let private toParamString (args: 'T seq when 'T :> obj) = Seq.map (fun a -> $"{a}") args |> String.concat " "
 
 /// <summary>
 /// A generic command line argument
@@ -17,24 +15,24 @@ type CommandArg(param: string, value: string) =
 
     override __.ToString() = $"--{__.Param} {__.Value}"
 
-type CommandArgList(args: CommandArg seq) =
+type CommandArgList<'T when 'T :> CommandArg>(args: 'T seq) =
     member val Args = args
 
-    override __.ToString() = toParamString args
+    override __.ToString() = Seq.map string __.Args |> String.concat " "
 
 /// <summary>
 /// A generic command line property
 /// </summary>
-type CommandProperty(prop: string, value: string) =
+type CommandProperty(prop: string, value: string, ?prefix: string) =
     member val Prop = prop
     member val Value = value
 
-    override __.ToString() = $"{__.Prop}={__.Value}"
+    override __.ToString() = $"""{defaultArg prefix ""}{__.Prop}={__.Value}"""
 
-type CommandPropertyList(props: CommandProperty seq) =
+type CommandPropertyList<'T when 'T :> CommandProperty>(props: 'T seq, ?delim: string) =
     member val Props = props
 
-    override __.ToString() = toParamString props
+    override __.ToString() = Seq.map string __.Props |> String.concat (defaultArg delim " ")
 
 /// <summary>
 /// A command line parameter for the fsdocs tool
@@ -46,7 +44,8 @@ type FsdocsParameter(param: string, value: string, ?prefix: bool) =
 
     override __.ToString() = $"{prefixString}{__.Param} {__.Value}"
 
-type FsdocsParameterList(opts: FsdocsParameter seq) =
-    member val opts = opts
-
-    override __.ToString() = toParamString opts
+/// <summary>
+/// A command line property for AltCover
+/// </summary>
+type AltCoverProperty(prop: string, value: string) =
+    inherit CommandProperty(prop, value, prefix = "AltCover")
