@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2023,2024 Robert Di Pardo and Contributors
+// Copyright (c) 2023,2024,2026 Robert Di Pardo and Contributors
 //
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this file,
@@ -23,9 +23,11 @@ open Fake.IO.Globbing.Operators
 type private CmdArg = Types.CommandArg
 type private CmdProp = Types.CommandProperty
 type private FsdocsParam = Types.FsdocsParameter
-type private ArgList = Types.CommandArgList
-type private PropList = Types.CommandPropertyList
-type private FsdocsParamList = Types.FsdocsParameterList
+type private AltCoverProp = Types.AltCoverProperty
+type private ArgList = Types.CommandArgList<CmdArg>
+type private PropList = Types.CommandPropertyList<CmdProp>
+type private FsdocsParamList = Types.CommandArgList<FsdocsParam>
+type private AltCoverPropList = Types.CommandPropertyList<AltCoverProp>
 
 // https://github.com/fsprojects/FAKE/issues/2719#issuecomment-1563725381
 System.Environment.GetCommandLineArgs()
@@ -90,7 +92,31 @@ Target.create "Build" (fun _ -> Project.File("Main") |> DotNet.build buildParams
 Target.create
     "Test"
     (fun _ ->
-        let result = Project.File("Test") |> DotNet.exec id "test"
+        let cmdArgs =
+            if CI_BUILD |> not then
+                id
+            else
+                (fun (options: DotNet.Options) ->
+                    let props =
+                        [ AltCoverProp("FailFast", "true")
+                          AltCoverProp("LocalSource", "true")
+                          AltCoverProp("ShowGenerated", "false")
+                          AltCoverProp("SourceLink", "true")
+                          AltCoverProp("Trivia", "false")
+                          AltCoverProp("VisibleBranches", "true")
+                          AltCoverProp("ReportFormat", "OpenCover")
+                          AltCoverProp("AssemblyExcludeFilter", $"""{"(Test)s?$"}""")
+                          AltCoverProp("TypeFilter", $"""{"^.*(StartupCode\$||Pipe\s#).*$"}""")
+                          AltCoverProp("MethodFilter", $"""{"^.*(\.c?ctor||op_||Invoke||MoveNext).*$"}""")
+                          AltCoverProp("Report", Path.Combine(__SOURCE_DIRECTORY__, "coverage.xml")) ]
+
+                    { options with
+                          CustomParams =
+                              [ string <| CmdProp("/p:AltCover", "true")
+                                string <| AltCoverPropList(props, ";") ]
+                              |> (String.concat ";" >> Some) })
+
+        let result = Project.File("Test") |> DotNet.exec cmdArgs "test"
         if not result.OK then failwith $"""{String.concat " " result.Messages}""")
 
 // --------------------------------------------------------------------------------------
