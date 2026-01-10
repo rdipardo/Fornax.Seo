@@ -268,7 +268,7 @@ module RslTests =
             let hasDisclaimer = Legal(Scopes.Legal.Disclaimer, disclaimers)
             let hasAttestation = Legal(Scopes.Legal.Attestation, attestation)
             let hasContact = Legal(Scopes.Legal.Contact, contact)
-            let hasProof = Legal(Scopes.Legal.Proof, proof)
+            let hasProof = Legal(Scopes.Legal.Proof, proof.Split(",") |> Array.randomChoice)
 
             let crawlRate = { Currency = CurrencyCode.USD; Value = 0.015m }
 
