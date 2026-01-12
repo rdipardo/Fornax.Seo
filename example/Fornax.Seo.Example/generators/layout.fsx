@@ -95,8 +95,6 @@ let layout (ctx: SiteContents) (active: string) (content: HtmlElement seq) =
                    Sizes "32x32"
                    Href "/images/favicon.png" ]
             link [ Rel "stylesheet"
-                   Href "https://fonts.googleapis.com/css?family=Open+Sans" ]
-            link [ Rel "stylesheet"
                    Href "https://unpkg.com/bulma@0.8.0/css/bulma.min.css" ]
             link [ Rel "stylesheet"
                    HtmlProperties.Type "text/css"

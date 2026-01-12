@@ -11,6 +11,7 @@
 #load ".paket/load/netstandard2.0/fake/Fake.Tools.Git.fsx"
 
 open System.IO
+open System.Text
 open Fake.Core
 open Fake.DotNet
 open Fake.IO
@@ -75,6 +76,20 @@ let private buildOrWatch (args: TargetParameter) =
     |> function
     | Some _ -> "watch"
     | None -> "build"
+
+let private tryGetTag =
+    try
+        let revName =
+            Git.Information.getCurrentHash ()
+            |> Git.Information.showName __SOURCE_DIRECTORY__
+
+        let matchResult = RegularExpressions.Regex.Match(revName, @"v?(\d+\.){2,}\d+")
+
+        if matchResult.Success then
+            (true, matchResult.Value |> Some)
+        else
+            (false, revName.Split() |> Array.tryHead)
+    with _ -> (false, None)
 
 Target.initEnvironment ()
 
@@ -150,14 +165,9 @@ Target.create
 
                 Environment.setEnvironVar "PackageReleaseNotes" notes
 
-            let sha = Git.Information.getCurrentHash ()
-            let revName = Git.Information.showName __SOURCE_DIRECTORY__ sha
-
             let buildNumber =
-                if revName.Contains("tags/") |> not then
-                    revName.Split() |> Array.tryHead
-                else
-                    None
+                let (isTag, revName) = tryGetTag
+                revName |> Option.filter (fun _ -> isTag |> not)
 
             let msbuildParams =
                 // make packages more Source-Link-friendly
@@ -183,6 +193,7 @@ Target.create
 Target.create
     "Docs"
     (fun args ->
+        let (isTag, tag) = tryGetTag
         let runArg = buildOrWatch args
         let homepage = Path.Combine("docs", "index.md")
         let siteRoot = if CI_BUILD then "https://rdipardo.github.io/Fornax.Seo/" else "/"
@@ -192,10 +203,16 @@ Target.create
             [ FsdocsParam("root", siteRoot, false)
               FsdocsParam("repository-link", "https://github.com/rdipardo/Fornax.Seo")
               FsdocsParam("logo-link", "https://www.nuget.org/packages/Fornax.Seo")
+              FsdocsParam("logo-src", "img/logo.png")
+              FsdocsParam("favicon-src", "img/favicon.ico")
               FsdocsParam("license-link", "https://raw.githubusercontent.com/rdipardo/Fornax.Seo/main/LICENSE")
               FsdocsParam(
                   "release-notes-link",
-                  "https://raw.githubusercontent.com/rdipardo/Fornax.Seo/main/CHANGELOG.md"
+                  tag
+                  |> (Option.filter (fun _ -> isTag)
+                      >> Option.map (fun t -> $"refs/tags/{t}")
+                      >> Option.defaultValue "main")
+                  |> sprintf "https://raw.githubusercontent.com/rdipardo/Fornax.Seo/%s/CHANGELOG.md"
               ) ]
 
         let cmdArgs =
@@ -215,6 +232,7 @@ Target.create
 
             if not result.OK then failwith $"""{String.concat " " result.Messages}"""
         finally
+            Path.Combine(__SOURCE_DIRECTORY__, "site", "content", "img") |> Shell.deleteDir
             Shell.rm homepage)
 
 // --------------------------------------------------------------------------------------
