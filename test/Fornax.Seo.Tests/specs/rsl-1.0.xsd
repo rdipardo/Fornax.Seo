@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- RELAX NG Compact Syntax Grammar for RSL Version 1.0 (STRICT) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:rsl="https://rslstandard.org/rsl" targetNamespace="https://rslstandard.org/rsl" elementFormDefault="qualified">
+  <!-- Namespace extensions -->
+  <xs:simpleType name="qnameToken">
+    <xs:restriction base="xs:token">
+      <xs:pattern value="[A-Za-z_][A-Za-z0-9_.\-]*:[A-Za-z_][A-Za-z0-9_.\-]*"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!-- Primitives -->
+  <xs:simpleType name="boolLower">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="true"/>
+      <xs:enumeration value="false"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="iso4217">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[A-Z]{3}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="geoToken">
+    <xs:restriction base="xs:token">
+      <xs:pattern value="([A-Z]{2}|EU)"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="email">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="^[A-Za-z0-9+.\-]+@[A-Za-z0-9+.\-]+(\.[A-Za-z]{2,})$"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="absoluteURI">
+    <xs:restriction base="xs:anyURI">
+      <xs:pattern value="^[A-Za-z][A-Za-z0-9+.\-]*:.*"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="contactURI">
+    <xs:union memberTypes="xs:anyURI rsl:email"/>
+  </xs:simpleType>
+  <!-- Vocabularies -->
+  <xs:simpleType name="rslUsageToken">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="all"/>
+      <xs:enumeration value="ai-all"/>
+      <xs:enumeration value="ai-train"/>
+      <xs:enumeration value="ai-input"/>
+      <xs:enumeration value="ai-index"/>
+      <xs:enumeration value="search"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="usageToken">
+    <xs:union memberTypes="rsl:rslUsageToken rsl:qnameToken"/>
+  </xs:simpleType>
+  <xs:simpleType name="rslUserToken">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="commercial"/>
+      <xs:enumeration value="non-commercial"/>
+      <xs:enumeration value="education"/>
+      <xs:enumeration value="government"/>
+      <xs:enumeration value="personal"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="userToken">
+    <xs:union memberTypes="rsl:rslUserToken rsl:qnameToken"/>
+  </xs:simpleType>
+  <xs:simpleType name="rslPaymentToken">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="purchase"/>
+      <xs:enumeration value="subscription"/>
+      <xs:enumeration value="training"/>
+      <xs:enumeration value="crawl"/>
+      <xs:enumeration value="use"/>
+      <xs:enumeration value="contribution"/>
+      <xs:enumeration value="attribution"/>
+      <xs:enumeration value="free"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="paymentToken">
+    <xs:union memberTypes="rsl:rslPaymentToken rsl:qnameToken"/>
+  </xs:simpleType>
+  <xs:simpleType name="warrantyToken">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="ownership"/>
+      <xs:enumeration value="authority"/>
+      <xs:enumeration value="no-infringement"/>
+      <xs:enumeration value="privacy-consent"/>
+      <xs:enumeration value="no-malware"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="disclaimerToken">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="as-is"/>
+      <xs:enumeration value="no-warranty"/>
+      <xs:enumeration value="no-liability"/>
+      <xs:enumeration value="no-indemnity"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType  name="permissionElementAttribute">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="usage"/>
+      <xs:enumeration value="user"/>
+      <xs:enumeration value="geo"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType  name="legalElementAttribute">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="warranty"/>
+      <xs:enumeration value="disclaimer"/>
+      <xs:enumeration value="attestation"/>
+      <xs:enumeration value="contact"/>
+      <xs:enumeration value="proof"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="permissionTerms">
+    <xs:union memberTypes="rsl:usageList rsl:userList rsl:geoList"/>
+  </xs:simpleType>
+  <xs:simpleType name="legalStatementTerms">
+    <xs:union memberTypes="rsl:warrantyList rsl:disclaimerList rsl:contactURI rsl:externalResourceList rsl:boolLower"/>
+  </xs:simpleType>
+  <!-- Lists -->
+  <xs:simpleType name="usageList">
+    <xs:restriction>
+      <xs:simpleType>
+        <xs:list itemType="rsl:usageToken"/>
+      </xs:simpleType>
+      <xs:minLength value="1"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="userList">
+    <xs:restriction>
+      <xs:simpleType>
+        <xs:list itemType="rsl:userToken"/>
+      </xs:simpleType>
+      <xs:minLength value="1"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="geoList">
+    <xs:restriction>
+      <xs:simpleType>
+        <xs:list itemType="rsl:geoToken"/>
+      </xs:simpleType>
+      <xs:minLength value="1"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="warrantyList">
+    <xs:restriction>
+      <xs:simpleType>
+        <xs:list itemType="rsl:warrantyToken"/>
+      </xs:simpleType>
+      <xs:minLength value="1"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="disclaimerList">
+    <xs:restriction>
+      <xs:simpleType>
+        <xs:list itemType="rsl:disclaimerToken"/>
+      </xs:simpleType>
+      <xs:minLength value="1"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="externalResourceList">
+    <xs:restriction>
+      <xs:simpleType>
+        <xs:list itemType="rsl:absoluteURI"/>
+      </xs:simpleType>
+      <xs:minLength value="1"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!-- Root -->
+  <xs:element name="rsl">
+    <xs:complexType>
+      <xs:choice>
+        <xs:choice minOccurs="1" maxOccurs="unbounded">
+          <xs:element ref="rsl:content"/>
+        </xs:choice>
+      </xs:choice>
+    </xs:complexType>
+    <xs:unique name="oneResourcePerContentElement">
+      <xs:selector xpath="rsl:content"/>
+      <xs:field xpath="@url"/>
+    </xs:unique>
+  </xs:element>
+  <!-- Content Element -->
+  <xs:element name="content">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="rsl:license" minOccurs="1"/>
+        <xs:element ref="rsl:alternate"/>
+        <xs:element ref="rsl:schema"/>
+        <xs:element ref="rsl:copyright"/>
+        <xs:element ref="rsl:terms"/>
+      </xs:choice>
+      <xs:attribute name="url" use="required">
+        <xs:simpleType>
+          <xs:union memberTypes="xs:anyURI">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value=""/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:union>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="server" type="xs:anyURI"/>
+      <xs:attribute name="encrypted" type="rsl:boolLower"/>
+      <xs:attribute name="lastmod" type="xs:dateTime"/>
+    </xs:complexType>
+  </xs:element>
+  <!-- License Element -->
+  <xs:element name="license">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="rsl:permits"/>
+        <xs:element ref="rsl:prohibits"/>
+        <xs:element ref="rsl:payment"/>
+        <xs:element ref="rsl:legal"/>
+      </xs:choice>
+    </xs:complexType>
+    <xs:unique name="onePermitElementPerType">
+      <xs:selector xpath="rsl:permits"/>
+      <xs:field xpath="@type"/>
+    </xs:unique>
+    <xs:unique name="oneProhibitsElementPerType">
+      <xs:selector xpath="rsl:prohibits"/>
+      <xs:field xpath="@type"/>
+    </xs:unique>
+    <xs:unique name="oneLegalElementPerType">
+      <xs:selector xpath="rsl:legal"/>
+      <xs:field xpath="@type"/>
+    </xs:unique>
+  </xs:element>
+  <!-- Permits Element -->
+  <xs:element name="permits">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="rsl:permissionTerms">
+          <xs:attribute name="type" use="required" type="rsl:permissionElementAttribute"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <!-- Prohibits Element -->
+  <xs:element name="prohibits">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="rsl:permissionTerms">
+          <xs:attribute name="type" use="required" type="rsl:permissionElementAttribute"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <!-- Payment Element -->
+  <xs:element name="payment">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="rsl:standard"/>
+        <xs:element ref="rsl:custom"/>
+        <xs:element ref="rsl:amount"/>
+        <xs:element ref="rsl:accepts"/>
+      </xs:choice>
+      <xs:attribute name="type" type="rsl:paymentToken"/>
+    </xs:complexType>
+  </xs:element>
+  <!-- Standard Element -->
+  <xs:element name="standard" type="rsl:absoluteURI"/>
+  <!-- Custom Element -->
+  <xs:element name="custom" type="xs:anyURI"/>
+  <!-- Amount Element -->
+  <xs:element name="amount">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:decimal">
+          <xs:attribute name="currency" use="required" type="rsl:iso4217"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <!-- Accepts Element -->
+  <xs:element name="accepts">
+    <xs:complexType mixed="true">
+      <xs:attribute name="type" use="required" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+  <!-- Legal Element -->
+  <xs:element name="legal">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="rsl:legalStatementTerms">
+          <xs:attribute name="type" use="required" type="rsl:legalElementAttribute"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <!-- Alternate Element -->
+  <xs:element name="alternate">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:anyURI">
+          <xs:attribute name="type" type="xs:string"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <!-- Schema Element -->
+  <xs:element name="schema">
+    <xs:complexType mixed="true">
+      <xs:attribute name="type">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="application/ld+json"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <!-- Copyright Element -->
+  <xs:element name="copyright">
+    <xs:complexType mixed="true">
+      <xs:attribute name="type">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="person"/>
+            <xs:enumeration value="organization"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="contactEmail" type="xs:string"/>
+      <xs:attribute name="contactUrl" type="xs:anyURI"/>
+    </xs:complexType>
+  </xs:element>
+  <!-- Terms Element -->
+  <xs:element name="terms" type="xs:anyURI"/>
+</xs:schema>

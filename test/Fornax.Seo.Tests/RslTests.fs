@@ -5,8 +5,7 @@ module RslTests =
     open System.IO
     open System.Reflection
     open System.Xml
-    open Commons.Xml.Relaxng
-    open Commons.Xml.Relaxng.Rnc
+    open System.Xml.Schema
     open NUnit.Framework
     open Fornax.Seo
     open Fornax.Seo.Rsl.DOM
@@ -229,24 +228,23 @@ module RslTests =
     [<TestFixture>]
     type SchemaTest() =
         let specLocation =
-            Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "specs", "rsl-1.0.rnc")
+            Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "specs", "rsl-1.0.xsd")
 
         let failWithMessage (e: 'T :> Exception) = AssertionException($"{e.GetType().Name}: {e.Message}", e) |> raise
 
         let validate (xml: string) =
             try
-                use schema = new StreamReader(specLocation, Text.Encoding.UTF8, false)
-                let parser = RncParser(NameTable())
-                let grammar = parser.Parse(schema)
+                let settings = XmlReaderSettings(ValidationType = ValidationType.Schema)
+                settings.Schemas.Add("https://rslstandard.org/rsl", specLocation) |> ignore
+                settings.ValidationEventHandler.Add(fun evt -> XmlSchemaException(evt.Message) |> raise)
 
                 use stream = new StringReader(xml)
-                use reader = XmlReader.Create(stream)
-                use validator = new RelaxngValidatingReader(reader, grammar)
+                use reader = XmlReader.Create(stream, settings)
 
-                while validator.EOF |> not do
-                    validator.Read() |> ignore
+                while reader.Read() do
+                    ()
             with
-                | :? RelaxngException
+                | :? XmlSchemaException
                 | :? AssertionException
                 | :? IOException
                 | :? ArgumentException as e -> failWithMessage e
