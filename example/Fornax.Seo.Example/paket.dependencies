@@ -9,4 +9,4 @@ group fornax_demo
   framework: netstandard2.0
 
   nuget Markdig ~> 0.41.3
-  nuget Fornax.Seo @> 1.4 prerelease
+  nuget Fornax.Seo @> 1.5 prerelease
