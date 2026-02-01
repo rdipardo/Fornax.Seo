@@ -19,7 +19,6 @@ module StructuredData =
     open Newtonsoft.Json.Serialization
     open System
     open System.IO
-    open System.Net.Http
 
     let jsonOptions =
         JsonSerializerSettings(
@@ -64,7 +63,8 @@ module StructuredData =
                 >> Map.fold (fun lst p c -> lst @ [ meta [ Property p; Content c ] ]) tags)
 
     module internal SchemaDotOrg =
-        let private Spec = @"https://schema.org/version/latest/schemaorg-current-https.jsonld"
+        [<Literal>]
+        let private Spec = "Fornax.Seo.Resources.schemaorg-current-https.jsonld"
 
         type TypeConverter() =
             inherit JsonConverter()
@@ -129,20 +129,18 @@ module StructuredData =
               mutable RdfsLabel: string }
 
         type SchemaProvider() =
-            static let client = new HttpClient()
             let mutable schema = Schema()
 
             let initSchema =
                 task {
                     try
-                        let! res = client.GetAsync(Spec)
+                        let assembly = (typeof<SchemaProvider>).Assembly
 
-                        if res.IsSuccessStatusCode then
-                            let! body = res.Content.ReadAsStreamAsync()
-                            use stream = new StreamReader(body, System.Text.UTF8Encoding())
-                            schema <- JsonConvert.DeserializeObject<Schema>(stream.ReadToEnd(), jsonOptions)
-                        else
-                            eprintfn $"Requesting {Spec} failed with message \"{res.ReasonPhrase}\""
+                        if assembly.GetManifestResourceNames() |> Seq.exists ((=) Spec) then
+                            use stream = assembly.GetManifestResourceStream(Spec)
+                            use reader = new StreamReader(Stream.Synchronized(stream), System.Text.UTF8Encoding())
+                            let! data = reader.ReadToEndAsync()
+                            schema <- JsonConvert.DeserializeObject<Schema>(data, jsonOptions)
                     with exc ->
                         let srcPath = $"{Path.Combine(__SOURCE_DIRECTORY__, __SOURCE_FILE__)},{__LINE__}"
                         eprintfn $"{exc.GetType().Name}: {exc.Message} ({srcPath})"
@@ -152,4 +150,3 @@ module StructuredData =
 
             member val Context = schema.Context
             member val Graph = schema.Graph
-            override __.Finalize() = client.Dispose()

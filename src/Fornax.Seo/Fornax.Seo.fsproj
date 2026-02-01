@@ -32,6 +32,11 @@
     <None Include="../../docs/img/logo.png" Pack="true" PackagePath="/" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources/schemaorg-current-https.jsonld">
+      <WithCulture>False</WithCulture>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Fornax.Core" Version="0.16.0"/>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4"/>
   </ItemGroup>

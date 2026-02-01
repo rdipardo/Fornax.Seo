@@ -45,15 +45,6 @@ module Tags =
 
     open Helpers
 
-    let private Schemata = SchemaDotOrg.SchemaProvider()
-
-    let private getSchemaOrgType name =
-        Schemata.Graph
-        |> Array.tryFind (fun s -> s.Id = $"schema:{name}")
-        |> function
-        | Some schema -> schema.RdfsLabel
-        | None -> invalidArg name "Invalid Schema.org type! See https://schema.org/docs/full.html"
-
     let private getOpenGraphType (name: string) =
         [ "website"
           "article"
@@ -137,9 +128,17 @@ module Tags =
         let contentType = defaultArg page.ContentType "Article"
         let url = parseUrl page.BaseUrl page.Url false
         let metaOpt = defaultArg page.Meta [ ("", "") ] |> Map.ofList
+        let schemaProvider = SchemaDotOrg.SchemaProvider()
+
+        let getSchemaOrgType name =
+            schemaProvider.Graph
+            |> Array.tryFind (fun s -> s.Id = $"schema:{name}")
+            |> function
+            | Some schema -> schema.RdfsLabel
+            | None -> invalidArg name "Invalid Schema.org type! See https://schema.org/docs/full.html"
 
         [<JsonProperty("@context")>]
-        member val Context: string = Schemata.Context.Schema
+        member val Context: string = schemaProvider.Context.Schema
 
         [<JsonProperty("@type")>]
         member val Schema: string = getSchemaOrgType objectType

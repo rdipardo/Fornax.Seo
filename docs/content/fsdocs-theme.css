@@ -43,6 +43,10 @@ body, table, dl, pre, code {
   font-size: var(--font-50);
 }
 
+.fsdocs-param-name {
+  font-weight: 600 !important;
+}
+
 h1 {
   font-size: var(--font-500);
 }
