@@ -20,6 +20,7 @@
     <Compile Include="Mocks.fs" />
     <Compile Include="UnitTests.fs" />
     <Compile Include="RslTests.fs" />
+    <Compile Include="XmlUnitTests.fs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="specs/*">

@@ -295,9 +295,33 @@ module RslTests =
                        ContactUrl = $"mailto:{UnitTest.ContentMeta.Author.Email}" }),
                 server = Uri(@"https://api.example.com", UriKind.Absolute)
             )
-            |> (List.singleton >> Root >> Rsl.toHtmlElement)
+            |> (List.singleton >> Root)
 
         [<Test>]
-        member __.``Generates a well-formed RSL document``() =
-            Assert.DoesNotThrow
-            <| TestDelegate(fun () -> createDocument |> HtmlElement.ToString |> validate)
+        member __.``Generates a well-formed RSL document as HTML``() =
+            let docRoot = createDocument
+            let htmlDoc = docRoot |> Rsl.toHtmlString
+            Assert.DoesNotThrow <| TestDelegate(fun () -> htmlDoc |> validate)
+            Assert.That(Rsl.Validation.isValid docRoot, $"%A{nameof createDocument} returned invalid HTML")
+
+        [<Test>]
+        member __.``Generates a well-formed RSL document as XML``() =
+            let docRoot = createDocument
+            let builder = Rsl.toXmlDocument docRoot
+            Assert.DoesNotThrow <| TestDelegate(fun () -> string builder |> validate)
+            Assert.That(Rsl.Validation.isValid docRoot, $"%A{nameof createDocument} returned invalid XML")
+
+        [<Test>]
+        member __.``Invalid RSL documents fail to validate``() =
+            Assert.That(
+                Content(
+                    Uri(ContentObject.Default.Url, UriKind.RelativeOrAbsolute),
+                    license =
+                        [ { Permits = None
+                            Prohibits = Some(List.replicate 2 Prohibits.AllBots)
+                            Legal = None
+                            Payment = None } ]
+                )
+                |> (List.singleton >> Root >> Rsl.Validation.isValid >> not),
+                "Expected validation to fail"
+            )

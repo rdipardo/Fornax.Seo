@@ -24,6 +24,7 @@
     <Compile Include="Models.fs"/>
     <Compile Include="Standards.fs"/>
     <Compile Include="StructuredData.fs"/>
+    <Compile Include="Xml.fs"/>
     <Compile Include="Tags.fs"/>
     <Compile Include="Rsl.fs"/>
     <Compile Include="Core.fs"/>
@@ -33,6 +34,10 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources/schemaorg-current-https.jsonld">
+      <WithCulture>False</WithCulture>
+    </EmbeddedResource>
+    <EmbeddedResource Include="../../test/Fornax.Seo.Tests/specs/rsl-1.0.xsd">
+      <LogicalName>$(AssemblyName).Resources.%(FileName)%(Extension)</LogicalName>
       <WithCulture>False</WithCulture>
     </EmbeddedResource>
   </ItemGroup>

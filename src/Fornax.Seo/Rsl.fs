@@ -59,7 +59,25 @@ module Rsl =
         abstract member ToHtml : unit -> HtmlElement
 
     /// <param name="elem">An RSL element type provided by the <see cref="T:Fornax.Seo.Rsl.DOM"/> module</param>
+    [<CompiledName("ToHtmlElement")>]
     let inline toHtmlElement (elem: 'T :> IRslElement) = elem.ToHtml()
+
+    /// <param name="elem">An RSL element type provided by the <see cref="T:Fornax.Seo.Rsl.DOM"/> module</param>
+    [<CompiledName("ToHtmlString")>]
+    let inline toHtmlString (elem: 'T :> IRslElement) = elem |> toHtmlElement |> HtmlElement.ToString
+
+    /// <summary>
+    ///  Transforms an RSL element into an XML document or fragment, without validating the contents
+    /// </summary>
+    /// <param name="elem">An RSL element type provided by the <see cref="T:Fornax.Seo.Rsl.DOM"/> module</param>
+    [<CompiledName("ToXmlDocument")>]
+    let inline toXmlDocument (elem: 'T :> IRslElement) =
+        let builder =
+            { new Xml.DocumentBuilder<'T>(null, null, false) with
+                member __.AsMarkup e = toHtmlString e }
+
+        builder.TryCreate elem |> ignore
+        builder
 
     let inline private (!) (s: string) = Html.string s |> List.singleton
 
@@ -673,3 +691,50 @@ module Rsl =
             | Inline of string
             /// The URL of a <a href="https://schema.org/docs/full.html">Schema.org</a> JSON-LD resource
             | Linked of System.Uri
+
+
+    /// XML validation utilities for RSL licenses
+    [<RequireQualifiedAccess>]
+    module Validation =
+        open Xml
+        open System.IO
+        open System.Xml.Schema
+
+        /// An XML schema for the RSL 1.0 specification
+        [<Sealed>]
+        type Schema() =
+            [<Literal>]
+            let SchemaResId = "Fornax.Seo.Resources.rsl-1.0.xsd"
+
+            let mutable (xsd: XmlSchema) = null
+
+            do
+                try
+                    let assembly = (typeof<IRslElement>).Assembly
+
+                    if assembly.GetManifestResourceNames() |> Seq.exists ((=) SchemaResId) then
+                        use stream = assembly.GetManifestResourceStream(SchemaResId)
+                        use reader = new StreamReader(Stream.Synchronized(stream), System.Text.UTF8Encoding())
+                        xsd <- XmlSchema.Read(reader, Schema.DefaultValidationEventHandler)
+                with _ -> ()
+
+            /// <summary>
+            ///  Returns a pre-compiled
+            ///  <a href="https://raw.githubusercontent.com/rdipardo/Fornax.Seo/refs/heads/main/test/Fornax.Seo.Tests/specs/rsl-1.0.xsd">
+            ///  schema</a>, if loaded successfully; otherwise <c>None</c>
+            /// </summary>
+            member __.TryGet() = xsd |> Option.ofObj
+
+            /// A default handler for RSL schema validation events
+            static member val DefaultValidationEventHandler = getValidationEventHandler @"https://rslstandard.org/rsl"
+
+        /// <summary>
+        ///  Returns <c>true</c> if the given <paramref name="document"/> is a valid RSL license; otherwise <c>false</c>
+        /// </summary>
+        [<CompiledName("IsValid")>]
+        let isValid (document: DOM.Root) =
+            let builder =
+                { new DocumentBuilder<DOM.Root>(Schema().TryGet() |> Option.toObj, Schema.DefaultValidationEventHandler) with
+                    member __.AsMarkup e = toHtmlString e }
+
+            builder.TryCreate document
