@@ -24,7 +24,7 @@
       "rollForward": false
     },
     "paket": {
-      "version": "9.0.2",
+      "version": "10.3.1",
       "commands": [
         "paket"
       ],
