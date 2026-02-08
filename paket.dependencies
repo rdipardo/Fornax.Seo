@@ -1,11 +1,11 @@
-version 9.0.2
+version 10.3.1
 
 group fake
   source https://api.nuget.org/v3/index.json
   storage: none
   strategy: min
   generate_load_scripts: true
-  framework: net8.0
+  framework: net10.0
 
   nuget Fake.Core.Target    ~> 6.1.4
   nuget Fake.DotNet.Cli     ~> 6.1.4

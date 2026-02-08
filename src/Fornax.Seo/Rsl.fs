@@ -11,6 +11,7 @@ namespace Fornax.Seo
 /// A (partial) implementation of the <a href="https://rslstandard.org/rsl">RSL 1.0</a> specification
 module Rsl =
     open System
+    open System.Diagnostics.CodeAnalysis
     open Tags.Helpers
     open Standards.Rsl
     open Standards.Rsl.Entities
@@ -79,16 +80,22 @@ module Rsl =
         builder.TryCreate elem |> ignore
         builder
 
+    [<ExcludeFromCodeCoverageAttribute>]
     let inline private (!) (s: string) = Html.string s |> List.singleton
 
+    [<ExcludeFromCodeCoverageAttribute>]
     let inline private (~+) (attr: Attribute) = attr.ToProperty() |> List.singleton
 
+    [<ExcludeFromCodeCoverageAttribute>]
     let inline private (?+) (attr: Attribute option) = attr |> Option.map (fun a -> a.ToProperty()) |> Option.toList
 
+    [<ExcludeFromCodeCoverageAttribute>]
     let inline private (~%) (elem: 'T :> IRslElement) = toHtmlElement elem
 
+    [<ExcludeFromCodeCoverageAttribute>]
     let inline private (!%) (elems: 'T list when 'T :> IRslElement) = List.map toHtmlElement elems
 
+    [<ExcludeFromCodeCoverageAttribute>]
     let inline private (?%) (elem: 'T option when 'T :> IRslElement) = elem |> Option.map toHtmlElement |> Option.toList
 
     /// An RSL element containing JSON
@@ -504,7 +511,7 @@ module Rsl =
 
                         if u.IsAbsoluteUri then
                             $"{AttributeValue.Url u}"
-                        else if scope = Scopes.Legal.Contact then
+                        else if scope.IsContact then
                             uri.Trim()
                             |> Net.Mail.MailAddress.TryCreate
                             |> function
@@ -523,7 +530,7 @@ module Rsl =
                     |> function
                     | Some uri -> tryParse uri |> entities.Add
                     | None ->
-                        if scope = Scopes.Legal.Contact then
+                        if scope.IsContact then
                             invalidArg (nameof specifics) "A single contact URL or email is required."
                         else
                             let uris = specs |> (Array.map tryParse >> String.concat " ")

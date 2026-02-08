@@ -45,6 +45,16 @@ type FsdocsParameter(param: string, value: string, ?prefix: bool) =
     override __.ToString() = $"{prefixString}{__.Param} {__.Value}"
 
 /// <summary>
+/// A command line parameter for coverlet
+/// </summary>
+type CoverletParameter(?param: string, ?value: string) =
+    inherit CommandArg(defaultArg param "coverlet", defaultArg value "")
+
+    let noParam = Option.isNone param
+
+    override __.ToString() = if noParam then base.ToString() else $"--coverlet-{__.Param} {__.Value}"
+
+/// <summary>
 /// A command line property for AltCover
 /// </summary>
 type AltCoverProperty(prop: string, value: string) =
