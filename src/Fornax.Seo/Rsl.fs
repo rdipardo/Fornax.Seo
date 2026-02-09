@@ -19,7 +19,7 @@ module Rsl =
     open Newtonsoft.Json.Linq
 
     /// An RSL element attribute
-    [<Struct; NoComparison>]
+    [<Struct; NoComparison; ExcludeFromCodeCoverage>]
     type Attribute =
         { Name: string
           Value: AttributeValue }
@@ -60,18 +60,18 @@ module Rsl =
         abstract member ToHtml : unit -> HtmlElement
 
     /// <param name="elem">An RSL element type provided by the <see cref="T:Fornax.Seo.Rsl.DOM"/> module</param>
-    [<CompiledName("ToHtmlElement")>]
+    [<CompiledName("ToHtmlElement"); ExcludeFromCodeCoverage>]
     let inline toHtmlElement (elem: 'T :> IRslElement) = elem.ToHtml()
 
     /// <param name="elem">An RSL element type provided by the <see cref="T:Fornax.Seo.Rsl.DOM"/> module</param>
-    [<CompiledName("ToHtmlString")>]
+    [<CompiledName("ToHtmlString"); ExcludeFromCodeCoverage>]
     let inline toHtmlString (elem: 'T :> IRslElement) = elem |> toHtmlElement |> HtmlElement.ToString
 
     /// <summary>
     ///  Transforms an RSL element into an XML document or fragment, without validating the contents
     /// </summary>
     /// <param name="elem">An RSL element type provided by the <see cref="T:Fornax.Seo.Rsl.DOM"/> module</param>
-    [<CompiledName("ToXmlDocument")>]
+    [<CompiledName("ToXmlDocument"); ExcludeFromCodeCoverage>]
     let inline toXmlDocument (elem: 'T :> IRslElement) =
         let builder =
             { new Xml.DocumentBuilder<'T>(null, null, false) with
@@ -80,23 +80,19 @@ module Rsl =
         builder.TryCreate elem |> ignore
         builder
 
-    [<ExcludeFromCodeCoverageAttribute>]
-    let inline private (!) (s: string) = Html.string s |> List.singleton
+    [<AutoOpen; ExcludeFromCodeCoverage>]
+    module private Ops =
+        let inline (!) (s: string) = Html.string s |> List.singleton
 
-    [<ExcludeFromCodeCoverageAttribute>]
-    let inline private (~+) (attr: Attribute) = attr.ToProperty() |> List.singleton
+        let inline (~+) (attr: Attribute) = attr.ToProperty() |> List.singleton
 
-    [<ExcludeFromCodeCoverageAttribute>]
-    let inline private (?+) (attr: Attribute option) = attr |> Option.map (fun a -> a.ToProperty()) |> Option.toList
+        let inline (?+) (attr: Attribute option) = attr |> Option.map (fun a -> a.ToProperty()) |> Option.toList
 
-    [<ExcludeFromCodeCoverageAttribute>]
-    let inline private (~%) (elem: 'T :> IRslElement) = toHtmlElement elem
+        let inline (~%) (elem: 'T :> IRslElement) = toHtmlElement elem
 
-    [<ExcludeFromCodeCoverageAttribute>]
-    let inline private (!%) (elems: 'T list when 'T :> IRslElement) = List.map toHtmlElement elems
+        let inline (!%) (elems: 'T list when 'T :> IRslElement) = List.map toHtmlElement elems
 
-    [<ExcludeFromCodeCoverageAttribute>]
-    let inline private (?%) (elem: 'T option when 'T :> IRslElement) = elem |> Option.map toHtmlElement |> Option.toList
+        let inline (?%) (elem: 'T option when 'T :> IRslElement) = elem |> Option.map toHtmlElement |> Option.toList
 
     /// An RSL element containing JSON
     [<Struct; NoComparison>]
@@ -126,7 +122,7 @@ module Rsl =
                 Html.custom this.Name props content
 
     /// An RSL element that simply wraps a URL
-    [<Struct; NoComparison>]
+    [<Struct; NoComparison; ExcludeFromCodeCoverage>]
     type private UrlElement =
         { Name: string
           Url: System.Uri }
@@ -150,8 +146,9 @@ module Rsl =
             | :? UniqueElement as elem -> this.Key.Value = elem.Key.Value
             | _ -> false
 
+        [<ExcludeFromCodeCoverage>]
         static member inline internal AllUnique(elems: 'T list when 'T: equality) =
-            elems |> List.distinctBy hash |> List.length |> (=) (List.length elems)
+            elems |> List.distinctBy id |> List.length |> (=) (List.length elems)
 
     /// A unique RSL element specifying the permitted or prohibited usage of a licensed work
     type PermittedUsage(kind: Disposition, scope: Scopes.Permission, specifics: string) =

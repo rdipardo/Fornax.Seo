@@ -128,6 +128,17 @@ module UnitTests =
             x.RunTest(Seo, expected)
 
         [<Test>]
+        member x.``X/Twitter card type defaults to "summary"``() =
+            let noImage = pageInfo.Meta |> Option.map (Map.ofList >> Map.remove "Image" >> Map.toList)
+            let archivedContent = pageInfo.Url.Split("/") |> (Seq.last >> (+) "/archived/")
+
+            $"""meta [@name="twitter:card" and @content="summary"]"""
+            |> x.TryFindTagName(seo { pageInfo with Meta = noImage; Url = archivedContent })
+            |> function
+            | Some _ -> Assert.Pass()
+            | None -> Assert.Fail(@"Expected ""twitter:card""'s content to be ""summary""")
+
+        [<Test>]
         member x.``Metadata includes Fornax version``() =
             let fornaxVersionInfo = FileVersionInfo.GetVersionInfo((typeof<HtmlElement>).Assembly.Location)
 
@@ -173,6 +184,22 @@ module UnitTests =
                 + """/i [@class="media-icon fa-solid fa-envelope"]"""
 
             x.RunTest(Meta, expected)
+
+        [<Test>]
+        member x.``No mailto: link if no email provided``() =
+            $"""a [@href="mailto:{pageAuthor.Email}"]"""
+            |> x.TryFindTagName(socialMedia { pageAuthor with Email = null })
+            |> function
+            | Some _ -> Assert.Fail("Expected no mailto: link")
+            | None -> Assert.Pass()
+
+        [<Test>]
+        member x.``No link title if no name provided``() =
+            x.XPathFor("LinkedIn", "linkedin").TrimStart('/')
+            |> x.TryFindTagName(socialMedia { pageAuthor with Name = null })
+            |> function
+            | Some _ -> Assert.Fail("Expected no matching link title")
+            | None -> Assert.Pass()
 
         [<Test>]
         member x.``Generates social media links with titles``() = x.RunTest(Meta, x.XPathFor("LinkedIn", "linkedin"))
