@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <VersionPrefix>1.4.1</VersionPrefix>
+    <VersionPrefix>1.5.1</VersionPrefix>
     <Authors>Robert Di Pardo</Authors>
     <Copyright>Copyright (c) 2021 Robert Di Pardo and Contributors</Copyright>
     <Description>A SEO meta tag generator for Fornax</Description>
@@ -24,12 +24,22 @@
     <Compile Include="Models.fs"/>
     <Compile Include="Standards.fs"/>
     <Compile Include="StructuredData.fs"/>
+    <Compile Include="Xml.fs"/>
     <Compile Include="Tags.fs"/>
     <Compile Include="Rsl.fs"/>
     <Compile Include="Core.fs"/>
     <None Include="../../README.md" Pack="true" PackagePath="/"/>
     <None Include="../../LICENSE" Pack="true" PackagePath="/"/>
     <None Include="../../docs/img/logo.png" Pack="true" PackagePath="/" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources/schemaorg-current-https.jsonld">
+      <WithCulture>False</WithCulture>
+    </EmbeddedResource>
+    <EmbeddedResource Include="../../test/Fornax.Seo.Tests/specs/rsl-1.0.xsd">
+      <LogicalName>$(AssemblyName).Resources.%(FileName)%(Extension)</LogicalName>
+      <WithCulture>False</WithCulture>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Fornax.Core" Version="0.16.0"/>

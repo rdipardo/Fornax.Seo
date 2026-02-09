@@ -1,3 +1,9 @@
+## 1.5.0
+- Implement Really Simple Licensing (RSL) metadata generation
+- Use `og:image` content to decorate X/Twitter cards
+- Bump Fornax.Core to 0.16.0
+- Bump Newtonsoft.Json to 13.0.4
+
 ## 1.4.0
 - Update static assets to Font Awesome 6
 - Provide new profile icons for Bluesky, Mastodon, TikTok, Discord, etc.

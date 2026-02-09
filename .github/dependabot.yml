@@ -9,9 +9,10 @@ updates:
       - dependency-name: "NUnit3TestAdapter"
       - dependency-name: "NUnit"
       - dependency-name: "fantomas-tool"
-      - dependency-name: "fsdocs-tool"
     schedule:
       interval: "weekly"
+    cooldown:
+      default-days: 7
     target-branch: "next"
   - package-ecosystem: "nuget"
     directories:
@@ -20,9 +21,10 @@ updates:
       - dependency-name: "FSharp.Core"
       - dependency-name: "Newtonsoft.Json"
       - dependency-name: "fantomas-tool"
-      - dependency-name: "fsdocs-tool"
     schedule:
       interval: "weekly"
+    cooldown:
+      default-days: 7
     target-branch: "next"
     groups:
       testing:
@@ -32,6 +34,8 @@ updates:
     directory: "/"
     schedule:
       interval: "monthly"
+    cooldown:
+      default-days: 10
     target-branch: "next"
     groups:
       gh-actions:

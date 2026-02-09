@@ -12,7 +12,7 @@ If you already have the source tree locally, run
 
 ### Development
 
-_All platforms need a .NET SDK at version 8.0.100 or later_
+_All platforms need a .NET SDK at version 10.0.102 or later_
 
 
 To run unit tests and build a sample website:

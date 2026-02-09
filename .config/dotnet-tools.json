@@ -10,7 +10,7 @@
       "rollForward": false
     },
     "fsdocs-tool": {
-      "version": "19.1.1",
+      "version": "21.0.0",
       "commands": [
         "fsdocs"
       ],
@@ -24,7 +24,7 @@
       "rollForward": false
     },
     "paket": {
-      "version": "9.0.2",
+      "version": "10.3.1",
       "commands": [
         "paket"
       ],

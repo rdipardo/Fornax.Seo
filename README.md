@@ -1,6 +1,7 @@
 # Fornax.Seo
 
 [![Nuget version][]][Package host]
+[![Codecov][]][Coverage]
 [![NuGet workflow status][]][NuGet Workflow]
 [![Test workflow status][]][Test Workflow]
 [![Docs workflow status][]][Docs Workflow]
@@ -8,6 +9,8 @@
 A SEO meta tag generator for [Fornax](https://ionide.io/Tools/fornax.html)
 
 ## Goals
+
+- promote adoption of the [Really Simple Licensing](https://rslstandard.org/rsl) (RSL) standard
 
 - enhance the search engine visibility of Fornax-generated websites with:
 
@@ -47,7 +50,7 @@ Visit [the wiki] to learn how to use this package with earlier `fornax` versions
     storage: none
 
     # . . .
-    nuget Fornax.Seo      >= 1.2.0  # pulls in the Fornax.Core package
+    nuget Fornax.Seo      >= 1.5.0  # pulls in the Fornax.Core package
     nuget Markdig
     #  . . .
     ```
@@ -64,13 +67,19 @@ Visit [the wiki] to learn how to use this package with earlier `fornax` versions
 
     ```fsharp
     // loaders/globalloader.fsx
-    #load @"../.paket/load/net8.0/Fornax.Core.fsx"
+    #load @"../.paket/load/net8.0/Fornax.Seo.fsx"
+
+    open Fornax.Seo
+    open Fornax.Seo.Rsl.DOM  // include the RSL type library
 
     type SiteInfo = {
         title: string
         /// The root domain of your website - must be an absolute URL
         baseUrl: string
+        /// RSL-specific terms and conditions for AI user agents
+        robots: License
         description: string
+        postPageSize: int
     }
     ```
 
@@ -78,15 +87,19 @@ Visit [the wiki] to learn how to use this package with earlier `fornax` versions
 
     ```fsharp
     // loaders/globalloader.fsx
-    #load @"../.paket/load/net8.0/Fornax.Seo.fsx"
 
-    open Fornax.Seo
+    // . . .
 
     let loader (projectRoot: string) (siteContent: SiteContents) =
         let siteInfo =
             { title = "Sample Fornax blog"
               baseUrl = "http://example.com"
-              description = "Just a simple blog" }
+              // Only search engine indexing allowed,
+              // provided users comply with the CC BY-ND 4.0
+              robots =
+                  License.FreeAndOpenSource(@"https://creativecommons.org/licenses/by-nd/4.0/")
+              description = "Just a simple blog"
+              postPageSize = 5 }
 
         let onTheWeb =
             [ "linkedin.com/in/username"
@@ -106,6 +119,25 @@ Visit [the wiki] to learn how to use this package with earlier `fornax` versions
     ```
 
 ### Collect metadata from a content item (e.g., a blog posting)
+
+~~~fsharp
+// loaders/postloader.fsx
+// . . .
+type Post = {
+    file: string
+    link : string
+    title: string
+    /// Provide content for "og:image" and "twitter:image" tags
+    image: string option
+    author: string option
+    published: System.DateTime option
+    modified: System.DateTime option
+    tags: string list
+    content: string
+    summary: string
+}
+// . . .
+~~~
 
 ~~~fsharp
 // generators/post.fsx
@@ -181,6 +213,10 @@ let layout (ctx: SiteContents) (active: string) (content: HtmlElement seq) =
         ctx.TryGetValues<ContentObject>()
         |> Option.defaultValue Seq.empty
 
+    let license =
+        ctx.TryGetValue<Globalloader.SiteInfo>()
+        |> Option.map (fun info -> info.robots)
+
     let pageMeta =
         seoData
         |> Seq.tryFind (fun p -> p.Title.Contains(active))
@@ -194,6 +230,7 @@ let layout (ctx: SiteContents) (active: string) (content: HtmlElement seq) =
             meta [ Name "viewport"; Content "width=device-width, initial-scale=1" ]
             // . . .
             yield! seo pageMeta
+            rsl pageMeta license
         ]
         body [] [
             // . . .
@@ -240,6 +277,8 @@ Distributed under the terms of the [Mozilla Public License Version 2.0][].
 
 [Nuget version]: https://img.shields.io/nuget/vpre/Fornax.Seo?color=blueviolet&logo=nuget
 [Package host]: https://www.nuget.org/packages/Fornax.Seo
+[Coverage]: https://codecov.io/gh/rdipardo/Fornax.Seo
+[Codecov]: https://codecov.io/gh/rdipardo/Fornax.Seo/graph/badge.svg
 [NuGet Workflow]: https://github.com/rdipardo/Fornax.Seo/actions/workflows/nuget.yml
 [NuGet workflow status]: https://github.com/rdipardo/Fornax.Seo/actions/workflows/nuget.yml/badge.svg
 [Test Workflow]: https://github.com/rdipardo/Fornax.Seo/actions/workflows/ci.yml

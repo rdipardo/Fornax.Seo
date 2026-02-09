@@ -11,10 +11,7 @@ module Mocks =
 
         static member inline Sample =
             [| "search"; "all"; "ai-train"; "ai-all"; "ai-index"; "ai-input" |]
-            |> (Seq.randomSample (Random().Next(1, 7))
-                >> String.concat ","
-                >> Usage.Usage
-                >> Seq.singleton)
+            |> (String.concat "," >> Usage.Usage >> Seq.singleton)
 
     /// Simulates a union case of type <see cref="T:Fornax.Seo.Standards.Rsl.Entities.Permissions.User"/>
     type User =
@@ -22,10 +19,7 @@ module Mocks =
 
         static member inline Sample =
             [| "commercial"; "education"; "government"; "non-commercial"; "personal" |]
-            |> (Seq.randomSample (Random().Next(1, 6))
-                >> String.concat ","
-                >> User.User
-                >> Seq.singleton)
+            |> (String.concat "," >> User.User >> Seq.singleton)
 
     /// Simulates a union case of type <see cref="T:Fornax.Seo.Standards.Rsl.Entities.Permissions.Geo"/>
     type Geo =
@@ -74,10 +68,7 @@ module Mocks =
                "no-malware"
                "ownership"
                "privacy-consent" |]
-            |> (Seq.randomSample (Random().Next(1, 6))
-                >> String.concat ","
-                >> Warranty.Warranty
-                >> Seq.singleton)
+            |> (String.concat "," >> Warranty.Warranty >> Seq.singleton)
 
     /// Simulates a union case of type <see cref="T:Fornax.Seo.Standards.Rsl.Entities.Declarations.Disclaimer"/>
     type Disclaimer =
@@ -85,10 +76,7 @@ module Mocks =
 
         static member inline Sample =
             [| "as-is"; "no-indemnity"; "no-liability"; "no-warranty" |]
-            |> (Seq.randomSample (Random().Next(1, 5))
-                >> String.concat ","
-                >> Disclaimer.Disclaimer
-                >> Seq.singleton)
+            |> (String.concat "," >> Disclaimer.Disclaimer >> Seq.singleton)
 
     /// Simulated content for entities of type <see cref="T:Fornax.Seo.Standards.Scopes.Legal.Proof"/>
     type Proof =
@@ -97,10 +85,7 @@ module Mocks =
         static member inline Sample =
             [| "https://blockscan.example/tx/0x9aBcD123"
                "https://projects/ed47-4512-cda3-5610/logs/cloudaudit.googleapis.com%2Faccess_transparency" |]
-            |> (Seq.randomSample (Random().Next(1, 3))
-                >> String.concat ","
-                >> Proof.Proof
-                >> Seq.singleton)
+            |> (String.concat "," >> Proof.Proof >> Seq.singleton)
 
     /// Simulated content for entities of type <see cref="T:Fornax.Seo.Standards.Scopes.Legal.Contact"/>
     type Contact =

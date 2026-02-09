@@ -5,8 +5,7 @@ module RslTests =
     open System.IO
     open System.Reflection
     open System.Xml
-    open Commons.Xml.Relaxng
-    open Commons.Xml.Relaxng.Rnc
+    open System.Xml.Schema
     open NUnit.Framework
     open Fornax.Seo
     open Fornax.Seo.Rsl.DOM
@@ -229,24 +228,23 @@ module RslTests =
     [<TestFixture>]
     type SchemaTest() =
         let specLocation =
-            Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "specs", "rsl-1.0.rnc")
+            Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "specs", "rsl-1.0.xsd")
 
         let failWithMessage (e: 'T :> Exception) = AssertionException($"{e.GetType().Name}: {e.Message}", e) |> raise
 
         let validate (xml: string) =
             try
-                use schema = new StreamReader(specLocation, Text.Encoding.UTF8, false)
-                let parser = RncParser(NameTable())
-                let grammar = parser.Parse(schema)
+                let settings = XmlReaderSettings(ValidationType = ValidationType.Schema)
+                settings.Schemas.Add("https://rslstandard.org/rsl", specLocation) |> ignore
+                settings.ValidationEventHandler.Add(fun evt -> XmlSchemaException(evt.Message) |> raise)
 
                 use stream = new StringReader(xml)
-                use reader = XmlReader.Create(stream)
-                use validator = new RelaxngValidatingReader(reader, grammar)
+                use reader = XmlReader.Create(stream, settings)
 
-                while validator.EOF |> not do
-                    validator.Read() |> ignore
+                while reader.Read() do
+                    ()
             with
-                | :? RelaxngException
+                | :? XmlSchemaException
                 | :? AssertionException
                 | :? IOException
                 | :? ArgumentException as e -> failWithMessage e
@@ -268,7 +266,7 @@ module RslTests =
             let hasDisclaimer = Legal(Scopes.Legal.Disclaimer, disclaimers)
             let hasAttestation = Legal(Scopes.Legal.Attestation, attestation)
             let hasContact = Legal(Scopes.Legal.Contact, contact)
-            let hasProof = Legal(Scopes.Legal.Proof, proof)
+            let hasProof = Legal(Scopes.Legal.Proof, proof.Split(",") |> Array.randomChoice)
 
             let crawlRate = { Currency = CurrencyCode.USD; Value = 0.015m }
 
@@ -297,9 +295,33 @@ module RslTests =
                        ContactUrl = $"mailto:{UnitTest.ContentMeta.Author.Email}" }),
                 server = Uri(@"https://api.example.com", UriKind.Absolute)
             )
-            |> (List.singleton >> Root >> Rsl.toHtmlElement)
+            |> (List.singleton >> Root)
 
         [<Test>]
-        member __.``Generates a well-formed RSL document``() =
-            Assert.DoesNotThrow
-            <| TestDelegate(fun () -> createDocument |> HtmlElement.ToString |> validate)
+        member __.``Generates a well-formed RSL document as HTML``() =
+            let docRoot = createDocument
+            let htmlDoc = docRoot |> Rsl.toHtmlString
+            Assert.DoesNotThrow <| TestDelegate(fun () -> htmlDoc |> validate)
+            Assert.That(Rsl.Validation.isValid docRoot, $"%A{nameof createDocument} returned invalid HTML")
+
+        [<Test>]
+        member __.``Generates a well-formed RSL document as XML``() =
+            let docRoot = createDocument
+            let builder = Rsl.toXmlDocument docRoot
+            Assert.DoesNotThrow <| TestDelegate(fun () -> string builder |> validate)
+            Assert.That(Rsl.Validation.isValid docRoot, $"%A{nameof createDocument} returned invalid XML")
+
+        [<Test>]
+        member __.``Invalid RSL documents fail to validate``() =
+            Assert.That(
+                Content(
+                    Uri(ContentObject.Default.Url, UriKind.RelativeOrAbsolute),
+                    license =
+                        [ { Permits = None
+                            Prohibits = Some(List.replicate 2 Prohibits.AllBots)
+                            Legal = None
+                            Payment = None } ]
+                )
+                |> (List.singleton >> Root >> Rsl.Validation.isValid >> not),
+                "Expected validation to fail"
+            )
