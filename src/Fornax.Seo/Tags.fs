@@ -20,6 +20,7 @@ module Tags =
     open System
     open System.Diagnostics
 
+    [<CodeAnalysis.ExcludeFromCodeCoverage>]
     module internal Helpers =
         type DateTime with
             member this.ToRfc3339() = this.ToString("yyyy-MM-ddTHH:mm:ssK")

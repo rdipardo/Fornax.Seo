@@ -317,10 +317,11 @@ module RslTests =
                 Content(
                     Uri(ContentObject.Default.Url, UriKind.RelativeOrAbsolute),
                     license =
-                        [ { Permits = None
-                            Prohibits = Some(List.replicate 2 Prohibits.AllBots)
-                            Legal = None
-                            Payment = None } ]
+                        [ { License.FreeAndOpenSource "https://creativecommons.org/licenses/by-nd/4.0" with
+                                Prohibits = Some(List.replicate 2 Prohibits.AllBots)
+                                Legal = Some [ Legal(Scopes.Legal.Contact, UnitTest.ContentMeta.Author.Email) ] } ],
+                    schema = (Schema.Linked <| Uri("/metadata/schemaorg/data.jsonld", UriKind.Relative)),
+                    terms = Uri("https://example.com/legal/data-terms.html", UriKind.Absolute)
                 )
                 |> (List.singleton >> Root >> Rsl.Validation.isValid >> not),
                 "Expected validation to fail"

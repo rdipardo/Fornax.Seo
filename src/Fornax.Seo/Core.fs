@@ -91,7 +91,7 @@ module Core =
     /// </returns>
     let socialMedia (author: ContentCreator) : HtmlElement list =
         let siteAuthor = author.Name
-        let email = author.Email.Trim()
+        let email = (author.Email |> (Option.ofObj >> Option.defaultWith (fun () -> ""))).Trim()
         let socialMedia = author.SocialMedia
 
         let mediaIcons =
@@ -192,7 +192,7 @@ module Core =
 
                     let className =
                         List.tryFind
-                            (fun c -> icon.Contains(c))
+                            (fun (c: string) -> icon.Contains(c))
                             [ "fa-brands"; "fa-solid"; "fa-regular"; "fa-light"; "fa-thin" ]
                         |> function
                         | Some _ -> String.Empty
