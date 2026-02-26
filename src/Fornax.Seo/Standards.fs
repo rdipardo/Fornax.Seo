@@ -19,7 +19,9 @@ module Standards =
     /// ISO specifications followed by RSL
     module ISO =
 
+        /// <summary>
         /// A country designator complying with <a href="https://www.iso.org/iso-3166-country-codes.html">ISO 3166-1</a> (alpha-2)
+        /// </summary>
         type CountryCode =
             | AD
             | AE
@@ -281,7 +283,9 @@ module Standards =
 
             interface IRslEntity
 
+        /// <summary>
         /// A currency designator complying with <a href="https://www.iso.org/iso-4217-currency-codes.html">ISO 4217</a>
+        /// </summary>
         type CurrencyCode =
             | AED
             | AFN

@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <VersionPrefix>1.5.1</VersionPrefix>
+    <VersionPrefix>1.6.0</VersionPrefix>
     <Authors>Robert Di Pardo</Authors>
     <Copyright>Copyright (c) 2021 Robert Di Pardo and Contributors</Copyright>
     <Description>A SEO meta tag generator for Fornax</Description>
@@ -10,15 +10,21 @@
     <RepositoryType>git</RepositoryType>
     <PackageLicenseExpression>MPL-2.0</PackageLicenseExpression>
     <RequireLicenseAcceptance>false</RequireLicenseAcceptance>
-    <PackageTags>seo;OpenGraph;json-ld;Fornax;f#</PackageTags>
+    <PackageTags>seo;OpenGraph;json-ld;really-simple-licensing;Fornax;f#</PackageTags>
   </PropertyGroup>
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <TargetFrameWork>netstandard2.0</TargetFrameWork>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <DebugType>embedded</DebugType>
-    <NoWarn>3218;3384;3390</NoWarn>
+    <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(_IsPacking)' == 'true'">
+    <DebugType>portable</DebugType>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>../../identities/$(AssemblyName).snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Models.fs"/>
@@ -28,6 +34,7 @@
     <Compile Include="Tags.fs"/>
     <Compile Include="Rsl.fs"/>
     <Compile Include="Core.fs"/>
+    <Compile Include="AssemblyVersion.fs"/>
     <None Include="../../README.md" Pack="true" PackagePath="/"/>
     <None Include="../../LICENSE" Pack="true" PackagePath="/"/>
     <None Include="../../docs/img/logo.png" Pack="true" PackagePath="/" />

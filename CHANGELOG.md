@@ -1,3 +1,10 @@
+## 1.6.0
+- Upgrade runtime target to .NET 10
+- Implement XML document creation and validation for RSL licenses
+- Avoid network requests when validating Schema.org types
+- Give release assemblies a strong name
+- Distribute debug info in a separate symbols package
+
 ## 1.5.0
 - Implement Really Simple Licensing (RSL) metadata generation
 - Use `og:image` content to decorate X/Twitter cards

@@ -8,7 +8,9 @@
 
 namespace Fornax.Seo
 
+/// <summary>
 /// A (partial) implementation of the <a href="https://rslstandard.org/rsl">RSL 1.0</a> specification
+/// </summary>
 module Rsl =
     open System
     open System.Diagnostics.CodeAnalysis
@@ -623,9 +625,11 @@ module Rsl =
         and [<Struct; NoComparison>] Accepts =
             { /// A media type identifying the payment protocol and payload format
               Type: string
+              /// <summary>
               /// A stringified JSON object of protocol-specific
               /// <a href="https://rslstandard.org/rsl#_3-11-accepts-payment-methods">metadata</a>,
               /// such as pricing and settlement instructions
+              /// </summary>
               Method: string }
 
             interface IRslElement with
@@ -691,9 +695,13 @@ module Rsl =
         ///  One of these may be a child of <see cref="T:Fornax.Seo.Rsl.DOM.Content"/>
         /// </remarks>
         and Schema =
+            /// <summary>
             /// A stringified <a href="https://schema.org/docs/full.html">Schema.org</a> JSON-LD object
+            /// </summary>
             | Inline of string
+            /// <summary>
             /// The URL of a <a href="https://schema.org/docs/full.html">Schema.org</a> JSON-LD resource
+            /// </summary>
             | Linked of System.Uri
 
 
