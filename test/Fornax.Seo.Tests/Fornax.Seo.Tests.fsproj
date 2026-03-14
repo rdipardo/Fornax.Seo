@@ -6,9 +6,9 @@
     <OutputType>Exe</OutputType>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="coverlet.mtp" Version="8.0.1-preview.3.g5274e6478e" />
+    <PackageReference Include="coverlet.mtp" Version="8.0.1-preview.6.geda5c7979e" />
     <PackageReference Include="HtmlAgilityPack" Version="1.12.4" />
-    <PackageReference Include="NUnit" Version="4.5.0" />
+    <PackageReference Include="NUnit" Version="4.5.1" />
     <PackageReference Include="NUnit3TestAdapter" Version="6.1.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.3.0" />
     <!-- <PackageReference Include="OpenGraph-Net" Version="3.2.6"/> -->
