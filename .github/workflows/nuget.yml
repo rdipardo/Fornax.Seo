@@ -23,7 +23,7 @@ jobs:
           persist-credentials: false
           fetch-depth: 0
       - name: Pre-build Install
-        uses: actions/setup-dotnet@baa11fbfe1d6520db94683bd5c7a3818018e4309 # v5.1.0
+        uses: actions/setup-dotnet@c2fa09f4bde5ebb9d1777cf28262a3eb3db3ced7 # v5.2.0
         with:
           global-json-file: ./global.json
       - name: Build package
@@ -33,14 +33,14 @@ jobs:
         run: |
           .\scripts\changelog.ps1 | Out-File release_notes.txt -Encoding utf8
       - name: Save package
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
           name: Fornax.Seo.${{ github.ref_name }}.nupkg
           path: ${{ github.workspace }}/release/*.nupkg
           retention-days: 30
           if-no-files-found: error
       - name: Prepare release
-        uses: softprops/action-gh-release@a06a81a03ee405af7f2048a818ed3f03bbf83c7b # v2.5.0
+        uses: softprops/action-gh-release@153bb8e04406b158c6c84fc1615b65b24149a1fe # v2.6.1
         with:
           body_path: release_notes.txt
           fail_on_unmatched_files: true
