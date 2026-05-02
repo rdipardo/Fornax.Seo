@@ -23,7 +23,7 @@ jobs:
           persist-credentials: false
           fetch-depth: 0
       - name: Pre-build Install
-        uses: actions/setup-dotnet@baa11fbfe1d6520db94683bd5c7a3818018e4309 # v5.1.0
+        uses: actions/setup-dotnet@c2fa09f4bde5ebb9d1777cf28262a3eb3db3ced7 # v5.2.0
         with:
           global-json-file: ./global.json
       - name: Build package
@@ -33,14 +33,14 @@ jobs:
         run: |
           .\scripts\changelog.ps1 | Out-File release_notes.txt -Encoding utf8
       - name: Save package
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: Fornax.Seo.${{ github.ref_name }}.nupkg
           path: ${{ github.workspace }}/release/*.nupkg
           retention-days: 30
           if-no-files-found: error
       - name: Prepare release
-        uses: softprops/action-gh-release@a06a81a03ee405af7f2048a818ed3f03bbf83c7b # v2.5.0
+        uses: softprops/action-gh-release@b4309332981a82ec1c5618f44dd2e27cc8bfbfda # v3.0.0
         with:
           body_path: release_notes.txt
           fail_on_unmatched_files: true
@@ -48,7 +48,7 @@ jobs:
           name: ${{ github.ref_name }}
           tag_name: ${{ github.ref_name }}
       - name: Obtain NuGet API key
-        uses: NuGet/login@d22cc5f58ff5b88bf9bd452535b4335137e24544 # v1.1.0
+        uses: NuGet/login@8d196754b4036150537f80ac539e15c2f1028841 # v1.2.0
         id: login
         with:
           user: ${{ github.actor }}

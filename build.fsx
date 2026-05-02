@@ -128,7 +128,7 @@ Target.create
         if not result.OK then
             failwith $"""{String.concat " " result.Errors}"""
         else
-            Path.Combine(Project.Dir("Test"), "**", "coverage.opencover.xml")
+            Path.Combine(Project.Dir("Test"), "**", "TestResults", "*.xml")
             |> ((!!) >> Seq.tryHead >> Option.iter (Shell.copyFile "coverage.xml")))
 
 // --------------------------------------------------------------------------------------

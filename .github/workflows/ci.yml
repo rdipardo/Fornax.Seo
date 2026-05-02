@@ -28,7 +28,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Pre-test install
-        uses: actions/setup-dotnet@baa11fbfe1d6520db94683bd5c7a3818018e4309 # v5.1.0
+        uses: actions/setup-dotnet@c2fa09f4bde5ebb9d1777cf28262a3eb3db3ced7 # v5.2.0
         with:
           global-json-file: ./global.json
       - name: Run tests
@@ -36,7 +36,7 @@ jobs:
           ./build -e CI=true
       - name: Upload coverage report
         if: startsWith(matrix.os, 'ubuntu')
-        uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de #v5.5.2
+        uses: codecov/codecov-action@57e3a136b779b570ffcdbf80b3bdc90e7fab3de2 #v6.0.0
         with:
           files: ./coverage.xml
           disable_search: true
