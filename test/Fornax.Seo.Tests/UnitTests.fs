@@ -9,6 +9,7 @@ module UnitTests =
     open HtmlAgilityPack
     open Fornax.Seo
     open Fornax.Seo.Tags
+    open System
     open System.Diagnostics
 
     type internal TestKind =
@@ -283,20 +284,19 @@ module UnitTests =
         [<Test>]
         member x.``Validates ContentObject's Schema.org Type``() =
             let f =
-                TestDelegate(fun () -> seo ({ pageInfo with ObjectType = Some "Starbucks" }) |> ignore)
+                Action(fun () -> seo ({ pageInfo with ObjectType = Some "Starbucks" }) |> ignore)
 
             Assert.Throws<System.ArgumentException>(f) |> ignore
 
         [<Test>]
         member x.``Validates MainEntity's Schema.org Type``() =
             let f =
-                TestDelegate(fun () -> seo ({ pageInfo with ContentType = Some "dog.food" }) |> ignore)
+                Action(fun () -> seo ({ pageInfo with ContentType = Some "dog.food" }) |> ignore)
 
             Assert.Throws<System.ArgumentException>(f) |> ignore
 
         [<Test>]
         member x.``Validates ContentObject's OpenGraphType Type``() =
-            let f =
-                TestDelegate(fun () -> seo ({ pageInfo with OpenGraphType = Some "" }) |> ignore)
+            let f = Action(fun () -> seo ({ pageInfo with OpenGraphType = Some "" }) |> ignore)
 
             Assert.Throws<System.ArgumentException>(f) |> ignore

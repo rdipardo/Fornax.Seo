@@ -93,7 +93,7 @@ module XmlUnitTests =
 
         [<Test>]
         member __.``Can parse and generate complete documents``() =
-            TestDelegate
+            Action
                 (fun () ->
                     builder.ReaderSettings.DtdProcessing <- DtdProcessing.Parse
                     Assert.That(builder.TryCreate hasDTD, $"Model %A{nameof hasDTD} in not a valid XML document")
@@ -109,7 +109,7 @@ module XmlUnitTests =
 
         [<Test>]
         member __.``Can parse and generate document fragments``() =
-            TestDelegate
+            Action
                 (fun () ->
                     builder.ReaderSettings.IgnoreProcessingInstructions <- false
                     Assert.That(builder.TryCreate hasPIs, $"Model %A{nameof hasPIs} in not a valid XML fragment")
@@ -139,30 +139,30 @@ module XmlUnitTests =
 
         [<Test>]
         member __.``Detects invalid documents``() =
-            TestDelegate
+            Action
                 (fun () ->
                     Assert.That(builder.TryCreate invalidDocument |> not, "Expected validation to fail")
 
-                    TestDelegate(fun () -> builder.Create invalidDocument)
+                    Action(fun () -> builder.Create invalidDocument)
                     |> (Assert.Throws<System.Xml.XmlException> >> ignore))
             |> Assert.Multiple
 
         [<Test>]
         member __.``Detects invalid attributes in document fragments``() =
-            TestDelegate
+            Action
                 (fun () ->
                     Assert.That(builder.TryCreate invalidAttributeFragment |> not, "Expected validation to fail")
 
-                    TestDelegate(fun () -> builder.Create invalidAttributeFragment)
+                    Action(fun () -> builder.Create invalidAttributeFragment)
                     |> (Assert.Throws<System.Xml.XmlException> >> ignore))
             |> Assert.Multiple
 
         [<Test>]
         member __.``Detects invalid elements in document fragments``() =
-            TestDelegate
+            Action
                 (fun () ->
                     Assert.That(builder.TryCreate invalidElementFragment |> not, "Expected validation to fail")
 
-                    TestDelegate(fun () -> builder.Create invalidElementFragment)
+                    Action(fun () -> builder.Create invalidElementFragment)
                     |> (Assert.Throws<System.Xml.XmlException> >> ignore))
             |> Assert.Multiple

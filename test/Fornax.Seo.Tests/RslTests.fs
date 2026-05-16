@@ -66,37 +66,37 @@ module RslTests =
 
         [<Theory>]
         member __.``Does not construct an Rsl.DOM.Permits from an empty string``(Allows scope) =
-            TestDelegate(fun () -> Permits(scope, String.Empty) |> ignore)
+            Action(fun () -> Permits(scope, String.Empty) |> ignore)
             |> Assert.Throws<ArgumentException>
             |> ignore
 
         [<Theory>]
         member __.``Does not construct an Rsl.DOM.Permits from invalid terms``(Allows scope) =
-            TestDelegate(fun () -> Permits(scope, invalid) |> ignore)
+            Action(fun () -> Permits(scope, invalid) |> ignore)
             |> Assert.Throws<ArgumentException>
             |> ignore
 
         [<Theory>]
         member __.``Does not construct an Rsl.DOM.Prohibits from an empty string``(Forbids scope) =
-            TestDelegate(fun () -> Prohibits(scope, String.Empty) |> ignore)
+            Action(fun () -> Prohibits(scope, String.Empty) |> ignore)
             |> Assert.Throws<ArgumentException>
             |> ignore
 
         [<Theory>]
         member __.``Does not construct an Rsl.DOM.Prohibits from invalid terms``(Forbids scope) =
-            TestDelegate(fun () -> Prohibits(scope, invalid) |> ignore)
+            Action(fun () -> Prohibits(scope, invalid) |> ignore)
             |> Assert.Throws<ArgumentException>
             |> ignore
 
         [<Theory>]
         member __.``Does not construct an Rsl.DOM.Legal from an empty string``(Provides scope) =
-            TestDelegate(fun () -> Legal(scope, String.Empty) |> ignore)
+            Action(fun () -> Legal(scope, String.Empty) |> ignore)
             |> Assert.Throws<ArgumentException>
             |> ignore
 
         [<Theory>]
         member __.``Does not construct an Rsl.DOM.Legal from invalid terms``(Provides scope) =
-            TestDelegate(
+            Action(
                 match scope with
                 | Scopes.Legal.Contact ->
                     let multiple =
@@ -116,72 +116,72 @@ module RslTests =
         member __.``Constructs an instance of Rsl.PermittedUsage from valid usage terms``(Usage terms) =
             Assume.That(String.IsNullOrEmpty terms |> not)
 
-            Assert.DoesNotThrow
-            <| TestDelegate(fun () -> Permits(Scopes.Permission.Usage, terms) |> ignore)
+            Action(fun () -> Permits(Scopes.Permission.Usage, terms) |> ignore)
+            |> Assert.DoesNotThrow
 
-            Assert.DoesNotThrow
-            <| TestDelegate(fun () -> Prohibits(Scopes.Permission.Usage, terms) |> ignore)
+            Action(fun () -> Prohibits(Scopes.Permission.Usage, terms) |> ignore)
+            |> Assert.DoesNotThrow
 
         [<Theory>]
         member __.``Constructs an instance of Rsl.PermittedUsage from valid end-user terms``(User terms) =
             Assume.That(String.IsNullOrEmpty terms |> not)
 
-            Assert.DoesNotThrow
-            <| TestDelegate(fun () -> Permits(Scopes.Permission.User, terms) |> ignore)
+            Action(fun () -> Permits(Scopes.Permission.User, terms) |> ignore)
+            |> Assert.DoesNotThrow
 
-            Assert.DoesNotThrow
-            <| TestDelegate(fun () -> Prohibits(Scopes.Permission.User, terms) |> ignore)
+            Action(fun () -> Prohibits(Scopes.Permission.User, terms) |> ignore)
+            |> Assert.DoesNotThrow
 
         [<Theory>]
         member __.``Constructs an instance of Rsl.PermittedUsage from valid geographic regions``(Geo terms) =
             Assume.That(String.IsNullOrEmpty terms |> not)
 
-            Assert.DoesNotThrow
-            <| TestDelegate(fun () -> Permits(Scopes.Permission.Geo, terms) |> ignore)
+            Action(fun () -> Permits(Scopes.Permission.Geo, terms) |> ignore)
+            |> Assert.DoesNotThrow
 
-            Assert.DoesNotThrow
-            <| TestDelegate(fun () -> Prohibits(Scopes.Permission.Geo, terms) |> ignore)
+            Action(fun () -> Prohibits(Scopes.Permission.Geo, terms) |> ignore)
+            |> Assert.DoesNotThrow
 
         [<Theory>]
         member __.``Constructs an Rsl.DOM.Legal from valid warranty terms``(Warranty terms) =
             Assume.That(String.IsNullOrEmpty terms |> not)
 
-            Assert.DoesNotThrow
-            <| TestDelegate(fun () -> Legal(Scopes.Legal.Warranty, terms) |> ignore)
+            Action(fun () -> Legal(Scopes.Legal.Warranty, terms) |> ignore)
+            |> Assert.DoesNotThrow
 
         [<Theory>]
         member __.``Constructs an Rsl.DOM.Legal from valid disclaimer terms``(Disclaimer terms) =
             Assume.That(String.IsNullOrEmpty terms |> not)
 
-            Assert.DoesNotThrow
-            <| TestDelegate(fun () -> Legal(Scopes.Legal.Disclaimer, terms) |> ignore)
+            Action(fun () -> Legal(Scopes.Legal.Disclaimer, terms) |> ignore)
+            |> Assert.DoesNotThrow
 
         [<Theory>]
         member __.``Constructs an Rsl.DOM.Legal from valid proof content``(Proof content) =
             Assume.That(String.IsNullOrEmpty content |> not)
 
-            Assert.DoesNotThrow
-            <| TestDelegate(fun () -> Legal(Scopes.Legal.Proof, content) |> ignore)
+            Action(fun () -> Legal(Scopes.Legal.Proof, content) |> ignore)
+            |> Assert.DoesNotThrow
 
         [<Theory>]
         member __.``Constructs an Rsl.DOM.Legal from valid contact content``(Contact content) =
             Assume.That(String.IsNullOrEmpty content |> not)
 
-            Assert.DoesNotThrow
-            <| TestDelegate(fun () -> Legal(Scopes.Legal.Contact, content) |> ignore)
+            Action(fun () -> Legal(Scopes.Legal.Contact, content) |> ignore)
+            |> Assert.DoesNotThrow
 
         [<Theory>]
         member __.``Constructs an Rsl.DOM.Legal from valid attestation content``(Attestation content) =
             Assume.That(String.IsNullOrEmpty content |> not)
 
-            Assert.DoesNotThrow
-            <| TestDelegate(fun () -> Legal(Scopes.Legal.Attestation, content) |> ignore)
+            Action(fun () -> Legal(Scopes.Legal.Attestation, content) |> ignore)
+            |> Assert.DoesNotThrow
 
     [<TestFixture>]
     type DomainTest() =
         [<Test>]
         member __.``Does not construct an Rsl.DOM.Root with no content``() =
-            TestDelegate
+            Action
                 (fun () ->
                     let emptyList = (ResizeArray<Content>().ToArray()) |> List.ofArray
                     Root(emptyList) |> ignore)
@@ -190,7 +190,7 @@ module RslTests =
 
         [<Test>]
         member __.``Does not construct an Rsl.DOM.Content with no license``() =
-            TestDelegate
+            Action
                 (fun () ->
                     let emptyList = (ResizeArray<License>().ToArray()) |> List.ofArray
                     Content(Shared.domainRoot, emptyList) |> ignore)
@@ -199,7 +199,7 @@ module RslTests =
 
         [<Test>]
         member __.``Requires each instance of Rsl.DOM.Content to reference a unique resource``() =
-            TestDelegate
+            Action
                 (fun () ->
                     let licenses = [ License.FreeAndSearchable; License.FreeAndOpenSource("MPL-2.0") ]
 
@@ -213,7 +213,7 @@ module RslTests =
 
         [<Test>]
         member __.``Requires each instance of Rsl.DOM.Content to declare a unique set of licenses``() =
-            TestDelegate
+            Action
                 (fun () ->
                     let duplicates = [ License.FreeAndSearchable; License.FreeAndSearchable ]
 
@@ -301,14 +301,14 @@ module RslTests =
         member __.``Generates a well-formed RSL document as HTML``() =
             let docRoot = createDocument
             let htmlDoc = docRoot |> Rsl.toHtmlString
-            Assert.DoesNotThrow <| TestDelegate(fun () -> htmlDoc |> validate)
+            Assert.DoesNotThrow(Action(fun () -> htmlDoc |> validate))
             Assert.That(Rsl.Validation.isValid docRoot, $"%A{nameof createDocument} returned invalid HTML")
 
         [<Test>]
         member __.``Generates a well-formed RSL document as XML``() =
             let docRoot = createDocument
             let builder = Rsl.toXmlDocument docRoot
-            Assert.DoesNotThrow <| TestDelegate(fun () -> string builder |> validate)
+            Assert.DoesNotThrow(Action(fun () -> string builder |> validate))
             Assert.That(Rsl.Validation.isValid docRoot, $"%A{nameof createDocument} returned invalid XML")
 
         [<Test>]
