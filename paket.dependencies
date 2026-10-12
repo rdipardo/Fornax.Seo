@@ -1,4 +1,4 @@
-version 10.3.1
+version 11.0.0
 
 group fake
   source https://api.nuget.org/v3/index.json
@@ -7,6 +7,6 @@ group fake
   generate_load_scripts: true
   framework: net10.0
 
-  nuget Fake.Core.Target    ~> 6.1.4
-  nuget Fake.DotNet.Cli     ~> 6.1.4
-  nuget Fake.Tools.Git      ~> 6.1.4
+  nuget Fake.Core.Target    ~> 6.2.0
+  nuget Fake.DotNet.Cli     ~> 6.2.0
+  nuget Fake.Tools.Git      ~> 6.2.0
